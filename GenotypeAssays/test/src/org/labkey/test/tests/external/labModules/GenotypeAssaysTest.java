@@ -32,7 +32,6 @@ import org.labkey.test.TestTimeoutException;
 import org.labkey.test.WebTestHelper;
 import org.labkey.test.categories.External;
 import org.labkey.test.categories.LabModule;
-import org.labkey.test.categories.ONPRC;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.ext4cmp.Ext4CmpRef;
@@ -49,7 +48,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-@Category({External.class, ONPRC.class, LabModule.class})
+@Category({External.class, LabModule.class})
 public class GenotypeAssaysTest extends AbstractLabModuleAssayTest
 {
     private static final String ASSAY_NAME = "Genotype Test";

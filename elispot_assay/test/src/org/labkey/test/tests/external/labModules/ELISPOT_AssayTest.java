@@ -21,7 +21,6 @@ import org.junit.experimental.categories.Category;
 import org.labkey.test.Locator;
 import org.labkey.test.categories.External;
 import org.labkey.test.categories.LabModule;
-import org.labkey.test.categories.ONPRC;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.ext4cmp.Ext4FieldRef;
@@ -36,7 +35,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@Category({External.class, ONPRC.class, LabModule.class})
+@Category({External.class, LabModule.class})
 public class ELISPOT_AssayTest extends AbstractLabModuleAssayTest
 {
     private static final String ASSAY_NAME = "ELISPOT Test";

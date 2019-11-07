@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.Locator;
 import org.labkey.test.categories.External;
-import org.labkey.test.categories.ONPRC;
+import org.labkey.test.categories.LabModule;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.ext4cmp.Ext4CmpRef;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@Category({External.class, ONPRC.class})
+@Category({External.class, LabModule.class})
 public class FlowAssaysTest extends AbstractLabModuleAssayTest
 {
     private static final String ICS_ASSAY_NAME = "ICS Assay Test";
