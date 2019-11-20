@@ -1,0 +1,2 @@
+# direct external dependencies for project :server:modules:BimberLabKeyModules:tcrdb
+repseqio-1.3.2.jar
