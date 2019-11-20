@@ -12,6 +12,7 @@ public class MixcrLibrary
     private String _libraryName;
     private String _species;
     private String _additionalParams;
+    private Integer _libraryId;
     private Date _dateDisabled;
     private String _container;
     private Date _created;
@@ -161,5 +162,15 @@ public class MixcrLibrary
         }
 
         return null;
+    }
+
+    public Integer getLibraryId()
+    {
+        return _libraryId;
+    }
+
+    public void setLibraryId(Integer libraryId)
+    {
+        _libraryId = libraryId;
     }
 }

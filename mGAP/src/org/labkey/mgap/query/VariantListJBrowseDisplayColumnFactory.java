@@ -99,7 +99,7 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 //Ensembl does use chr or padded names.
                 String contigE = contig.replaceAll("chr", "");
                 contigE = contigE.replaceAll("^0", "");
-                String url = "https://www.ensembl.org/Macaca_mulatta/Location/View?db=core;r=" + contigE + ":" + start +"-" + stop;
+                String url = "https://jul2019.archive.ensembl.org/Macaca_mulatta/Location/View?db=core;r=" + contigE + ":" + start +"-" + stop;
                 out.write(delim);
                 out.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View Region in Ensembl</a>");
             }

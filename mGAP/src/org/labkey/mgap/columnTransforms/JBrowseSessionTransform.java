@@ -19,7 +19,6 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.util.GUID;
-import org.labkey.api.util.JobRunner;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.mgap.mGAPSchema;
 
@@ -310,6 +309,6 @@ public class JBrowseSessionTransform extends AbstractVariantTransform
 
     protected String getTrackJson()
     {
-        return "{\"category\":\"mGAP Variant Catalog\",\"visibleByDefault\": true,\"ensemblId\":\"Macaca_mulatta\",\"additionalFeatureMsg\":\"<h2>**The annotations below are primarily derived from human data sources (not macaque), and must be viewed in that context.</h2>\"}";
+        return "{\"category\":\"mGAP Variant Catalog\",\"visibleByDefault\": true,\",\"ensemblUrl\":\"jul2019.archive.ensembl.org\",\"ensemblId\":\"Macaca_mulatta\",\"additionalFeatureMsg\":\"<h2>**The annotations below are primarily derived from human data sources (not macaque), and must be viewed in that context.</h2>\"}";
     }
 }

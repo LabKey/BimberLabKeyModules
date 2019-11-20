@@ -197,7 +197,7 @@ public class CellRangerVDJUtils
             return null;
         }
 
-        _log.debug("total cashed readset/HTO pairs: " + readsetToHashing.size());
+        _log.debug("total cached readset/HTO pairs: " + readsetToHashing.size());
 
         //prepare whitelist of cell indexes
         File cellBarcodeWhitelist = getValidCellIndexFile();
@@ -618,6 +618,24 @@ public class CellRangerVDJUtils
         runProps.put("analysisId", model.getAnalysisId());
         runProps.put("pipelineRunId", runId);
 
+        if (model.getLibraryId() != null)
+        {
+            TableSelector ts = new TableSelector(TCRdbSchema.getInstance().getSchema().getTable(TCRdbSchema.TABLE_LIBRARIES), PageFlowUtil.set("rowid"), new SimpleFilter(FieldKey.fromString("libraryId"), model.getLibraryId()), null);
+            if (ts.exists())
+            {
+                int mixcrId = ts.getObject(Integer.class);
+                _log.debug("adding mixcr library id: " + mixcrId);
+                for (Map<String, Object> row : rows)
+                {
+                    row.put("libraryId", mixcrId);
+                }
+            }
+            else
+            {
+                _log.debug("Unable to find MiXCR library for genome: " + model.getLibraryId());
+            }
+        }
+
         JSONObject json = new JSONObject();
         json.put("Run", runProps);
 
@@ -657,13 +675,14 @@ public class CellRangerVDJUtils
 
     public static void deleteExistingData(AssayProvider ap, ExpProtocol protocol, Container c, User u, Logger log, int readsetId) throws PipelineJobException
     {
-        log.info("Preparing to delete any existing runs from this container for the same readset:" + readsetId);
+        log.info("Preparing to delete any existing runs from this container for the same readset: " + readsetId);
 
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("analysisId/readset"), readsetId);
         filter.addCondition(FieldKey.fromString("Folder"), c.getId());
 
         AssayProtocolSchema aps = ap.createProtocolSchema(u, c, protocol, null);
-        TableInfo runsTable = aps.createRunsTable(null);
+        TableInfo runsTable = QueryService.get().getUserSchema(u, c, aps.getSchemaPath()).getTable(AssayProtocolSchema.RUNS_TABLE_NAME);
+
         TableSelector ts = new TableSelector(runsTable, PageFlowUtil.set("RowId"), filter, null);
         if (ts.exists())
         {
@@ -722,6 +741,7 @@ public class CellRangerVDJUtils
         try (CSVWriter bcWriter = new CSVWriter(PrintWriters.getPrintWriter(barcodeOutput), ',', CSVWriter.NO_QUOTE_CHARACTER))
         {
             List<Readset> cachedReadsets = support.getCachedReadsets();
+            job.getLogger().debug("total cached readsets: " + cachedReadsets.size());
             Set<String> distinctHTOs = new HashSet<>();
             Set<Boolean> hashingStatus = new HashSet<>();
             for (Readset rs : cachedReadsets)
@@ -766,6 +786,10 @@ public class CellRangerVDJUtils
             if (hashingStatus.size() > 1)
             {
                 throw new PipelineJobException("The selected readsets/cDNA records use a mixture of cell hashing and non-hashing.");
+            }
+            else if (hashingStatus.isEmpty())
+            {
+                throw new PipelineJobException("There were no readsets found.");
             }
 
             boolean useCellHashing = hashingStatus.iterator().next();
@@ -912,7 +936,7 @@ public class CellRangerVDJUtils
 
         public String getAssaySampleName()
         {
-            return getPlateId() + "_" + getWell() + "_" + getSortRecord().getStimRecord().getAnimalId() + "_" + getSortRecord().getStimRecord().getStim() + "_" + getSortRecord().getPopulation() + "_" + getSortRecord().getHto();
+            return getPlateId() + "_" + getWell() + "_" + getSortRecord().getStimRecord().getAnimalId() + "_" + getSortRecord().getStimRecord().getStim() + "_" + getSortRecord().getPopulation() + (getSortRecord().getHto() == null ? "" : "_" + getSortRecord().getHto());
         }
 
         public static CDNA getRowId(int rowId)

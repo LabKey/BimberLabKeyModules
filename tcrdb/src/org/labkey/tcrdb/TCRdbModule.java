@@ -28,7 +28,6 @@ import org.labkey.api.sequenceanalysis.SequenceAnalysisService;
 import org.labkey.api.sequenceanalysis.pipeline.SequencePipelineService;
 import org.labkey.tcrdb.pipeline.CellRangerCellHashingHandler;
 import org.labkey.tcrdb.pipeline.CellRangerVDJCellHashingHandler;
-import org.labkey.tcrdb.pipeline.CellRangerVDJResultHandler;
 import org.labkey.tcrdb.pipeline.CellRangerVDJWrapper;
 import org.labkey.tcrdb.pipeline.MiXCRAnalysis;
 import org.labkey.tcrdb.pipeline.SeuratCellHashingHandler;
@@ -49,7 +48,7 @@ public class TCRdbModule extends ExtendedSimpleModule
     @Override
     public double getVersion()
     {
-        return 15.46;
+        return 15.47;
     }
 
     @Override
@@ -120,7 +119,6 @@ public class TCRdbModule extends ExtendedSimpleModule
 
                 SequenceAnalysisService.get().registerFileHandler(new CellRangerCellHashingHandler());
                 SequenceAnalysisService.get().registerFileHandler(new CellRangerVDJCellHashingHandler());
-                SequenceAnalysisService.get().registerFileHandler(new CellRangerVDJResultHandler());
                 SequenceAnalysisService.get().registerFileHandler(new SeuratCellHashingHandler());
 
                 _hasRegistered = true;

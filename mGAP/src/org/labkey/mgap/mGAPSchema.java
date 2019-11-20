@@ -34,6 +34,8 @@ public class mGAPSchema
     public static final String TABLE_TRACKS_PER_RELEASE = "tracksPerRelease";
     public static final String TABLE_PHENOTYPES = "phenotypes";
     public static final String TABLE_PEDIGREE_OVERRIDES = "pedigreeOverrides";
+    public static final String TABLE_DEMOGRAPHICS = "demographics";
+    public static final String TABLE_SUBJECT_SOURCE = "subjectsSource";
 
 
     public static mGAPSchema getInstance()

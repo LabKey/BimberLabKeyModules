@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.labkey.api.assay.AssayProvider;
+import org.labkey.api.assay.AssayService;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.SimpleFilter;
@@ -42,8 +44,6 @@ import org.labkey.api.sequenceanalysis.pipeline.SequencePipelineService;
 import org.labkey.api.sequenceanalysis.pipeline.ToolParameterDescriptor;
 import org.labkey.api.sequenceanalysis.run.PicardWrapper;
 import org.labkey.api.sequenceanalysis.run.SimpleScriptWrapper;
-import org.labkey.api.assay.AssayProvider;
-import org.labkey.api.assay.AssayService;
 import org.labkey.api.util.FileUtil;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.Pair;
@@ -1380,7 +1380,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
             }
         }
 
-        if (!row.containsKey("cDNA"))
+        if (!row.containsKey("cDNA") || row.get("cDNA") == null)
         {
             getPipelineCtx().getLogger().warn("Unable to find cDNA for: " + model.getReadset());
         }

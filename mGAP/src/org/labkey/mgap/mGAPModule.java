@@ -24,6 +24,7 @@ import org.labkey.api.data.ContainerFilter;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Sort;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.jbrowse.JBrowseService;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.ldk.LDKService;
 import org.labkey.api.ldk.buttons.ShowBulkEditButton;
@@ -57,7 +58,7 @@ public class mGAPModule extends ExtendedSimpleModule
     @Override
     public double getVersion()
     {
-        return 16.55;
+        return 16.56;
     }
 
     @Override
@@ -77,6 +78,8 @@ public class mGAPModule extends ExtendedSimpleModule
         LDKService.get().registerQueryButton(new ReleaseButton(this), mGAPSchema.NAME, mGAPSchema.TABLE_RELEASE_TRACKS);
 
         NotificationService.get().registerNotification(new mGAPUserNotification(this));
+
+        JBrowseService.get().registerDemographicsSource(new mGAPDemographicsSource());
 
         new PipelineStartup();
     }

@@ -11,9 +11,10 @@
                     <column>gender</column>
                     <column>species</column>
                     <column>geographic_origin</column>
+                    <column>center</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="laboratory" queryName="subjects" targetOption="truncate">
+            <destination schemaName="mgap" queryName="demographics" targetOption="truncate">
                 <columnTransforms>
 
                 </columnTransforms>

@@ -198,7 +198,7 @@ public class CellRangerCellHashingHandler extends AbstractParameterizedOutputHan
         CellRangerVDJUtils utils = new CellRangerVDJUtils(ctx.getLogger(), ctx.getSourceDirectory());
 
         Map<Integer, Integer> readsetToHashing = CellRangerVDJUtils.getCachedReadsetMap(ctx.getSequenceSupport());
-        ctx.getLogger().debug("total cashed readset/HTO pairs: " + readsetToHashing.size());
+        ctx.getLogger().debug("total cached readset/HTO pairs: " + readsetToHashing.size());
 
         //prepare whitelist of cell indexes
         File cellBarcodeWhitelist = utils.getValidCellIndexFile();

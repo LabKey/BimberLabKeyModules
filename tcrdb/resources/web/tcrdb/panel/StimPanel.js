@@ -1887,13 +1887,13 @@ Ext4.define('TCRdb.panel.StimPanel', {
                                 var sampleName = getSampleName(simpleSampleNames, r.readsetId, r['readsetId/name']);
                                 var data = [sampleName, (instrument === 'Novogene' ? '' : cleanedName), bc, ''];
                                 if (instrument === 'Novogene') {
-                                    data = idx === 0 ? [sampleName] : ['']; //only add once per group
+                                    data = [sampleName];
                                     if (r.plateAlias) {
                                         data.unshift(r.plateAlias);
                                         data.push('G' + r.plateId.replace(/-/g, '_'));
                                     }
                                     else {
-                                        data.unshift('G' + r.plateId.replace(/-/g, '_'));
+                                        data.unshift(idx === 0 ? 'G' + r.plateId.replace(/-/g, '_') : '');
                                     }
 
                                     data.push('Macaca mulatta');
@@ -1928,13 +1928,13 @@ Ext4.define('TCRdb.panel.StimPanel', {
                                 var sampleName = getSampleName(simpleSampleNames, r.enrichedReadsetId, r['enrichedReadsetId/name'], (instrument === 'Novogene' ? '' : '-TCR'));
                                 var data = [sampleName, (instrument === 'Novogene' ? '' : cleanedName), bc, ''];
                                 if (instrument === 'Novogene') {
-                                    data = idx === 0 ? [sampleName] : ['']; //only add once per group
+                                    data = [sampleName];
                                     if (r.plateAlias) {
                                         data.unshift(r.plateAlias);
                                         data.push('T' + r.plateId.replace(/-/g, '_'));
                                     }
                                     else {
-                                        data.push('T' + r.plateId.replace(/-/g, '_'));
+                                        data.unshift(idx === 0 ? 'T' + r.plateId.replace(/-/g, '_') : '');
                                     }
 
                                     data.push('Macaca mulatta');
