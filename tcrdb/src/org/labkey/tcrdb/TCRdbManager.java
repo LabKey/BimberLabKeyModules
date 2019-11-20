@@ -29,16 +29,22 @@ import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.query.InvalidKeyException;
 import org.labkey.api.query.QueryService;
+import org.labkey.api.query.QueryUpdateServiceException;
 import org.labkey.api.query.UserSchema;
 import org.labkey.api.security.User;
+import org.labkey.api.sequenceanalysis.GenomeTrigger;
 import org.labkey.api.sequenceanalysis.RefNtSequenceModel;
 import org.labkey.api.sequenceanalysis.SequenceAnalysisService;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.tcrdb.query.MixcrLibrary;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -72,6 +78,11 @@ public class TCRdbManager
         if (jsonFile == null)
         {
             throw new IllegalArgumentException("Unable to find JSON for MiXCR library: " + mixcrRowId);
+        }
+
+        if (lib.getLibraryId() != null)
+        {
+            throw new IllegalArgumentException("MiXCR library already has a genome associated with it: " + mixcrRowId);
         }
 
         Container target = c.isWorkbookOrTab() ? c.getParent() : c;
@@ -174,6 +185,16 @@ public class TCRdbManager
 
                             }
 
+                            if (ref.getDatedisabled() != null)
+                            {
+                                toUpdate.put("datedisabled", null);
+                            }
+
+                            if (ref.getDisabledby() != null)
+                            {
+                                toUpdate.put("disabledby", null);
+                            }
+
                             if (!gene.getGeneName().equals(ref.getSubset()))
                             {
                                 toUpdate.put("subset", gene.getGeneName());
@@ -235,7 +256,7 @@ public class TCRdbManager
             if (!sequences.isEmpty())
             {
                 _log.info("Creating mixcr genome with " + sequences.size() + " sequences");
-                SequenceAnalysisService.get().createReferenceLibrary(sequences, ContainerManager.getForId(lib.getContainer()), u, lib.getLabel(), null, "Created from MiXCR library: " + lib.getLibraryName(), true, true);
+                SequenceAnalysisService.get().createReferenceLibrary(sequences, ContainerManager.getForId(lib.getContainer()), u, lib.getLabel(), null, "Created from MiXCR library: " + lib.getLibraryName(), true, true, PageFlowUtil.set(new MiXCRGenomeTrigger(mixcrRowId)));
             }
             else
             {
@@ -248,6 +269,83 @@ public class TCRdbManager
             _log.error(e.getMessage(), e);
             throw e;
 
+        }
+    }
+
+    public static class MiXCRGenomeTrigger implements GenomeTrigger
+    {
+        private Integer _mixcrId = null;
+
+        public MiXCRGenomeTrigger()
+        {
+
+        }
+
+        public MiXCRGenomeTrigger(int mixcrId)
+        {
+            _mixcrId = mixcrId;
+        }
+
+        public Integer getMixcrId()
+        {
+            return _mixcrId;
+        }
+
+        public void setMixcrId(Integer mixcrId)
+        {
+            _mixcrId = mixcrId;
+        }
+
+        @Override
+        public String getName()
+        {
+            return "MiXCR Library Update";
+        }
+
+        @Override
+        public void onCreate(Container c, User u, Logger log, int genomeId)
+        {
+            if (_mixcrId != null)
+            {
+                TableInfo ti = QueryService.get().getUserSchema(u, c, TCRdbSchema.NAME).getTable(TCRdbSchema.TABLE_LIBRARIES);
+                List<Map<String, Object>> rows = new ArrayList<>();
+                List<Map<String, Object>> oldKeys = new ArrayList<>();
+                Map<String, Object> row = new CaseInsensitiveHashMap<>();
+                row.put("rowid", _mixcrId);
+                row.put("libraryId", genomeId);
+                rows.add(row);
+
+                Map<String, Object> keyRow = new CaseInsensitiveHashMap<>();
+                keyRow.put("rowid", _mixcrId);
+                oldKeys.add(keyRow);
+
+                try
+                {
+                    ti.getUpdateService().updateRows(u, c, rows, oldKeys, null, null);
+                }
+                catch (QueryUpdateServiceException | InvalidKeyException | BatchValidationException | SQLException e)
+                {
+                    _log.error(e.getMessage(), e);
+                }
+            }
+        }
+
+        @Override
+        public void onRecreate(Container c, User u, Logger log, int genomeId)
+        {
+
+        }
+
+        @Override
+        public void onDelete(Container c, User u, Logger log, int genomeId)
+        {
+
+        }
+
+        @Override
+        public boolean isAvailable(Container c)
+        {
+            return c.getActiveModules().contains(ModuleLoader.getInstance().getModule(TCRdbModule.class));
         }
     }
 }

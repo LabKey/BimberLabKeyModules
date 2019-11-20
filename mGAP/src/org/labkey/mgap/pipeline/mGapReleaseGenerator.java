@@ -165,7 +165,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
         public void init(PipelineJob job, SequenceAnalysisJobSupport support, List<SequenceOutputFile> inputFiles, JSONObject params, File outputDir, List<RecordedAction> actions, List<SequenceOutputFile> outputsToCreate) throws UnsupportedOperationException, PipelineJobException
         {
             job.getLogger().info("writing track/subset data to file");
-            TableInfo releaseTrackSubsets = QueryService.get().getUserSchema(job.getUser(), (job.getContainer().isWorkbook() ? job.getContainer().getParent() : job.getContainer()), mGAPSchema.NAME).getTable(mGAPSchema.TABLE_RELEASE_TRACKS);
+            TableInfo releaseTracks = QueryService.get().getUserSchema(job.getUser(), (job.getContainer().isWorkbook() ? job.getContainer().getParent() : job.getContainer()), mGAPSchema.NAME).getTable(mGAPSchema.TABLE_RELEASE_TRACKS);
 
             Set<FieldKey> toSelect = new HashSet<>();
             toSelect.add(FieldKey.fromString("trackName"));
@@ -174,13 +174,13 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
             toSelect.add(FieldKey.fromString("isprimarytrack"));
             toSelect.add(FieldKey.fromString("vcfId"));
             toSelect.add(FieldKey.fromString("vcfId/dataId"));
-            Map<FieldKey, ColumnInfo> colMap = QueryService.get().getColumns(releaseTrackSubsets, toSelect);
+            Map<FieldKey, ColumnInfo> colMap = QueryService.get().getColumns(releaseTracks, toSelect);
 
             Set<String> distinctTracks = new HashSet<>();
             File trackFile = getTrackListFile(outputDir);
             try (CSVWriter writer = new CSVWriter(PrintWriters.getPrintWriter(trackFile), '\t', CSVWriter.NO_QUOTE_CHARACTER))
             {
-                new TableSelector(releaseTrackSubsets, colMap.values(), null, null).forEachResults(rs -> {
+                new TableSelector(releaseTracks, colMap.values(), null, null).forEachResults(rs -> {
                     if (rs.getObject(FieldKey.fromString("vcfId")) == null)
                     {
                         boolean isPrimary = rs.getObject(FieldKey.fromString("isprimarytrack")) != null && rs.getBoolean(FieldKey.fromString("isprimarytrack"));

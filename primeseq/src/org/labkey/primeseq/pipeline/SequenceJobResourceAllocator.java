@@ -280,7 +280,7 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
         }
     }
 
-    private void removeExistingPartition(List<String> lines, boolean removeTime)
+    private void removeLines(List<String> lines, boolean removeTime)
     {
         lines.removeIf(line -> line.contains("#SBATCH --qos="));
 
@@ -290,8 +290,28 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
         }
     }
 
+    private String getTime(PipelineJob job)
+    {
+        Map<String, String> params = ((HasJobParams)job).getJobParams();
+        if (params.get("resourceSettings.resourceSettings.time") != null)
+        {
+            return StringUtils.trimToNull(params.get("resourceSettings.resourceSettings.time"));
+        }
+
+        return null;
+    }
+
     private void possiblyAddWeekLongLines(PipelineJob job, RemoteExecutionEngine engine, List<String> lines)
     {
+        String time = getTime(job);
+        if (time != null)
+        {
+            job.getLogger().debug("adding user-supplied time to job: " + time);
+            removeLines(lines, true);
+
+            lines.add("#SBATCH --time=" + time);
+        }
+
         Map<String, String> params = ((HasJobParams)job).getJobParams();
         if (params.get("resourceSettings.resourceSettings.weekLongJob") != null)
         {
@@ -312,11 +332,11 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
                     //Note: consider supporting --time, which allows request of a shorter duration job
 
                     //first remove existing
-                    removeExistingPartition(lines, true);
+                    removeLines(lines, true);
 
                     //then add
                     lines.add("#SBATCH --qos=long_jobs");
-                    lines.add("#SBATCH --time=10-0");  //10 days
+                    lines.add("#SBATCH --time=" + (time == null ? "10-0" :  time));  //10 days
                 }
             }
         }
@@ -330,71 +350,15 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
                 if (engine.getType().equals("SlurmEngine"))
                 {
                     //first remove existing
-                    removeExistingPartition(lines, true);
+                    removeLines(lines, true);
 
                     //then add
                     lines.add("#SBATCH --qos=very_long_jobs");
-                    lines.add("#SBATCH --time=30-0");  //30 days
+                    lines.add("#SBATCH --time=" + (time == null ? "30-0" : time));  //30 days
                 }
             }
         }
     }
-
-    private boolean jobProvidedCpusOrRam(PipelineJob job)
-    {
-        if (job instanceof HasJobParams)
-        {
-            Map<String, String> params = ((HasJobParams) job).getJobParams();
-            if (StringUtils.trimToNull(params.get("resourceSettings.resourceSettings.cpus")) != null)
-            {
-                return true;
-            }
-            else if (StringUtils.trimToNull(params.get("resourceSettings.resourceSettings.ram")) != null)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-//    private boolean getHighIOValue(PipelineJob job)
-//    {
-//        Map<String, String> params = ((HasJobParams) job).getJobParams();
-//        if (params.get("resourceSettings.resourceSettings.highio") != null)
-//        {
-//            return ConvertHelper.convert(params.get("resourceSettings.resourceSettings.highio"), Boolean.class);
-//        }
-//
-//        return false;
-//    }
-//
-//    private void possiblyAddHighIoFlag(PipelineJob job, RemoteExecutionEngine engine, List<String> lines)
-//    {
-//        if (job instanceof HasJobParams)
-//        {
-//            boolean highio = getHighIOValue(job);
-//            if (highio)
-//            {
-//                job.getLogger().debug("adding highio as supplied by job");
-//                if (engine.getType().equals("HTCondorEngine"))
-//                {
-//                    lines.add("concurrency_limits = highio");
-//                    return;
-//                }
-//                else if (engine.getType().equals("SlurmEngine"))
-//                {
-//                    removeExistingPartition(lines, false);
-//
-//                    lines.add("#SBATCH --partition=highio");
-//                }
-//                else
-//                {
-//                    job.getLogger().debug("HighIO was selected, but it is not supported on this cluster type: " + engine.getType());
-//                }
-//            }
-//        }
-//    }
 
     private Long getFileSize(PipelineJob job)
     {

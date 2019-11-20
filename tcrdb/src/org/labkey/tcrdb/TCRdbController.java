@@ -32,6 +32,7 @@ import org.labkey.api.action.SimpleApiJsonForm;
 import org.labkey.api.action.SimpleViewAction;
 import org.labkey.api.action.SpringActionController;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
+import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.DbScope;
@@ -544,18 +545,38 @@ public class TCRdbController extends SpringActionController
             }
 
             StringBuilder fasta = new StringBuilder();
+            Map<Integer, Set<String>> segmentsByLibrary = new HashMap<>();
 
             //find assay records
             SimpleFilter assayFilter = new SimpleFilter(FieldKey.fromString("rowId"), rowIds, CompareType.IN);
-            TableSelector ts = new TableSelector(assayData, PageFlowUtil.set("samplename", "sequence", "cdr3", "vHit", "jHit", "dHit", "cHit"), assayFilter, null);
-            Set<String> primarySegments = new HashSet<>();
+            Map<FieldKey, ColumnInfo> cols = QueryService.get().getColumns(assayData, PageFlowUtil.set(
+                    FieldKey.fromString("samplename"),
+                    FieldKey.fromString("sequence"),
+                    FieldKey.fromString("cdr3"),
+                    FieldKey.fromString("vHit"),
+                    FieldKey.fromString("jHit"),
+                    FieldKey.fromString("dHit"),
+                    FieldKey.fromString("cHit"),
+                    FieldKey.fromString("libraryId/libraryId")));
+            TableSelector ts = new TableSelector(assayData, cols.values(), assayFilter, null);
+            Set<String> segmentsByName = new HashSet<>();
             final String[] segmentFields = new String[]{"vHit", "jHit", "cHit"};
             ts.forEachResults(rs -> {
+                Integer libraryId = rs.getObject(FieldKey.fromString("libraryId/libraryId")) == null ? null : rs.getInt(FieldKey.fromString("libraryId/libraryId"));
                 for (String fn : segmentFields)
                 {
                     if (rs.getString(FieldKey.fromString(fn)) != null)
                     {
-                        primarySegments.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                        if (libraryId != null)
+                        {
+                            Set<String> map = segmentsByLibrary.getOrDefault(libraryId, new HashSet<>());
+                            map.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                            segmentsByLibrary.put(libraryId, map);
+                        }
+                        else
+                        {
+                            segmentsByName.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                        }
                     }
                 }
 
@@ -571,14 +592,38 @@ public class TCRdbController extends SpringActionController
             });
 
             // look up segments in NT table
-            SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("name"), primarySegments, CompareType.IN);
-            ntFilter.addCondition(FieldKey.fromString("datedisabled"), null, CompareType.ISBLANK);
-            Set<String> missingSegments = new HashSet<>(primarySegments);
-            new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("ref_nt_sequences"), PageFlowUtil.set("rowid"), ntFilter, null).forEachResults(rs -> {
-                RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("rowid")));
-                fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
-                missingSegments.remove(nt.getName());
-            });
+            Set<String> missingSegments = new HashSet<>(segmentsByName);
+            for (int libraryId : segmentsByLibrary.keySet())
+            {
+                missingSegments.addAll(segmentsByLibrary.get(libraryId));
+            }
+
+            if (!segmentsByLibrary.isEmpty())
+            {
+                for (int libraryId : segmentsByLibrary.keySet())
+                {
+                    SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("ref_nt_id/name"), segmentsByLibrary.get(libraryId), CompareType.IN);
+                    ntFilter.addCondition(FieldKey.fromString("ref_nt_id/datedisabled"), null, CompareType.ISBLANK);
+                    ntFilter.addCondition(FieldKey.fromString("library_id"), libraryId, CompareType.EQUAL);
+                    new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("reference_library_members"), PageFlowUtil.set("ref_nt_id"), ntFilter, null).forEachResults(rs -> {
+                        RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("ref_nt_id")));
+                        fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
+                        missingSegments.remove(nt.getName());
+                    });
+                }
+            }
+
+            if (!segmentsByName.isEmpty())
+            {
+                SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("name"), segmentsByName, CompareType.IN);
+                ntFilter.addCondition(FieldKey.fromString("datedisabled"), null, CompareType.ISBLANK);
+
+                new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("ref_nt_sequences"), PageFlowUtil.set("rowid"), ntFilter, null).forEachResults(rs -> {
+                    RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("rowid")));
+                    fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
+                    missingSegments.remove(nt.getName());
+                });
+            }
 
             if (!missingSegments.isEmpty())
             {
@@ -627,19 +672,45 @@ public class TCRdbController extends SpringActionController
 
             // find distinct analyses for assay rows and primary segments
             SimpleFilter assayFilter = new SimpleFilter(FieldKey.fromString("rowId"), rowIds, CompareType.IN);
-            TableSelector ts = new TableSelector(assayData, PageFlowUtil.set("analysisId", "vHit", "jHit", "dHit", "cHit", "cloneId", "sequence", "sampleName", "clonesFile", "cdr3"), assayFilter, null);
-            Set<String> primarySegments = new HashSet<>();
+            Map<FieldKey, ColumnInfo> cols = QueryService.get().getColumns(assayData, PageFlowUtil.set(
+                    FieldKey.fromString("analysisId"),
+                    FieldKey.fromString("samplename"),
+                    FieldKey.fromString("sequence"),
+                    FieldKey.fromString("cdr3"),
+                    FieldKey.fromString("vHit"),
+                    FieldKey.fromString("jHit"),
+                    FieldKey.fromString("dHit"),
+                    FieldKey.fromString("cHit"),
+                    FieldKey.fromString("cloneId"),
+                    FieldKey.fromString("sequence"),
+                    FieldKey.fromString("clonesFile"),
+                    FieldKey.fromString("libraryId/libraryId")));
+
+            TableSelector ts = new TableSelector(assayData, cols.values(), assayFilter, null);
+            Set<String> segmentsByName = new HashSet<>();
+            Map<Integer, Set<String>> segmentsByLibrary = new HashMap<>();
+
             Map<Integer, Set<String>> clnaToCloneMap = new HashMap<>();
             Map<String, String> clnaToCDR3Map = new HashMap<>();
             StringBuilder imputedSequences = new StringBuilder();
             Set<Integer> analyses = new HashSet<>();
             final String[] segmentFields = new String[]{"vHit", "jHit", "cHit"};
             ts.forEachResults(rs -> {
+                Integer libraryId = rs.getObject(FieldKey.fromString("libraryId/libraryId")) == null ? null : rs.getInt(FieldKey.fromString("libraryId/libraryId"));
                 for (String fn : segmentFields)
                 {
                     if (rs.getString(FieldKey.fromString(fn)) != null)
                     {
-                        primarySegments.add(rs.getString(FieldKey.fromString(fn)));
+                        if (libraryId != null)
+                        {
+                            Set<String> map = segmentsByLibrary.getOrDefault(libraryId, new HashSet<>());
+                            map.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                            segmentsByLibrary.put(libraryId, map);
+                        }
+                        else
+                        {
+                            segmentsByName.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                        }
                     }
                 }
 
@@ -673,28 +744,60 @@ public class TCRdbController extends SpringActionController
             }
 
             // then find all segments from these analyses
-            Set<String> allSegments = new HashSet<>(primarySegments);
             SimpleFilter assayFilter2 = new SimpleFilter(FieldKey.fromString("analysisId"), analyses, CompareType.IN);
-            new TableSelector(assayData, PageFlowUtil.set("vHit", "jHit", "dHit", "cHit"), assayFilter2, null).forEachResults(rs -> {
+            new TableSelector(assayData, cols.values(), assayFilter2, null).forEachResults(rs -> {
+                Integer libraryId = rs.getObject(FieldKey.fromString("libraryId/libraryId")) == null ? null : rs.getInt(FieldKey.fromString("libraryId/libraryId"));
                 for (String fn : segmentFields)
                 {
                     if (rs.getString(FieldKey.fromString(fn)) != null)
                     {
-                        allSegments.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                        if (libraryId != null)
+                        {
+                            Set<String> map = segmentsByLibrary.getOrDefault(libraryId, new HashSet<>());
+                            map.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                            segmentsByLibrary.put(libraryId, map);
+                        }
+                        else
+                        {
+                            segmentsByName.add(StringUtils.trimToNull(rs.getString(FieldKey.fromString(fn))));
+                        }
                     }
                 }
             });
 
             // look up segments in NT table
+            Set<String> missingSegments = new HashSet<>(segmentsByName);
+            for (int libraryId : segmentsByLibrary.keySet())
+            {
+                missingSegments.addAll(segmentsByLibrary.get(libraryId));
+            }
+
             StringBuilder fasta = new StringBuilder();
-            SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("name"), allSegments, CompareType.IN);
-            ntFilter.addCondition(FieldKey.fromString("datedisabled"), null, CompareType.ISBLANK);
-            Set<String> missingSegments = new HashSet<>(allSegments);
-            new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("ref_nt_sequences"), PageFlowUtil.set("rowid"), ntFilter, null).forEachResults(rs -> {
-                RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("rowid")));
-                fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
-                missingSegments.remove(nt.getName());
-            });
+            if (!segmentsByLibrary.isEmpty())
+            {
+                for (int libraryId : segmentsByLibrary.keySet())
+                {
+                    SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("ref_nt_id/name"), segmentsByLibrary.get(libraryId), CompareType.IN);
+                    ntFilter.addCondition(FieldKey.fromString("ref_nt_id/datedisabled"), null, CompareType.ISBLANK);
+                    ntFilter.addCondition(FieldKey.fromString("library_id"), libraryId, CompareType.EQUAL);
+                    new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("reference_library_members"), PageFlowUtil.set("ref_nt_id"), ntFilter, null).forEachResults(rs -> {
+                        RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("ref_nt_id")));
+                        fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
+                        missingSegments.remove(nt.getName());
+                    });
+                }
+            }
+
+            if (!segmentsByName.isEmpty())
+            {
+                SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("name"), segmentsByName, CompareType.IN);
+                ntFilter.addCondition(FieldKey.fromString("datedisabled"), null, CompareType.ISBLANK);
+                new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("ref_nt_sequences"), PageFlowUtil.set("rowid"), ntFilter, null).forEachResults(rs -> {
+                    RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("rowid")));
+                    fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
+                    missingSegments.remove(nt.getName());
+                });
+            }
 
             if (!missingSegments.isEmpty())
             {

@@ -962,4 +962,80 @@
             </item>
         </buttonBarOptions>
     </table>
+    <table tableName="demographics" tableDbType="TABLE" useColumnOrder="true">
+        <javaCustomizer class="org.labkey.ldk.query.DefaultTableCustomizer" />
+        <pkColumnName>rowid</pkColumnName>
+        <tableTitle>Supplemental Demographics</tableTitle>
+        <auditLogging>DETAILED</auditLogging>
+        <columns>
+            <column columnName="rowid">
+                <isAutoInc>true</isAutoInc>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <isUserEditable>false</isUserEditable>
+                <columnTitle>Row Id</columnTitle>
+            </column>
+            <column columnName="subjectname">
+                <columnTitle>Subject Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="species">
+                <columnTitle>Species</columnTitle>
+                <fk>
+                    <fkDbSchema>laboratory</fkDbSchema>
+                    <fkTable>species</fkTable>
+                    <fkColumnName>common_name</fkColumnName>
+                    <fkDisplayColumnName useRawValue="true"/>
+                </fk>
+            </column>
+            <column columnName="gender">
+                <columnTitle>Gender</columnTitle>
+                <fk>
+                    <fkDbSchema>laboratory</fkDbSchema>
+                    <fkTable>genders</fkTable>
+                    <fkColumnName>code</fkColumnName>
+                    <fkDisplayColumnName useRawValue="true"/>
+                </fk>
+            </column>
+            <column columnName="geographic_origin">
+                <columnTitle>Geographic Origin</columnTitle>
+                <fk>
+                    <fkDbSchema>laboratory</fkDbSchema>
+                    <fkTable>geographic_origins</fkTable>
+                    <fkColumnName>origin</fkColumnName>
+                    <fkDisplayColumnName useRawValue="true"/>
+                </fk>
+            </column>
+            <column columnName="center">
+                <columnTitle>Center</columnTitle>
+            </column>
+            <column columnName="status">
+                <columnTitle>Status</columnTitle>
+            </column>
+            <column columnName="container">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="createdby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="created">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modifiedby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modified">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <isHidden>true</isHidden>
+            </column>
+        </columns>
+    </table>
+
 </tables>

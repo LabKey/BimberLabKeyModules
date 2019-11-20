@@ -47,6 +47,10 @@ public class mGAPUserSchema extends SimpleUserSchema
             // TODO: assert cf is null or not default?
             return new ContainerScopedTable<>(this, sourceTable, cf, "subjectname").init();
         }
+        else if (mGAPSchema.TABLE_DEMOGRAPHICS.equalsIgnoreCase(name))
+        {
+            return new ContainerScopedTable<>(this, sourceTable, cf, "subjectname").init();
+        }
         else if (mGAPSchema.TABLE_VARIANT_CATALOG_RELEASES.equalsIgnoreCase(name))
         {
             return createWrappedVariantTable(name, sourceTable, cf);

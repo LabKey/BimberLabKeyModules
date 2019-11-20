@@ -1,5 +1,9 @@
 package org.labkey.tcrdb;
 
+import org.labkey.api.assay.AssayProtocolSchema;
+import org.labkey.api.assay.AssayProvider;
+import org.labkey.api.assay.AssayResultTable;
+import org.labkey.api.assay.AssayService;
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
@@ -18,10 +22,6 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.UserSchema;
-import org.labkey.api.assay.AssayProtocolSchema;
-import org.labkey.api.assay.AssayProvider;
-import org.labkey.api.assay.AssayResultTable;
-import org.labkey.api.assay.AssayService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -199,7 +199,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
     {
         addAssayFieldsToTable(ti, "analysisId/readset", "LEFT JOIN sequenceanalysis.sequence_analyses a2 ON (a.analysisId = a2.rowId) WHERE a2.readset = " + ExprColumn.STR_TABLE_ALIAS + ".readsetId", "readsetId", "FullTranscript", " (Full Transcriptome)");
 
-        addAssayFieldsToTable(ti, "cdna", " WHERE a.cDNA = " + ExprColumn.STR_TABLE_ALIAS + ".rowid", "enrichedReadsetId", "TCREnriched", " (TCR Enriched)", false);
+        addAssayFieldsToTable(ti, "cdna", " WHERE a.cDNA = " + ExprColumn.STR_TABLE_ALIAS + ".rowid", "rowid", "TCREnriched", " (TCR Enriched)", false);
     }
 
     private void addAssayFieldsToTable(AbstractTableInfo ti, String urlField, String whereClause, String urlSourceCol)

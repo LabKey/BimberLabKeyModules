@@ -37,6 +37,15 @@
                 <columnTitle>Additional Params</columnTitle>
                 <description>A semi-colon delimited list of additional command line arguments to pass to mixcr align</description>
             </column>
+            <column columnName="libraryId">
+                <columnTitle>Reference Genome</columnTitle>
+                <nullable>true</nullable>
+                <fk>
+                    <fkDbSchema>sequenceanalysis</fkDbSchema>
+                    <fkTable>reference_libraries</fkTable>
+                    <fkColumnName>rowid</fkColumnName>
+                </fk>
+            </column>
             <column columnName="dateDisabled">
                 <columnTitle>Date Disabled</columnTitle>
             </column>

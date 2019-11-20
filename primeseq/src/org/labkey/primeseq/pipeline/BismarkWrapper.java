@@ -27,6 +27,7 @@ import org.labkey.api.sequenceanalysis.pipeline.AbstractPipelineStepProvider;
 import org.labkey.api.sequenceanalysis.pipeline.AlignerIndexUtil;
 import org.labkey.api.sequenceanalysis.pipeline.AlignmentOutputImpl;
 import org.labkey.api.sequenceanalysis.pipeline.AlignmentStep;
+import org.labkey.api.sequenceanalysis.pipeline.AlignmentStepProvider;
 import org.labkey.api.sequenceanalysis.pipeline.AnalysisOutputImpl;
 import org.labkey.api.sequenceanalysis.pipeline.AnalysisStep;
 import org.labkey.api.sequenceanalysis.pipeline.CommandLineParam;
@@ -39,6 +40,7 @@ import org.labkey.api.sequenceanalysis.pipeline.SamtoolsRunner;
 import org.labkey.api.sequenceanalysis.pipeline.SequenceOutputTracker;
 import org.labkey.api.sequenceanalysis.pipeline.SequencePipelineService;
 import org.labkey.api.sequenceanalysis.pipeline.ToolParameterDescriptor;
+import org.labkey.api.sequenceanalysis.run.AbstractAlignmentPipelineStep;
 import org.labkey.api.sequenceanalysis.run.AbstractCommandPipelineStep;
 import org.labkey.api.sequenceanalysis.run.AbstractCommandWrapper;
 import org.labkey.api.util.FileUtil;
@@ -78,9 +80,9 @@ public class BismarkWrapper extends AbstractCommandWrapper
         super(logger);
     }
 
-    public static class BismarkAlignmentStep extends AbstractCommandPipelineStep<BismarkWrapper> implements AlignmentStep
+    public static class BismarkAlignmentStep extends AbstractAlignmentPipelineStep<BismarkWrapper> implements AlignmentStep
     {
-        public BismarkAlignmentStep(PipelineStepProvider provider, PipelineContext ctx)
+        public BismarkAlignmentStep(AlignmentStepProvider provider, PipelineContext ctx)
         {
             super(provider, ctx, new BismarkWrapper(ctx.getLogger()));
         }

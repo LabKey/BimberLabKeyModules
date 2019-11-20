@@ -1,6 +1,7 @@
 package org.labkey.mgap.query;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.DataColumn;
 import org.labkey.api.data.DisplayColumn;
@@ -14,6 +15,8 @@ import java.util.Set;
 
 public class SourceDisplayColumnFactory implements DisplayColumnFactory
 {
+    private static final Logger _log = Logger.getLogger(SourceDisplayColumnFactory.class);
+
     @Override
     public DisplayColumn createRenderer(ColumnInfo colInfo)
     {
@@ -40,14 +43,21 @@ public class SourceDisplayColumnFactory implements DisplayColumnFactory
                 if (identifier != null && identifier.contains(":"))
                 {
                     String[] parts = identifier.split(":");
-                    switch (parts[0])
+                    if (parts.length != 2)
                     {
-                        case "ClinVar":
-                            if (!StringUtils.isEmpty(parts[1]))
-                            {
-                                url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
-                            }
-                            break;
+                        _log.error("Invalid variant identifier: " + val, new Exception());
+                    }
+                    else
+                    {
+                        switch (parts[0])
+                        {
+                            case "ClinVar":
+                                if (!StringUtils.isEmpty(parts[1]))
+                                {
+                                    url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
+                                }
+                                break;
+                        }
                     }
                 }
 

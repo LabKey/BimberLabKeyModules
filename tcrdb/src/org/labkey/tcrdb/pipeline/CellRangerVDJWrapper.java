@@ -29,15 +29,15 @@ import org.labkey.api.sequenceanalysis.pipeline.AbstractAlignmentStepProvider;
 import org.labkey.api.sequenceanalysis.pipeline.AlignerIndexUtil;
 import org.labkey.api.sequenceanalysis.pipeline.AlignmentOutputImpl;
 import org.labkey.api.sequenceanalysis.pipeline.AlignmentStep;
+import org.labkey.api.sequenceanalysis.pipeline.AlignmentStepProvider;
 import org.labkey.api.sequenceanalysis.pipeline.CommandLineParam;
 import org.labkey.api.sequenceanalysis.pipeline.IndexOutputImpl;
 import org.labkey.api.sequenceanalysis.pipeline.PipelineContext;
-import org.labkey.api.sequenceanalysis.pipeline.PipelineStepProvider;
 import org.labkey.api.sequenceanalysis.pipeline.ReferenceGenome;
 import org.labkey.api.sequenceanalysis.pipeline.SequenceAnalysisJobSupport;
 import org.labkey.api.sequenceanalysis.pipeline.SequencePipelineService;
 import org.labkey.api.sequenceanalysis.pipeline.ToolParameterDescriptor;
-import org.labkey.api.sequenceanalysis.run.AbstractCommandPipelineStep;
+import org.labkey.api.sequenceanalysis.run.AbstractAlignmentPipelineStep;
 import org.labkey.api.sequenceanalysis.run.AbstractCommandWrapper;
 import org.labkey.api.sequenceanalysis.run.SimpleScriptWrapper;
 import org.labkey.api.util.FileUtil;
@@ -92,6 +92,12 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             ), PageFlowUtil.set("tcrdb/field/AssaySelectorField.js"), "https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger", true, false, false, ALIGNMENT_MODE.MERGE_THEN_ALIGN);
         }
 
+        @Override
+        public boolean shouldRunIdxstats()
+        {
+            return false;
+        }
+
         public String getName()
         {
             return "CellRanger-VDJ";
@@ -108,7 +114,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
         }
     }
 
-    public static class CellRangerVDJAlignmentStep extends AbstractCommandPipelineStep<CellRangerVDJWrapper> implements AlignmentStep
+    public static class CellRangerVDJAlignmentStep extends AbstractAlignmentPipelineStep<CellRangerVDJWrapper> implements AlignmentStep
     {
         private CellRangerVDJUtils _utils = null;
 
@@ -122,7 +128,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             return _utils;
         }
 
-        public CellRangerVDJAlignmentStep(PipelineStepProvider provider, PipelineContext ctx, CellRangerVDJWrapper wrapper)
+        public CellRangerVDJAlignmentStep(AlignmentStepProvider provider, PipelineContext ctx, CellRangerVDJWrapper wrapper)
         {
             super(provider, ctx, wrapper);
         }
@@ -336,7 +342,15 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             output.setBAM(bam);
 
             //NOTE: run these before cleanup in case of failure
-            getUtils().runRemoteCellHashingTasks(output, getUtils().getPerCellCsv(output.getBAM().getParentFile()), rs, getPipelineCtx().getSequenceSupport(), null, getPipelineCtx().getWorkingDirectory(), getPipelineCtx().getSourceDirectory());
+            Integer assayId = getProvider().getParameterByName(TARGET_ASSAY).extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Integer.class);
+            if (assayId != null)
+            {
+                getUtils().runRemoteCellHashingTasks(output, getUtils().getPerCellCsv(output.getBAM().getParentFile()), rs, getPipelineCtx().getSequenceSupport(), null, getPipelineCtx().getWorkingDirectory(), getPipelineCtx().getSourceDirectory());
+            }
+            else
+            {
+                getPipelineCtx().getLogger().debug("No target assay selected, skipping cell hashing steps");
+            }
 
             //now do cleanup/rename:
             try
@@ -417,32 +431,40 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             return true;
         }
 
-        private String getSymlinkFileName(String fileName)
+        private String getSymlinkFileName(String fileName, boolean doRename, String sampleName, int idx, boolean isReversed)
         {
             //NOTE: cellranger is very picky about file name formatting
-            Matcher m = FILE_PATTERN.matcher(fileName);
-            if (m.matches())
+            if (doRename)
             {
-                if (!StringUtils.isEmpty(m.group(7)))
-                {
-                    return m.group(1).replaceAll("_", "-") + StringUtils.trimToEmpty(m.group(2)) + "_L" + StringUtils.trimToEmpty(m.group(3)) + "_" + StringUtils.trimToEmpty(m.group(4)) + StringUtils.trimToEmpty(m.group(5)) + StringUtils.trimToEmpty(m.group(6)) + ".fastq.gz";
-                }
-                else if (m.group(1).contains("_"))
-                {
-                    getPipelineCtx().getLogger().info("replacing underscores in file/sample name");
-                    return m.group(1).replaceAll("_", "-") + StringUtils.trimToEmpty(m.group(2)) + "_L" + StringUtils.trimToEmpty(m.group(3)) + "_" + StringUtils.trimToEmpty(m.group(4)) + StringUtils.trimToEmpty(m.group(5)) + StringUtils.trimToEmpty(m.group(6)) + ".fastq.gz";
-                }
-                else
-                {
-                    getPipelineCtx().getLogger().info("no additional characters found");
-                }
+                sampleName = FileUtil.makeLegalName(sampleName.replaceAll("_", "-")).replaceAll(" ", "-").replaceAll("\\.", "-");;
+                return sampleName + "_S1_L001_R" + (isReversed ? "2" : "1") + "_" + StringUtils.leftPad(String.valueOf(idx), 3, "0") + ".fastq.gz";
             }
             else
             {
-                getPipelineCtx().getLogger().warn("filename does not match Illumina formatting: " + fileName);
+                Matcher m = FILE_PATTERN.matcher(fileName);
+                if (m.matches())
+                {
+                    if (!StringUtils.isEmpty(m.group(7)))
+                    {
+                        return m.group(1).replaceAll("_", "-") + StringUtils.trimToEmpty(m.group(2)) + "_L" + StringUtils.trimToEmpty(m.group(3)) + "_" + StringUtils.trimToEmpty(m.group(4)) + StringUtils.trimToEmpty(m.group(5)) + StringUtils.trimToEmpty(m.group(6)) + ".fastq.gz";
+                    }
+                    else if (m.group(1).contains("_"))
+                    {
+                        getPipelineCtx().getLogger().info("replacing underscores in file/sample name");
+                        return m.group(1).replaceAll("_", "-") + StringUtils.trimToEmpty(m.group(2)) + "_L" + StringUtils.trimToEmpty(m.group(3)) + "_" + StringUtils.trimToEmpty(m.group(4)) + StringUtils.trimToEmpty(m.group(5)) + StringUtils.trimToEmpty(m.group(6)) + ".fastq.gz";
+                    }
+                    else
+                    {
+                        getPipelineCtx().getLogger().info("no additional characters found");
+                    }
+                }
+                else
+                {
+                    getPipelineCtx().getLogger().warn("filename does not match Illumina formatting: " + fileName);
+                }
             }
 
-            return fileName;
+            return FileUtil.makeLegalName(fileName);
         }
 
         public Set<String> prepareFastqSymlinks(Readset rs, File localFqDir) throws PipelineJobException
@@ -453,11 +475,20 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
                 localFqDir.mkdirs();
             }
 
+            String[] files = localFqDir.list();
+            if (files != null && files.length > 0)
+            {
+                deleteSymlinks(localFqDir);
+            }
+
+            int idx = 0;
+            boolean doRename = true;  //cellranger is too picky - simply rename files all the time
             for (ReadData rd : rs.getReadData())
             {
+                idx++;
                 try
                 {
-                    File target1 = new File(localFqDir, getSymlinkFileName(rd.getFile1().getName()));
+                    File target1 = new File(localFqDir, getSymlinkFileName(rd.getFile1().getName(), doRename,  rs.getName(), idx, false));
                     getPipelineCtx().getLogger().debug("file: " + rd.getFile1().getPath());
                     getPipelineCtx().getLogger().debug("target: " + target1.getPath());
                     if (target1.exists())
@@ -471,7 +502,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
 
                     if (rd.getFile2() != null)
                     {
-                        File target2 = new File(localFqDir, getSymlinkFileName(rd.getFile2().getName()));
+                        File target2 = new File(localFqDir, getSymlinkFileName(rd.getFile2().getName(), doRename, rs.getName(), idx, true));
                         getPipelineCtx().getLogger().debug("file: " + rd.getFile2().getPath());
                         getPipelineCtx().getLogger().debug("target: " + target2.getPath());
                         if (target2.exists())

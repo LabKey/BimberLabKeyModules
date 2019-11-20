@@ -121,6 +121,11 @@ Ext4.define('TCRdb.panel.cDNAImportPanel', {
             itemId: 'requireHTO',
             checked: true
         }, {
+            xtype: 'checkbox',
+            fieldLabel: 'Require Library Concentrations',
+            itemId: 'requireConc',
+            checked: true
+        }, {
             xtype: 'textarea',
             fieldLabel: 'Paste Data Below',
             labelAlign: 'top',

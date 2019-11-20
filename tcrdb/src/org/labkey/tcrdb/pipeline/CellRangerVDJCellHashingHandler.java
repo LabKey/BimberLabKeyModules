@@ -48,7 +48,7 @@ public class CellRangerVDJCellHashingHandler extends AbstractParameterizedOutput
 
     public CellRangerVDJCellHashingHandler()
     {
-        super(ModuleLoader.getInstance().getModule(TCRdbModule.class), "CellRanger VDJ/Cell Hashing", "This will run CiteSeqCount/MultiSeqClassifier to generate a sample-to-cellbarcode TSV based on the filtered barcodes from CellRanger VDJ. Results will be imported into the selected assay.", new LinkedHashSet<>(PageFlowUtil.set("tcrdb/field/AssaySelectorField.js")), Arrays.asList(
+        super(ModuleLoader.getInstance().getModule(TCRdbModule.class), "CellRanger VDJ Import", "This will either directly import data (if cell hashing is not used), or run CiteSeqCount/MultiSeqClassifier to generate a sample-to-cellbarcode TSV based on the filtered barcodes from CellRanger VDJ and then import.", new LinkedHashSet<>(PageFlowUtil.set("tcrdb/field/AssaySelectorField.js")), Arrays.asList(
                 ToolParameterDescriptor.create(TARGET_ASSAY, "Target Assay", "Results will be loaded into this assay.  If no assay is selected, a table will be created with nothing in the DB.", "tcr-assayselectorfield", null, null),
                 ToolParameterDescriptor.create(DELETE_EXISTING_ASSAY_DATA, "Delete Any Existing Assay Data", "If selected, prior to importing assay data, and existing assay runs in the target container from this readset will be deleted.", "checkbox", new JSONObject(){{
                     put("checked", true);
@@ -218,6 +218,7 @@ public class CellRangerVDJCellHashingHandler extends AbstractParameterizedOutput
             if (metrics.exists())
             {
                 job.getLogger().info("Loading metrics");
+                int total = 0;
                 TableInfo ti = DbSchema.get("sequenceanalysis", DbSchemaType.Module).getTable("quality_metrics");
                 try (CSVReader reader = new CSVReader(Readers.getReader(metrics), '\t'))
                 {
@@ -243,15 +244,19 @@ public class CellRangerVDJCellHashingHandler extends AbstractParameterizedOutput
                         String fieldName = NumberUtils.isCreatable(value) ? "metricvalue" : "qualvalue";
                         r.put(fieldName, value);
 
+                        r.put("analysis_id", so.getAnalysis_id());
                         r.put("dataid", so.getDataId());
                         r.put("readset", so.getReadset());
                         r.put("container", job.getContainer());
                         r.put("createdby", job.getUser().getUserId());
 
                         Table.insert(job.getUser(), ti, r);
+                        total++;
 
                         valueMap.put(line[1], value);
                     }
+
+                    job.getLogger().info("total metrics: " + total);
 
                     if (updateDescription)
                     {
@@ -301,8 +306,12 @@ public class CellRangerVDJCellHashingHandler extends AbstractParameterizedOutput
             }
             else
             {
-                job.getLogger().info("Unable to find metrics file: " + metrics.getPath());
+                job.getLogger().warn("Unable to find metrics file: " + metrics.getPath());
             }
+        }
+        else
+        {
+            job.getLogger().warn("Unable to update metrics, file id is null: " + so.getName());
         }
     }
 }

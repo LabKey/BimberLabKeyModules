@@ -82,7 +82,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         transform: 'htoIndex'
     },{
         name: 'hto_library_conc',
-        labels: ['HTO Library Conc', 'HTO Library Conc (ng/uL)', 'HTO (qubit) ng/uL'],
+        labels: ['HTO Library Conc', 'HTO Library Conc (ng/uL)', 'HTO (qubit) ng/uL', 'HTO (quibit) ng/uL'],
         allowRowSpan: true
     },{
         name: 'gex_library_index',
@@ -91,7 +91,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         transform: 'tenXBarcode'
     },{
         name: 'gex_library_conc',
-        labels: ['5\' GEX Library Conc', 'GEX Library Conc', 'GEX Library Conc (ng/uL)', '5\' GEX Conc', 'GEX Conc', 'GEX Conc (ng/uL)', '5\' GEX (qubit) ng/uL'],
+        labels: ['5\' GEX Library Conc', 'GEX Library Conc', 'GEX Library Conc (ng/uL)', '5\' GEX Conc', 'GEX Conc', 'GEX Conc (ng/uL)', '5\' GEX (qubit) ng/uL', '5\' GEX Library (qubit) ng/uL'],
         allowRowSpan: true
     },{
         name: 'gex_library_fragment',
@@ -116,7 +116,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
 
     transforms: {
         stim: function(val, panel) {
-            if (val && val === '--') {
+            if (val && (val === '--' || val === '-')) {
                 val = 'NoStim';
             }
 
@@ -334,8 +334,13 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             checked: true
         },{
             xtype: 'checkbox',
-            fieldLabel: 'Skip cDNA Libraries',
-            itemId: 'skipCDNA',
+            fieldLabel: 'Require Library Concentrations',
+            itemId: 'requireConc',
+            checked: true
+        }, {
+            xtype: 'checkbox',
+            fieldLabel: 'Skip Readsets',
+            itemId: 'skipReadsets',
             checked: false,
             listeners: {
                 scope: this,
@@ -359,8 +364,8 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             scope: this,
             handler: this.onPreview
         },{
-            style: 'margin-top: 20px;margin-bottom: 10px;',
             itemId: 'previewArea',
+            style: 'margin-top: 20px;margin-bottom: 10px;',
             autoEl: 'table',
             cls: 'stripe hover'
         }];
@@ -581,24 +586,35 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             var readsetGUIDs = {};
 
             var requireHTO = this.down('#requireHTO').getValue();
-            readsetGUIDs.hashingReadsetGUID = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'hto', 'HTO', 'Cell Hashing', null);
-            if (requireHTO && readsetGUIDs.hashingReadsetGUID === false){
+            var rs = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'hto', 'HTO', 'Cell Hashing', null);
+            if (Ext4.isString(rs)) {
+                readsetGUIDs.hashingReadsetGUID = rs;
+            }
+            else if (requireHTO){
                 errorsMsgs.push('Missing HTO library');
+                errorsMsgs = errorsMsgs.concat(rs);
                 return false;
             }
 
             var requireGEX = this.down('#requireGEX').getValue();
-            readsetGUIDs.readsetGUID = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'gex', 'GEX', 'RNA-seq, Single Cell', '10x 5\' GEX');
-            // always expect a GEX readset
-            if (requireGEX && readsetGUIDs.readsetGUID === false){
+            rs = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'gex', 'GEX', 'RNA-seq, Single Cell', '10x 5\' GEX');
+            if (Ext4.isString(rs)) {
+                readsetGUIDs.readsetGUID = rs;
+            }
+            else if (requireGEX){
                 errorsMsgs.push('Missing GEX library');
+                errorsMsgs = errorsMsgs.concat(rs);
                 return false;
             }
 
             var requireTCR = this.down('#requireTCR').getValue();
-            readsetGUIDs.enrichedReadsetGUID = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'tcr', 'TCR', 'RNA-seq, Single Cell', '10x 5\' VDJ (Rhesus A/B/G)');
-            if (requireTCR && readsetGUIDs.enrichedReadsetGUID === false){
+            rs = this.processReadsetForGroup(poolName, rowArr, ret.readsetRows, 'tcr', 'TCR', 'RNA-seq, Single Cell', '10x 5\' VDJ (Rhesus A/B/G)');
+            if (Ext4.isString(rs)) {
+                readsetGUIDs.enrichedReadsetGUID = rs;
+            }
+            else if (requireTCR){
                 errorsMsgs.push('Missing TCR library');
+                errorsMsgs = errorsMsgs.concat(rs);
                 return false;
             }
 
@@ -619,7 +635,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
 
         if (errorsMsgs.length) {
             errorsMsgs = Ext4.unique(errorsMsgs);
-            Ext4.Msg.alert('Error', errorsMsgs.join('\n'));
+            Ext4.Msg.alert('Error', errorsMsgs.join('<br>'));
             return null;
         }
 
@@ -633,7 +649,13 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         var subjectid = this.getUniqueValues(rowArr, 'animalId');
         subjectid = subjectid.length === 1 ? subjectid[0] : null;
 
+        var requireConc = this.down('#requireConc').getValue();
+
         if (idxValues.length === 1){
+            if (requireConc && !conc[0]) {
+                return ['Pool ' + poolName + ': did not provide concentration for library: ' + type];
+            }
+
             var guid = LABKEY.Utils.generateUUID();
             readsetRows.push({
                 name: poolName + '-' + type,
@@ -652,14 +674,12 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             return guid;
         }
         else if (idxValues.length > 1) {
-            Ext4.Msg.alert('Error', 'Pool ' + poolName + ' uses more than one ' + type + ' index');
-            return false;
+            return ['Error', 'Pool ' + poolName + ' uses more than one ' + type + ' index'];
         }
         else if (idxValues.length === 0) {
             var required = this.down('#require' + type).getValue();
             if (required) {
-                Ext4.Msg.alert('Error', 'No index found for pool: ' + poolName + ', for library type: ' + type);
-                return false;
+                return ['Error', 'No index found for pool: ' + poolName + ', for library type: ' + type];
             }
         }
     },
@@ -675,8 +695,8 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
     },
 
     renderPreview: function(colArray, parsedRows, groupedRows){
-        var target = this.down('#previewArea');
-        target.removeAll();
+        var previewArea = this.down('#previewArea');
+        previewArea.removeAll();
 
         var columns = [{title: 'Row #'}];
         var colIdxs = [];
@@ -708,7 +728,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             data.push(toAdd);
         }, this);
 
-        var id = '#' + target.getId();
+        var id = '#' + previewArea.getId();
         if ( jQuery.fn.dataTable.isDataTable(id) ) {
             jQuery(id).DataTable().destroy();
         }
@@ -730,7 +750,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             columns: columns
         });
 
-        target.doLayout();
+        previewArea.doLayout();
 
         if (missingValues){
             Ext4.Msg.alert('Error', 'One or more rows is missing data.  Any required cells without values are marked MISSING');
@@ -740,7 +760,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
     onSubmit: function(e, dt, node, config){
         Ext4.Msg.wait('Saving...');
         LABKEY.Ajax.request({
-            url: LABKEY.ActionURL.buildURL('tcrdb', 'importTenx', Laboratory.Utils.getQueryContainerPath()),
+            url: LABKEY.ActionURL.buildURL('tcrdb', 'importTenx'),
             method: 'POST',
             jsonData: config.rowData.groupedRows,
             scope: this,
