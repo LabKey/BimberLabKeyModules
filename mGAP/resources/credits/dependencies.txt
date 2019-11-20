@@ -1,0 +1,2 @@
+# direct external dependencies for project :server:modules:BimberLabKeyModules:mGAP
+htsjdk-2.14.3.jar
