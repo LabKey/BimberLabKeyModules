@@ -81,7 +81,7 @@ public class TCRdbProvider extends AbstractSequenceDataProvider
             return Collections.emptyList();
         }
 
-        TCRdbImportNavItem item = new TCRdbImportNavItem(this, "TCR Stims/Sorts", LaboratoryService.NavItemCategory.data, NAME);
+        TCRdbImportNavItem item = new TCRdbImportNavItem(this, "TCR Stims/Sorts (SMART-seq)", LaboratoryService.NavItemCategory.data, NAME);
         item.setQueryCache(cache);
         items.add(item);
 

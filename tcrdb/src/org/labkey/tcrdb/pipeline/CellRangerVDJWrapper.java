@@ -216,7 +216,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
                 }
             }
 
-            getUtils().prepareVDJHashingFilesIfNeeded(getPipelineCtx().getJob(), getPipelineCtx().getSequenceSupport());
+            getUtils().prepareHashingFilesIfNeeded(getPipelineCtx().getJob(), getPipelineCtx().getSequenceSupport(), "enrichedReadsetId");
         }
 
         private File getGenomeFasta()
@@ -347,8 +347,9 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             {
                 boolean scanEditDistances = getProvider().getParameterByName("scanEditDistances").extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Boolean.class, false);
                 int editDistance = getProvider().getParameterByName("editDistance").extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Integer.class, 2);
+                int minCountPerCell = getProvider().getParameterByName("minCountPerCell").extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Integer.class, 3);
 
-                getUtils().runRemoteCellHashingTasks(output, CellRangerVDJCellHashingHandler.CATEGORY, getUtils().getPerCellCsv(output.getBAM().getParentFile()), rs, getPipelineCtx().getSequenceSupport(), null, getPipelineCtx().getWorkingDirectory(), getPipelineCtx().getSourceDirectory(), editDistance, scanEditDistances, referenceGenome.getGenomeId());
+                getUtils().runRemoteCellHashingTasks(output, CellRangerVDJCellHashingHandler.CATEGORY, getUtils().getPerCellCsv(output.getBAM().getParentFile()), rs, getPipelineCtx().getSequenceSupport(), null, getPipelineCtx().getWorkingDirectory(), getPipelineCtx().getSourceDirectory(), editDistance, scanEditDistances, referenceGenome.getGenomeId(), minCountPerCell);
             }
             else
             {

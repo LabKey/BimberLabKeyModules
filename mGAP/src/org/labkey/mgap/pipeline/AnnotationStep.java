@@ -121,7 +121,7 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
     }
 
     @Override
-    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable Interval interval) throws PipelineJobException
+    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable List<Interval> intervals) throws PipelineJobException
     {
         VariantProcessingStepOutputImpl output = new VariantProcessingStepOutputImpl();
 
@@ -144,7 +144,7 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
             totalSubjects = reader.getFileHeader().getSampleNamesInOrder().size();
         }
 
-        boolean needToSubsetToInterval = interval != null;
+        boolean needToSubsetToInterval = intervals != null && !intervals.isEmpty();
         boolean dropGenotypes = totalSubjects > 10;
         boolean dropFiltered = getProvider().getParameterByName("dropFiltered").extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Boolean.class);
 
@@ -170,8 +170,11 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
 
             if (needToSubsetToInterval)
             {
-                selectArgs.add("-L");
-                selectArgs.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                for (Interval interval : intervals)
+                {
+                    selectArgs.add("-L");
+                    selectArgs.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                }
                 needToSubsetToInterval = false;
             }
 
@@ -202,26 +205,29 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
             {
                 List<String> selectArgs = new ArrayList<>();
                 getPipelineCtx().getLogger().info("subsetting VCF by interval");
-                selectArgs.add("-L");
-                selectArgs.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                for (Interval interval : intervals)
+                {
+                    selectArgs.add("-L");
+                    selectArgs.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                }
                 needToSubsetToInterval = false;
 
-                File subset = new File(outputDirectory, SequenceAnalysisService.get().getUnzippedBaseName(inputVCF.getName()) + "." + interval.getContig() + ".subset.vcf.gz");
-                if (!indexExists(subset))
+                File intervalSubset = new File(outputDirectory, SequenceAnalysisService.get().getUnzippedBaseName(inputVCF.getName()) + ".intervalSubset.vcf.gz");
+                if (!indexExists(intervalSubset))
                 {
                     SelectVariantsWrapper wrapper = new SelectVariantsWrapper(getPipelineCtx().getLogger());
-                    wrapper.execute(originalGenome.getWorkingFastaFile(), inputVCF, subset, selectArgs);
+                    wrapper.execute(originalGenome.getWorkingFastaFile(), inputVCF, intervalSubset, selectArgs);
                 }
                 else
                 {
-                    getPipelineCtx().getLogger().info("resuming with existing file: " + subset.getPath());
+                    getPipelineCtx().getLogger().info("resuming with existing file: " + intervalSubset.getPath());
                 }
 
-                output.addOutput(subset, "VCF Subset");
-                output.addIntermediateFile(subset);
-                output.addIntermediateFile(new File(subset.getPath() + ".tbi"));
+                output.addOutput(intervalSubset, "VCF Subset");
+                output.addIntermediateFile(intervalSubset);
+                output.addIntermediateFile(new File(intervalSubset.getPath() + ".tbi"));
 
-                currentVcf = subset;
+                currentVcf = intervalSubset;
 
                 getPipelineCtx().getJob().getLogger().info("total variants: " + SequenceAnalysisService.get().getVCFLineCount(currentVcf, getPipelineCtx().getJob().getLogger(), false));
                 getPipelineCtx().getJob().getLogger().info("passing variants: " + SequenceAnalysisService.get().getVCFLineCount(currentVcf, getPipelineCtx().getJob().getLogger(), true));
@@ -333,8 +339,11 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
             List<String> options = new ArrayList<>();
             if (needToSubsetToInterval)
             {
-                options.add("-L");
-                options.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                for (Interval interval : intervals)
+                {
+                    options.add("-L");
+                    options.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                }
                 needToSubsetToInterval = false;
             }
 

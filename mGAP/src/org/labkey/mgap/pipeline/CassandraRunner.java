@@ -104,7 +104,7 @@ public class CassandraRunner extends AbstractCommandWrapper
                 writer.write("set -x\n");
                 writer.write("set -e\n");
                 writer.write("{\n");
-                writer.write("cat " + inputUnzip.getPath() + " | head -n 50000 | grep -e '^#' | sed 's/Number=0,Type=String/Number=1,Type=String/';\n");
+                writer.write("cat " + inputUnzip.getPath() + " | head -n 50000 | grep -e '^#' | grep -v '^##META' | sed 's/Number=0,Type=String/Number=1,Type=String/';\n");
                 writer.write("cat " + inputUnzip.getPath() + " | grep -v '^#';\n");
                 writer.write("} | bgzip > " + outputGzip + "\n");
             }

@@ -10,23 +10,39 @@ labkey_home=/usr/local/labkey
 cd /usr/local/src
 
 #NOTE: corresponding changes must be made in javaWrapper.sh
-MAJOR=18
-MINOR=2
-BRANCH=Discvr${MAJOR}${MINOR}_Installers
-ARTIFACT=LabKey${MAJOR}.${MINOR}
-MODULE_DIST_NAME=prime-seq-modules
-PREMIUM=premium-${MAJOR}.${MINOR}.module
+MAJOR=19
+MINOR_FULL="3.4"
+MINOR_SHORT=3
+BRANCH=LabKey_Discvr_Discvr${MAJOR}${MINOR_SHORT}_Premuim_Installers
 TOMCAT_HOME=/usr/share/tomcat
+TEAMCITY_USERNAME=username
+MODULE_DIST_NAME=prime-seq-modules
+
+ARTIFACT=LabKey${MAJOR}.${MINOR_FULL}
+PREMIUM=premium-${MAJOR}.${MINOR_SHORT}.module
+DATAINTEGRATION=dataintegration-${MAJOR}.${MINOR_SHORT}.module
+
+isGzZip() {
+	RET=`file $1 | grep -E 'gzip compressed|Zip archive data' | wc -l`
+	if [ $RET == 0 ];then
+		echo "Not GZIP!"
+		exit 1
+	else
+		echo "Is GZIP!"
+	fi
+}
 
 #first download
 DATE=$(date +"%Y%m%d%H%M")
 MODULE_ZIP=${ARTIFACT}-ExtraModules-${DATE}.zip
 rm -Rf $MODULE_ZIP
-wget --trust-server-names --no-check-certificate -O $MODULE_ZIP http://teamcity.labkey.org/guestAuth/repository/download/LabKey_${BRANCH}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-{build.number}-ExtraModules.zip
+wget -O $MODULE_ZIP https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${BRANCH}/.lastSuccessful/${MODULE_DIST_NAME}/${ARTIFACT}-{build.number}-ExtraModules.zip
+isGzZip $MODULE_ZIP
 
 GZ=${ARTIFACT}-${DATE}-discvr-bin.tar.gz
 rm -Rf $GZ
-wget --trust-server-names --no-check-certificate -O $GZ http://teamcity.labkey.org/guestAuth/repository/download/Labkey_${BRANCH}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr-bin.tar.gz
+wget -O $GZ https://${TEAMCITY_USERNAME}@teamcity.labkey.org/repository/download/${BRANCH}/.lastSuccessful/discvr/${ARTIFACT}-{build.number}-discvr-bin.tar.gz
+isGzZip $GZ
 
 #extract, find name
 tar -xf $GZ
@@ -53,6 +69,11 @@ rm -Rf ./modules_unzip
 #premium
 if [ -e $PREMIUM ];then
         cp $PREMIUM ${labkey_home}/externalModules
+fi
+
+#DataIntegration
+if [ -e $DATAINTEGRATION ];then
+        cp $DATAINTEGRATION ${labkey_home}/externalModules
 fi
 
 #main server
