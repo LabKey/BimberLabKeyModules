@@ -578,7 +578,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                         data.unshift(r.plateAlias);
                                     }
                                     else {
-                                        data.unshift(idx === 0 ? 'G' + r.plateId.replace(/-/g, '_') : '');
+                                        data.unshift('G' + r.plateId.replace(/-/g, '_'));
                                     }
 
                                     data.push('Macaca mulatta');
@@ -590,9 +590,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                     data.push('500');
                                     data.push('1');  //PhiX
                                     data.push(r.laneAssignment || '');
-                                    if (idx === 0) {
-                                        data.push('Please QC individually and pool in equal amounts per lane');
-                                    }
+                                    data.push('Please QC individually and pool in equal amounts per lane');
                                 }
                                 rows.push(data.join(delim));
                             }, this);
@@ -617,7 +615,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                         data.unshift(r.plateAlias);
                                     }
                                     else {
-                                        data.unshift(idx === 0 ? 'T' + r.plateId.replace(/-/g, '_') : '');
+                                        data.unshift('T' + r.plateId.replace(/-/g, '_'));
                                     }
 
                                     data.push('Macaca mulatta');
@@ -629,9 +627,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                     data.push('700');
                                     data.push('1');  //PhiX
                                     data.push(r.laneAssignment || '');
-                                    if (idx === 0) {
-                                        data.push('Please QC individually and pool in equal amounts per lane');
-                                    }
+                                    data.push('Please QC individually and pool in equal amounts per lane');
                                 }
 
                                 rows.push(data.join(delim));
@@ -659,7 +655,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                         data.unshift(r.plateAlias);
                                     }
                                     else {
-                                        data.unshift(idx === 0 ? 'H' + r.plateId.replace(/-/g, '_') : '');
+                                        data.unshift('H' + r.plateId.replace(/-/g, '_'));
                                     }
 
                                     data.push('Macaca mulatta');
@@ -671,9 +667,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                     data.push('182');
                                     data.push('5');  //PhiX
                                     data.push(r.laneAssignment || '');
-                                    if (idx === 0) {
-                                        data.push('Cell hashing, 190bp amplicon.  Please QC individually and pool in equal amounts per lane');
-                                    }
+                                    data.push('Cell hashing, 190bp amplicon.  Please QC individually and pool in equal amounts per lane');
                                 }
 
                                 rows.push(data.join(delim));
