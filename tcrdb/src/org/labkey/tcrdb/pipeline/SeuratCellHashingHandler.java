@@ -22,7 +22,7 @@ import java.util.List;
 public class SeuratCellHashingHandler extends AbstractParameterizedOutputHandler<SequenceOutputHandler.SequenceOutputProcessor>
 {
     private FileType _fileType = new FileType(".seurat.rds", false);
-    private static final String CATEGORY = "Seurat Cell Hashing Calls";
+    public static final String CATEGORY = "Seurat Cell Hashing Calls";
 
     public SeuratCellHashingHandler()
     {
@@ -31,6 +31,7 @@ public class SeuratCellHashingHandler extends AbstractParameterizedOutputHandler
                     put("checked", true);
                 }}, true),
                 ToolParameterDescriptor.create("editDistance", "Edit Distance", null, "ldk-integerfield", null, 1),
+                ToolParameterDescriptor.create("minCountPerCell", "Min Reads/Cell (Cell Hashing)", null, "ldk-integerfield", null, 3),
                 ToolParameterDescriptor.create("useOutputFileContainer", "Submit to Source File Workbook", "If checked, each job will be submitted to the same workbook as the input file, as opposed to submitting all jobs to the same workbook.  This is primarily useful if submitting a large batch of files to process separately..", "checkbox", new JSONObject()
                 {{
                     put("checked", true);
@@ -79,7 +80,7 @@ public class SeuratCellHashingHandler extends AbstractParameterizedOutputHandler
         @Override
         public void init(PipelineJob job, SequenceAnalysisJobSupport support, List<SequenceOutputFile> inputFiles, JSONObject params, File outputDir, List<RecordedAction> actions, List<SequenceOutputFile> outputsToCreate) throws UnsupportedOperationException, PipelineJobException
         {
-            CellRangerVDJUtils.prepareCellHashingFiles(job, support, outputDir, "readsetId", true);
+            new CellRangerVDJUtils(job.getLogger(), outputDir).prepareHashingFilesIfNeeded(job, support, "readsetId");
         }
 
         @Override

@@ -35,6 +35,8 @@ import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
+import org.labkey.api.data.ContainerManager;
+import org.labkey.api.data.ContainerType;
 import org.labkey.api.data.DbScope;
 import org.labkey.api.data.Selector;
 import org.labkey.api.data.SimpleFilter;
@@ -977,10 +979,10 @@ public class TCRdbController extends SpringActionController
         @Override
         public Object execute(SimpleApiJsonForm form, BindException errors) throws Exception
         {
-            List<Map<String, Object>> stimRows = parseRows(form, "stimRows");
-            List<Map<String, Object>> sortRows = parseRows(form, "sortRows");
-            List<Map<String, Object>> readsetRows = parseRows(form, "readsetRows");
-            List<Map<String, Object>> cDNARows = parseRows(form, "cDNARows");
+            List<Map<String, Object>> stimRows = parseRows(form, "stimRows", getContainer());
+            List<Map<String, Object>> sortRows = parseRows(form, "sortRows", getContainer());
+            List<Map<String, Object>> readsetRows = parseRows(form, "readsetRows", getContainer());
+            List<Map<String, Object>> cDNARows = parseRows(form, "cDNARows", getContainer());
 
             UserSchema tcrdb = QueryService.get().getUserSchema(getUser(), getContainer(), TCRdbSchema.NAME);
             UserSchema sequenceAnalysis = QueryService.get().getUserSchema(getUser(), getContainer(), "sequenceanalysis");
@@ -1008,7 +1010,7 @@ public class TCRdbController extends SpringActionController
                 });
 
 
-                List<Map<String, Object>> insertedStimRows = tcrdb.getTable(TCRdbSchema.TABLE_STIMS).getUpdateService().insertRows(getUser(), getContainer(), stimRowsToInsert, bve, null, new HashMap<>());
+                List<Map<String, Object>> insertedStimRows = tcrdb.getTable(TCRdbSchema.TABLE_STIMS, null).getUpdateService().insertRows(getUser(), getContainer(), stimRowsToInsert, bve, null, new HashMap<>());
                 if (bve.hasErrors())
                 {
                     throw bve;
@@ -1042,7 +1044,7 @@ public class TCRdbController extends SpringActionController
                     }
                 });
 
-                sortRows = tcrdb.getTable(TCRdbSchema.TABLE_SORTS).getUpdateService().insertRows(getUser(), getContainer(), sortRowsToInsert, bve, null, new HashMap<>());
+                sortRows = tcrdb.getTable(TCRdbSchema.TABLE_SORTS, null).getUpdateService().insertRows(getUser(), getContainer(), sortRowsToInsert, bve, null, new HashMap<>());
                 if (bve.hasErrors())
                 {
                     throw bve;
@@ -1057,7 +1059,7 @@ public class TCRdbController extends SpringActionController
                     sortMap.put((String) r.get("objectId"), (Integer) r.get("rowId"));
                 });
 
-                readsetRows = sequenceAnalysis.getTable("sequence_readsets").getUpdateService().insertRows(getUser(), getContainer(), readsetRows, bve, null, new HashMap<>());
+                readsetRows = sequenceAnalysis.getTable("sequence_readsets", null).getUpdateService().insertRows(getUser(), getContainer(), readsetRows, bve, null, new HashMap<>());
                 if (bve.hasErrors())
                 {
                     throw bve;
@@ -1096,7 +1098,7 @@ public class TCRdbController extends SpringActionController
         }
     }
 
-    private static List<Map<String, Object>> parseRows(SimpleApiJsonForm form, String propName) throws ApiUsageException
+    private static List<Map<String, Object>> parseRows(SimpleApiJsonForm form, String propName, Container container) throws ApiUsageException
     {
         if (!form.getJsonObject().containsKey(propName))
         {
@@ -1109,6 +1111,18 @@ public class TCRdbController extends SpringActionController
         Arrays.stream(arr.toJSONObjectArray()).forEach(m -> {
             Map<String, Object> map = new CaseInsensitiveHashMap<>();
             map.putAll(m);
+
+            if (map.containsKey("workbook"))
+            {
+                Container parent = container.getContainerFor(ContainerType.DataType.folderManagement);
+                Container workbook = ContainerManager.getForPath(parent.getPath() + "/" + map.get("workbook").toString());
+                if (workbook == null)
+                {
+                    throw new IllegalArgumentException("Unable to identify matching workbook for: " + map.get("workbook"));
+                }
+
+                map.put("container", workbook == null ? null : workbook.getId());
+            }
             ret.add(map);
         });
 
@@ -1125,7 +1139,7 @@ public class TCRdbController extends SpringActionController
         {
             ApiSimpleResponse resp = new ApiSimpleResponse();
 
-            List<Map<String, Object>> stimRows = parseRows(form, "stimRows");
+            List<Map<String, Object>> stimRows = parseRows(form, "stimRows", getContainer());
 
             UserSchema us = QueryService.get().getUserSchema(getUser(), getContainer(), TCRdbSchema.NAME);
             if (us == null)

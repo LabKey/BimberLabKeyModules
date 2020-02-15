@@ -1,10 +1,9 @@
 Ext4.define('TCRdb.panel.PoolImportPanel', {
     extend: 'Ext.panel.Panel',
 
-    //TODO: replicate, buffer?
     COLUMNS: [{
-        name: 'expt',
-        labels: ['Expt', 'Expt #', 'Experiment', 'Exp#', 'Exp #', 'Workbook'],
+        name: 'workbook',
+        labels: ['Experiment/Workbook', 'Expt', 'Expt #', 'Experiment', 'Exp#', 'Exp #', 'Workbook', 'Workbook #'],
         allowRowSpan: true,
         alwaysShow: true,
         transform: 'expt',
@@ -27,7 +26,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         labels: ['Animal Id', 'SubjectId', 'Subject Id'],
         allowRowSpan: true,
         allowBlank: false,
-        transform: 'animal',
+        transform: 'animal'
     },{
         name: 'sampleDate',
         labels: ['Sample Date', 'Date'],
@@ -149,13 +148,15 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                 return;
             }
 
+            var barcodeSeries = panel.down('#barcodeSeries').getValue();
             val = val.toUpperCase();
-            if (!val.match(/^SI-GA-/)) {
+            var re = new RegExp('^' + barcodeSeries + '-', 'i');
+            if (!val.match(re)) {
                 if (val.length > 3) {
                     //errorMsgs.push('Every row must have name, application and proper barcodes');
                 }
                 else {
-                    val = 'SI-GA-' + val;
+                    val = barcodeSeries + '-' + val;
                 }
             }
 
@@ -178,9 +179,10 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             return val ? Ext4.data.Types.INTEGER.convert(val) : val;
         },
 
-        pool: function(val, panel){
-            if (panel.EXPERIMENT && Ext4.isNumeric(val) && panel.EXPERIMENT !== val){
-                return panel.EXPERIMENT + '-' + val;
+        pool: function(val, panel, row){
+            var workbook = row.workbook || panel.EXPERIMENT;
+            if (workbook && Ext4.isNumeric(val) && workbook !== val){
+                return workbook + '-' + val;
             }
 
             return val;
@@ -356,6 +358,13 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                 }
             }
         },{
+            xtype: 'ldk-simplecombo',
+            fieldLabel: '10x Barcode Series',
+            itemId: 'barcodeSeries',
+            forceSelection: true,
+            storeValues: ['SI-GA'],
+            value: 'SI-GA'
+        },{
             xtype: 'textarea',
             fieldLabel: 'Paste Data Below',
             labelAlign: 'top',
@@ -401,13 +410,15 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         var parsedRows = this.parseRows(colArray, rows);
         var stimRows = [];
         Ext4.Array.forEach(parsedRows, function(r){
+            LDK.Assert.assertNotEmpty('Expected non-null workbook', r.workbook);
             stimRows.push({
                 animalId: r.animalId,
                 date: r.sampleDate,
                 stim: r.stim,
                 treatment: r.treatment || 'None',
                 objectId: r.objectId,
-                population: r.population
+                population: r.population,
+                workbook: r.workbook
             });
         }, this);
 
@@ -484,7 +495,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         Ext4.Array.forEach(rows, function(row, rowIdx){
             var data = {
                 objectId: LABKEY.Utils.generateUUID()
-            }
+            };
 
             Ext4.Array.forEach(colArray, function(col, colIdx){
                 var cell = Ext4.isDefined(col.dataIdx) ? row[col.dataIdx] : '';
@@ -541,6 +552,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
 
                 stimMap[key] = guid;
                 stimIdxs[key] = stimIdx;
+                LDK.Assert.assertNotEmpty('Expected non-null workbook', row.workbook);
                 ret.stimRows.push({
                     rowId: row.stimId || null,
                     animalId: row.animalId,
@@ -549,7 +561,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                     effector: row.effector,
                     treatment: row.treatment || 'None',
                     objectId: guid,
-                    container: LABKEY.Security.currentContainer.id
+                    workbook: row.workbook
                 });
             }
 
@@ -559,6 +571,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         //sorts:
         var sortMap = {};
         Ext4.Array.forEach(parsedRows, function(row){
+            LDK.Assert.assertNotEmpty('Expected non-null workbook', row.workbook);
             var stimGUID = stimMap[this.getStimKey(row)];
             var key = this.getSortKey(row);
             if (!sortMap[key]){
@@ -575,7 +588,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                     hto: row.hto,
                     buffer: row.buffer,
                     objectId: guid,
-                    container: LABKEY.Security.currentContainer.id
+                    workbook: row.workbook
                 });
             }
         }, this);
@@ -626,12 +639,13 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             Ext4.Array.forEach(rowArr, function(row) {
                 var sortKey = this.getSortKey(row);
 
+                LDK.Assert.assertNotEmpty('Expected non-null workbook', row.workbook);
                 var cDNA = Ext4.apply({
                     sortGUID: sortMap[sortKey],
                     chemistry: null,
                     plateId: row.plateId,
                     well: row.well || 'Pool',
-                    container: LABKEY.Security.currentContainer.id
+                    workbook: row.workbook
                 }, readsetGUIDs);
 
                 ret.cDNARows.push(cDNA);
@@ -651,6 +665,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         var idxValues = this.getUniqueValues(rowArr, prefix + '_library_index');
         var conc = this.getUniqueValues(rowArr, prefix + '_library_conc');
         var fragment = this.getUniqueValues(rowArr, prefix + '_library_fragment');
+        var workbook = this.getUniqueValues(rowArr, 'workbook');
         var subjectid = this.getUniqueValues(rowArr, 'animalId');
         subjectid = subjectid.length === 1 ? subjectid[0] : null;
 
@@ -662,6 +677,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             }
 
             var guid = LABKEY.Utils.generateUUID();
+            LDK.Assert.assertNotEmpty('Expected non-null workbook', workbook);
             readsetRows.push({
                 name: poolName + '-' + type,
                 barcode5: idxValues[0],
@@ -673,7 +689,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                 subjectid: subjectid,
                 sampleType: 'mRNA',
                 objectId: guid,
-                container: LABKEY.Security.currentContainer.id
+                workbook: workbook
             });
 
             return guid;
@@ -714,7 +730,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
 
         var data = [];
         var missingValues = false;
-        var requireHTO = this.down('#requireHTO').getValue() || this.down('#requireHashTag').getValue();
+        var requireHTO = this.down('#requireHTO').getValue() || (this.down('#requireHashTag') && this.down('#requireHashTag').getValue());
         Ext4.Array.forEach(parsedRows, function(row, rowIdx){
             var toAdd = [rowIdx + 1];
             Ext4.Array.forEach(colIdxs, function(colIdx){
@@ -771,14 +787,14 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
     onSubmit: function(e, dt, node, config){
         Ext4.Msg.wait('Saving...');
         LABKEY.Ajax.request({
-            url: LABKEY.ActionURL.buildURL('tcrdb', 'importTenx'),
+            url: LABKEY.ActionURL.buildURL('tcrdb', 'importTenx', Laboratory.Utils.getQueryContainerPath()),
             method: 'POST',
             jsonData: config.rowData.groupedRows,
             scope: this,
             success: function(){
                 Ext4.Msg.hide();
                 Ext4.Msg.alert('Success', 'Data Saved', function(){
-                    window.location = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', null, {'query.queryName': 'cdnas', schemaName: 'tcrdb'})
+                    window.location = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', Laboratory.Utils.getQueryContainerPath(), {'query.queryName': 'cdnas', schemaName: 'tcrdb'})
                 }, this);
             },
             failure: LDK.Utils.getErrorCallback()

@@ -118,4 +118,10 @@ public class PrimeseqModule extends ExtendedSimpleModule
     {
         return PageFlowUtil.set(ClusterMaintenanceTask.TestCase.class);
     }
+
+    @Override
+    public boolean hasScripts()
+    {
+        return false;
+    }
 }

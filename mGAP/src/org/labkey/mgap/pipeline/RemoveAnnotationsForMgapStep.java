@@ -47,7 +47,7 @@ public class RemoveAnnotationsForMgapStep extends AbstractCommandPipelineStep<Re
     }
 
     @Override
-    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable Interval interval) throws PipelineJobException
+    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable List<Interval> intervals) throws PipelineJobException
     {
         VariantProcessingStepOutputImpl output = new VariantProcessingStepOutputImpl();
 
@@ -58,7 +58,7 @@ public class RemoveAnnotationsForMgapStep extends AbstractCommandPipelineStep<Re
         }
         else
         {
-            getWrapper().execute(inputVCF, outputFile, genome.getWorkingFastaFile(), interval);
+            getWrapper().execute(inputVCF, outputFile, genome.getWorkingFastaFile(), intervals);
         }
 
         output.setVcf(outputFile);
@@ -80,7 +80,7 @@ public class RemoveAnnotationsForMgapStep extends AbstractCommandPipelineStep<Re
             super(log);
         }
 
-        public void execute(File input, File outputFile, File referenceFasta, @Nullable Interval interval) throws PipelineJobException
+        public void execute(File input, File outputFile, File referenceFasta, @Nullable List<Interval> intervals) throws PipelineJobException
         {
             List<String> args = new ArrayList<>(getBaseArgs());
             args.add("RemoveAnnotations");
@@ -91,10 +91,12 @@ public class RemoveAnnotationsForMgapStep extends AbstractCommandPipelineStep<Re
             args.add("-O");
             args.add(outputFile.getPath());
 
-            if (interval != null)
+            if (intervals != null)
             {
-                args.add("-L");
-                args.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                intervals.forEach(interval -> {
+                    args.add("-L");
+                    args.add(interval.getContig() + ":" + interval.getStart() + "-" + interval.getEnd());
+                });
             }
 
             for (String key : ALLOWABLE_ANNOTATIONS)

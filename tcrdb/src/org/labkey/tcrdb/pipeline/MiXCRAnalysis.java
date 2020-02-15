@@ -1450,9 +1450,11 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
             try (CSVReader reader = new CSVReader(Readers.getReader(possibleNovels), '\t'))
             {
                 String[] line;
+                int idx = 0;
                 while ((line = reader.readNext()) != null)
                 {
-                    if (line[0].startsWith("Readset"))
+                    idx++;
+                    if (idx == 1)
                     {
                         continue;
                     }

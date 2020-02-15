@@ -45,7 +45,7 @@ public class VariantDBModule extends ExtendedSimpleModule
     }
 
     @Override
-    public double getVersion()
+    public Double getSchemaVersion()
     {
         return 13.40;
     }

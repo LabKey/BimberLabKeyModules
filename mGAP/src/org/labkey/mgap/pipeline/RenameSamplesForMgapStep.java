@@ -83,11 +83,11 @@ public class RenameSamplesForMgapStep extends AbstractPipelineStep implements Va
     }
 
     @Override
-    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable Interval interval) throws PipelineJobException
+    public Output processVariants(File inputVCF, File outputDirectory, ReferenceGenome genome, @Nullable List<Interval> intervals) throws PipelineJobException
     {
         VariantProcessingStepOutputImpl output = new VariantProcessingStepOutputImpl();
 
-        File outputFile = renameSamples(inputVCF, genome, interval);
+        File outputFile = renameSamples(inputVCF, genome, intervals);
 
         output.setVcf(outputFile);
         output.addIntermediateFile(outputFile);
@@ -106,7 +106,7 @@ public class RenameSamplesForMgapStep extends AbstractPipelineStep implements Va
         return new File(outputDir, "sampleMapping.txt");
     }
 
-    private File renameSamples(File currentVCF, ReferenceGenome genome, @Nullable Interval interval) throws PipelineJobException
+    private File renameSamples(File currentVCF, ReferenceGenome genome, @Nullable List<Interval> intervals) throws PipelineJobException
     {
         getPipelineCtx().getLogger().info("renaming samples in VCF");
 
@@ -154,11 +154,28 @@ public class RenameSamplesForMgapStep extends AbstractPipelineStep implements Va
                 }
 
                 writer.writeHeader(new VCFHeader(header.getMetaDataInInputOrder(), remappedSamples));
-                try (CloseableIterator<VariantContext> it = (interval == null ? reader.iterator() : reader.query(interval.getContig(), interval.getStart(), interval.getEnd())))
+                if (intervals == null)
                 {
-                    while (it.hasNext())
+                    try (CloseableIterator<VariantContext> it = reader.iterator())
                     {
-                        writer.add(it.next());
+                        while (it.hasNext())
+                        {
+                            writer.add(it.next());
+                        }
+                    }
+
+                }
+                else
+                {
+                    for (Interval interval : intervals)
+                    {
+                        try (CloseableIterator<VariantContext> it = reader.query(interval.getContig(), interval.getStart(), interval.getEnd()))
+                        {
+                            while (it.hasNext())
+                            {
+                                writer.add(it.next());
+                            }
+                        }
                     }
                 }
             }
