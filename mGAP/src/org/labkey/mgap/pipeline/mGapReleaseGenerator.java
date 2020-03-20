@@ -452,7 +452,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
                         map.put("isprimarytrack", rs.getBoolean(FieldKey.fromString("isprimarytrack")));
                         map.put("url", rs.getString(FieldKey.fromString("url")));
                         map.put("releaseId", releaseId);
-                        map.put("vcfId", so3.getDataId());
+                        map.put("vcfId", so3.getRowid());
                         map.put("objectId", new GUID().toString());
 
                         tracksPerReleaseRows.add(map);

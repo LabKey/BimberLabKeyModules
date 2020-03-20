@@ -309,6 +309,6 @@ public class JBrowseSessionTransform extends AbstractVariantTransform
 
     protected String getTrackJson()
     {
-        return "{\"category\":\"mGAP Variant Catalog\",\"visibleByDefault\": true,\",\"ensemblUrl\":\"jul2019.archive.ensembl.org\",\"ensemblId\":\"Macaca_mulatta\",\"additionalFeatureMsg\":\"<h2>**The annotations below are primarily derived from human data sources (not macaque), and must be viewed in that context.</h2>\"}";
+        return "{\"category\":\"mGAP Variant Catalog\",\"visibleByDefault\": true,\"ensemblUrl\":\"jul2019.archive.ensembl.org\",\"ensemblId\":\"Macaca_mulatta\",\"additionalFeatureMsg\":\"<h2>**The annotations below are primarily derived from human data sources (not macaque), and must be viewed in that context.</h2>\"}";
     }
 }

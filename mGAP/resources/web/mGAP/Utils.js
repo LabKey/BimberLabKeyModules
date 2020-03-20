@@ -46,7 +46,7 @@ mGAP.Utils = (function($){
                     $('#' + tableId).html('<table>' + versionLine + '<tr><td>Total Variants:</td><td>' + numberWithCommas(data0.TotalVariants) + '</td></tr><tr><td>Total Animals:</td><td>' + numberWithCommas(data0.TotalSamples) + '</td></tr><tr><td style="padding-right: 20px;">Private Variants:</td><td>' + numberWithCommas(data0.TotalPrivateVariants) + '</td></tr></table>');
 
                     var data1 = map.CodingPotential || {};
-                    var codingLabels = ["Exonic", "Downstream<br>Gene", "Upstream<br>Gene", "Intergenic", "Intronic / Non-coding"];
+                    var codingLabels = ["Exonic", "Downstream<br>Gene", "Upstream<br>Gene", "Intergenic", "Intronic/<br>Non-coding"];
                     var codingData = [];
                     var codingDataMap = {};
                     for (var values in data1){
@@ -78,11 +78,11 @@ mGAP.Utils = (function($){
                                 return;
                             }
                             else if (['intron_variant', 'splice_acceptor_variant', 'splice_region_variant', 'splice_donor_variant'].indexOf(val) > -1) {
-                                targets.push('Intronic / Non-coding');
+                                targets.push('Intronic/<br>Non-coding');
                                 return false;
                             }
                             else if (['intragenic_variant', 'non_coding_transcript_variant', 'non_coding_transcript_exon_variant', '3_prime_UTR_variant', '5_prime_UTR_premature_start_codon_gain_variant', '5_prime_UTR_variant'].indexOf(val) > -1) {
-                                targets.push('Intronic / Non-coding');
+                                targets.push('Intronic/<br>Non-coding');
                                 return false;
                             }
                             else if (['intergenic_region'].indexOf(val) > -1) {
@@ -118,14 +118,14 @@ mGAP.Utils = (function($){
                         }], {
                             "width": width,
                             "height": 300,
-                            "margin": {"l": 40, "r": 10, "t": 10, "b": 70},
+                            "margin": {"l": 80, "r": 0, "t": 0, "b": 0},
                             "autosize": false,
                             "showlegend": false,
                             "breakpoints": [],
                             "titlefont": {"size": 14},
                             "hovermode": "closest",
-                            "font": {"size": 12},
-                            "legend": {"font": {"size": 12}}
+                            "font": {"size": 11},
+                            "legend": {"font": {"size": 10}}
                         }, {displayModeBar: false});
 
                     var data2 = map.AnnotationSummary || {};
