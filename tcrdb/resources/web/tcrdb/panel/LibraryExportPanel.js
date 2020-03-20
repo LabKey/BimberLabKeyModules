@@ -556,6 +556,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                     }
                 }
                 else if (instrument === '10x Sample Sheet' || instrument === 'Novogene') {
+                    //we make the default assumption that we're using 10x primers, which are listed in the sample-sheet orientation
                     var doRC = false;
                     var rows = [];
                     var barcodes = '10x Chromium Single Cell v2';
@@ -565,7 +566,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                     }
 
                     //only include readsets without existing data
-                    var processType = function(readsetIds, rows, r, fieldName, suffix, size, phiX, samplePrefix, comment) {
+                    var processType = function(readsetIds, rows, r, fieldName, suffix, size, phiX, samplePrefix, comment, doRC) {
                         if (!readsetIds[r[fieldName]] && r[fieldName] && (includeWithData || r[fieldName + '/totalFiles'] === 0) && isMatchingApplication(application, r[fieldName + '/librarytype'], r[fieldName + '/application'], r.targetApplication)) {
                             //allow for shared readsets across cDNAs (hashing, etc.)
                             readsetIds[r[fieldName]] = true;
@@ -611,10 +612,10 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
 
                     var delim = instrument === 'Novogene' ? '\t' : ',';
                     Ext4.Array.forEach(sortedRows, function (r) {
-                        processType(readsetIds, rows, r, 'readsetId', 'GEX', 500, 1, 'G');
-                        processType(readsetIds, rows, r, 'enrichedReadsetId', 'TCR', 700, 1, 'T');
-                        processType(readsetIds, rows, r, 'hashingReadsetId', 'HTO', 182, 5, 'H', 'Cell hashing, 190bp amplicon.  Please QC individually and pool in equal amounts per lane');
-                        processType(readsetIds, rows, r, 'citeseqReadsetId', 'CITE', 182, 5, 'C', 'CITE-Seq, 190bp amplicon.  Please QC individually and pool in equal amounts per lane');
+                        processType(readsetIds, rows, r, 'readsetId', 'GEX', 500, 1, 'G', null, false);
+                        processType(readsetIds, rows, r, 'enrichedReadsetId', 'TCR', 700, 1, 'T', null, false);
+                        processType(readsetIds, rows, r, 'hashingReadsetId', 'HTO', 182, 5, 'H', 'Cell hashing, 190bp amplicon.  Please QC individually and pool in equal amounts per lane', true);
+                        processType(readsetIds, rows, r, 'citeseqReadsetId', 'CITE', 182, 5, 'C', 'CITE-Seq, 190bp amplicon.  Please QC individually and pool in equal amounts per lane', false);
                     }, this);
 
                     //add missing barcodes:

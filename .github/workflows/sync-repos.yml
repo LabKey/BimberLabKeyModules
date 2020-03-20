@@ -16,7 +16,8 @@ jobs:
           source_branch_prefix: "release"
           destination_repo: "BimberLabInternal/BimberLabKeyModules"
           destination_branch_prefix: "discvr-"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # NOTE: permissions are limited on the default secrets.GITHUB_TOKEN, including updating workflows, so use a personal access token
+          github_token: ${{ secrets.PAT }}
   sync-develop:
     if: github.repository == 'BimberLabInternal/BimberLabKeyModules'
     runs-on: ubuntu-latest
