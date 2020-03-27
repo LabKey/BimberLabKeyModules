@@ -17,6 +17,7 @@ import org.labkey.api.util.FileUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -274,11 +275,28 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
             possiblyAddHighIO(job, engine, lines);
             possiblyAddDisk(job, engine, lines);
             possiblyAddSSD(job, engine, lines);
+
+            possiblyAddGScratch(job, engine, lines);
         }
         else
         {
             job.getLogger().error("This job type does not implement HasJobParams");
         }
+    }
+
+    @Override
+    public Map<String, Object> getEnvironmentVars(PipelineJob job, RemoteExecutionEngine engine)
+    {
+        Map<String, Object> ret = new HashMap<>();
+
+        if (job instanceof HasJobParams && getGScratchValue((HasJobParams)job))
+        {
+            job.getLogger().info("Requiring using GScratch pilot as working space");
+            ret.put("WORK_BASEDIR", "/home/exacloud/gscratch/prime-seq/workDir/");
+
+        }
+
+        return ret;
     }
 
     private void removeQueueLines(List<String> lines)
@@ -349,6 +367,31 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
         {
             job.getLogger().info("Requiring local SSD scratch space");
             String line = "#SBATCH -C ssdscratch";
+            if (!lines.contains(line))
+            {
+                lines.add(line);
+            }
+        }
+    }
+
+    private boolean getGScratchValue(HasJobParams job)
+    {
+        Map<String, String> params = (job).getJobParams();
+        String val = StringUtils.trimToNull(params.get("resourceSettings.resourceSettings.useGScratch"));
+        if (val == null)
+        {
+            return false;
+        }
+
+        return Boolean.parseBoolean(val);
+    }
+
+    private void possiblyAddGScratch(PipelineJob job, RemoteExecutionEngine engine, List<String> lines)
+    {
+        if (getGScratchValue((HasJobParams)job))
+        {
+            job.getLogger().info("Requiring infiniband node, because GScratch was selected as working space");
+            String line = "#SBATCH -C IB";
             if (!lines.contains(line))
             {
                 lines.add(line);

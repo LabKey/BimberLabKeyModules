@@ -166,7 +166,7 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
             {
                 try (VCFFileReader reader = new VCFFileReader(subset))
                 {
-                    if (reader.getFileHeader().getSampleNamesInOrder().size() == 0)
+                    if (reader.getFileHeader().getGenotypeSamples().isEmpty())
                     {
                         getPipelineCtx().getLogger().info("A VCF appears to have been created with --sites-only.  Will overwrite these using an output with a single sample for Cassandra");
                         forceRecreate = true;
@@ -181,7 +181,7 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
                 String firstSample;
                 try (VCFFileReader reader = new VCFFileReader(inputVCF))
                 {
-                    firstSample = reader.getFileHeader().getSampleNamesInOrder().get(0);
+                    firstSample = reader.getFileHeader().getGenotypeSamples().get(0);
                 }
 
                 selectArgs.add("-sn");

@@ -781,6 +781,7 @@
                 </fk>
             </column>
             <column columnName="adaptersequence">
+                <columnTitle>Adapter Sequence</columnTitle>
                 <inputType>textarea</inputType>
             </column>
             <column columnName="container">
