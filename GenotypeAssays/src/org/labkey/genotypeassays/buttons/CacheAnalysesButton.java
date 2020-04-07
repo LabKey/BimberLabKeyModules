@@ -19,9 +19,10 @@ public class CacheAnalysesButton extends SimpleButtonConfigFactory
     {
         super(owner, "Cache Results", "GenotypeAssays.window.CacheResultsWindow.showWindow(dataRegionName);");
 
-        setClientDependencies(ClientDependency.fromModuleName("ldk"), ClientDependency.fromPath("genotypeassays/window/CacheResultsWindow.js"));
+        setClientDependencies(ClientDependency.supplierFromModuleName("ldk"), ClientDependency.supplierFromPath("genotypeassays/window/CacheResultsWindow.js"));
     }
 
+    @Override
     public boolean isAvailable(TableInfo ti)
     {
         return super.isAvailable(ti) && ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), DeletePermission.class) && ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), InsertPermission.class) && ti.getUserSchema().getContainer().hasPermission(ti.getUserSchema().getUser(), UpdatePermission.class);

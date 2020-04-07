@@ -6,7 +6,6 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.genotypeassays.GenotypeAssaysModule;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 /**
  * User: bimber
@@ -17,6 +16,6 @@ public class PublishSBTResultsButton extends SimpleButtonConfigFactory
 {
     public PublishSBTResultsButton()
     {
-        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.buttonHandler(dataRegionName);", new LinkedHashSet<>(Arrays.asList(ClientDependency.fromPath("genotypeassays/window/PublishResultsWindow.js"))));
+        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.buttonHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("genotypeassays/window/PublishResultsWindow.js")));
     }
 }

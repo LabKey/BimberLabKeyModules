@@ -17,6 +17,6 @@ public class PublishSBTHaplotypesButton extends SimpleButtonConfigFactory
 {
     public PublishSBTHaplotypesButton()
     {
-        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.haplotypeButtonHandler(dataRegionName);", new LinkedHashSet<>(Arrays.asList(ClientDependency.fromPath("genotypeassays/window/PublishResultsWindow.js"))));
+        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.haplotypeButtonHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("genotypeassays/window/PublishResultsWindow.js")));
     }
 }

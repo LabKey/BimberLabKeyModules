@@ -91,7 +91,7 @@ public class GenotypeAssaysModule extends ExtendedSimpleModule
         LaboratoryService.get().registerAssayResultsIndex(GenotypeAssaysManager.GENOTYPE_ASSAY_PROVIDER, Arrays.asList("RowId", "DataId"));
 
         SimpleButtonConfigFactory btn3 = new SimpleButtonConfigFactory(this, "Edit Alignments", "GenotypeAssays.window.EditAlignmentsWindow.buttonHandler(dataRegionName, arguments[0] ? arguments[0].ownerCt : null)");
-        btn3.setClientDependencies(ClientDependency.fromModuleName("laboratory"), ClientDependency.fromModuleName("sequenceanalysis"), ClientDependency.fromPath("genotypeassays/window/EditAlignmentsWindow.js"));
+        btn3.setClientDependencies(ClientDependency.supplierFromModuleName("laboratory"), ClientDependency.supplierFromModuleName("sequenceanalysis"), ClientDependency.supplierFromPath("genotypeassays/window/EditAlignmentsWindow.js"));
         LDKService.get().registerQueryButton(btn3, "sequenceanalysis", "alignment_summary_grouped");
 
         LDKService.get().registerQueryButton(new SBTReviewButton(), "sequenceanalysis", "sequence_analyses");
