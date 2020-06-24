@@ -3,36 +3,28 @@ Ext4.define('mGAP.window.SequenceDownloadWindow', {
 
     statics: {
         buttonHandler: function(dataRegionName, releaseId, el){
-            var dr = LABKEY.DataRegions[dataRegionName];
-            dr.getSelected({
+            var checked = LABKEY.DataRegions[dataRegionName].getChecked();
+            if (!checked.length){
+                Ext4.Msg.alert('Error', 'No rows selected');
+                return;
+            }
+
+            LABKEY.Query.selectRows({
+                schemaName: 'mGap',
+                queryName: 'sequenceDatasets',
+                columns: 'sraAccession',
+                filterArray: [LABKEY.Filter.create('rowid', checked.join(';'), LABKEY.Filter.Types.IN)],
                 scope: this,
-                success: function(results, response){
-                    if (!results || !results.selected || !results.selected.length){
-                        Ext4.Msg.alert('Error', 'No rows selected');
-                        return;
-                    }
+                success: function(results){
+                    var sraIDs = [];
+                    Ext4.Array.forEach(results.rows, function(row){
+                        sraIDs.push(row.sraAccession);
+                    }, this);
 
-                    var checked = LABKEY.DataRegions[dataRegionName].getChecked();
-
-                    LABKEY.Query.selectRows({
-                        schemaName: 'mGap',
-                        queryName: 'sequenceDatasets',
-                        columns: 'sraAccession',
-                        filterArray: [LABKEY.Filter.create('rowid', checked.join(';'), LABKEY.Filter.Types.IN)],
-                        scope: this,
-                        success: function(results){
-                            var sraIDs = [];
-                            Ext4.Array.forEach(results.rows, function(row){
-                                sraIDs.push(row.sraAccession);
-                            }, this);
-
-                            Ext4.create('mGAP.window.SequenceDownloadWindow', {
-                                sraIDs: sraIDs
-                            }).show(el);
-                        }
-                    });
-                },
-                failure: LDK.Utils.getErrorCallback()
+                    Ext4.create('mGAP.window.SequenceDownloadWindow', {
+                        sraIDs: sraIDs
+                    }).show(el);
+                }
             });
         }
     },

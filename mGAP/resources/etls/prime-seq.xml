@@ -14,7 +14,7 @@
                     <column>center</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mgap" queryName="demographics" targetOption="truncate">
+            <destination schemaName="mgap" queryName="demographics" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
 
                 </columnTransforms>
@@ -34,7 +34,7 @@
                     <column>sraAccession</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="sequenceDatasets" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="sequenceDatasets" bulkLoad="true" targetOption="truncate">
 
             </destination>
         </transform>
@@ -56,7 +56,7 @@
                     <column>vcfId/library_id/name</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="tracksPerRelease" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="tracksPerRelease" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                     <column source="vcfId/dataid/DataFileUrl" target="vcfId" transformClass="org.labkey.mgap.columnTransforms.TrackOutputFileTransform" />
                 </columnTransforms>
@@ -94,7 +94,7 @@
                     <column>objectId</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="variantCatalogReleases" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="variantCatalogReleases" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                     <column source="genomeId/name" target="genomeId" transformClass="org.labkey.mgap.columnTransforms.GenomeTransform" />
                     <column source="vcfId/dataid/DataFileUrl" target="vcfId" transformClass="org.labkey.mgap.columnTransforms.OutputFileTransform" />
@@ -116,7 +116,7 @@
                     <column>objectid</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="releaseStats" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="releaseStats" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                     <column source="objectid" target="objectid" transformClass="org.labkey.mgap.columnTransforms.PopulateObjectid" />
                 </columnTransforms>
@@ -142,7 +142,7 @@
                     <column>af</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="variantList" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="variantList" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                     <column source="objectid" target="objectid" transformClass="org.labkey.mgap.columnTransforms.PopulateObjectid" />
                 </columnTransforms>
@@ -159,7 +159,7 @@
                     <column>omim</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="mGAP" queryName="phenotypes" targetOption="truncate">
+            <destination schemaName="mGAP" queryName="phenotypes" bulkLoad="true" targetOption="truncate">
                 <columnTransforms>
                 </columnTransforms>
             </destination>

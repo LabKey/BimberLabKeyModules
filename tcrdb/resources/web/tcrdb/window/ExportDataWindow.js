@@ -26,6 +26,11 @@ Ext4.define('TCRdb.window.ExportDataWindow', {
                     var checked = LABKEY.DataRegions[dataRegionName].getChecked();
                     LDK.Assert.assertEquality('getChecked and getSelected do not match', data.selected.length, checked.length)
 
+                    if (!checked.length){
+                        Ext4.Msg.alert('Error', 'No Rows Selected');
+                        return;
+                    }
+
                     var win = Ext4.create('TCRdb.window.ExportDataWindow', {
                         dataRegionName: dataRegionName,
                         selected: checked,

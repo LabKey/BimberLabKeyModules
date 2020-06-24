@@ -275,6 +275,7 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
             possiblyAddHighIO(job, engine, lines);
             possiblyAddDisk(job, engine, lines);
             possiblyAddSSD(job, engine, lines);
+            possiblyAddExclusive(job, engine, lines);
 
             possiblyAddGScratch(job, engine, lines);
             possiblyAddCOVID(job, lines);
@@ -373,6 +374,27 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
 
         job.getLogger().debug("Adding local disk (mb): " + val);
         lines.add("#SBATCH --gres=disk:" + val);
+    }
+
+    private void possiblyAddExclusive(PipelineJob job, RemoteExecutionEngine engine, List<String> lines)
+    {
+        Map<String, String> params = ((HasJobParams)job).getJobParams();
+        String val = StringUtils.trimToNull(params.get("resourceSettings.resourceSettings.useExclusive"));
+        if (val == null)
+        {
+            return;
+        }
+
+        boolean parsed = Boolean.parseBoolean(val);
+        if (parsed)
+        {
+            job.getLogger().info("Adding --exclusive flag");
+            String line = "#SBATCH --exclusive";
+            if (!lines.contains(line))
+            {
+                lines.add(line);
+            }
+        }
     }
 
     private void possiblyAddSSD(PipelineJob job, RemoteExecutionEngine engine, List<String> lines)

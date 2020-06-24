@@ -89,7 +89,7 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
                 ToolParameterDescriptor.create("mergeMethod", "Merge Method", "This determines whether any batch correction will be applied when merging datasets.", "ldk-simplecombo", new JSONObject(){{
                     put("storeValues", "simple;cca");
                 }}, "simple"),
-                ToolParameterDescriptor.create(SEURAT_MAX_THREADS, "Seurat Max Threads", "Because seurat can behave badly with multiple threads, this allows a separate cap to be used from the main job.  This will allow CITE-Seq-Count and other tools to run with more threads.", "ldk-integerfield", null, 2)
+                ToolParameterDescriptor.create(SEURAT_MAX_THREADS, "Seurat Max Threads", "Because seurat can behave badly with multiple threads, this allows a separate cap to be used from the main job.  This will allow CITE-Seq-Count and other tools to run with more threads.", "ldk-integerfield", null, 1)
         ));
 
         ret.addAll(CellRangerCellHashingHandler.getDefaultHashingParams(false));
@@ -362,7 +362,7 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
                 Integer maxThreads = SequencePipelineService.get().getMaxThreads(ctx.getLogger());
                 if (maxThreads != null)
                 {
-                    if (ctx.getParams().get("seuratMaxThreads") != null)
+                    if (ctx.getParams().get(SEURAT_MAX_THREADS) != null)
                     {
                         maxThreads = Math.min(ctx.getParams().getInt(SEURAT_MAX_THREADS), maxThreads);
                         wrapper.addToEnvironment("SEQUENCEANALYSIS_MAX_THREADS", maxThreads.toString());

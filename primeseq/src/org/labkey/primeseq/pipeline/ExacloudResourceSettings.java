@@ -33,6 +33,7 @@ public class ExacloudResourceSettings implements JobResourceSettings
                 }}, 1028),
                 ToolParameterDescriptor.create("localSSD", "Request Nodes With SSD Scratch", "If selected, -C ssdscratch will be added to the submit script, which limits to node with faster SSD scratch space.  This might be important for I/O intense jobs.", "checkbox", null, null),
                 ToolParameterDescriptor.create("useGScratch", "Use GScratch Working Space", "If selected, this job will use the GCratch pilot as working space, which may be faster in some cases than lustre.", "checkbox", null, null),
+                ToolParameterDescriptor.create("useExclusive", "Use Exclusive Flag", "If selected, the job allocation can not share nodes with other running jobs. This should not be selected unless you are sure about this. It can help protect memory-intensive, long-running jobs.", "checkbox", null, null),
                 ToolParameterDescriptor.create("covidRelated", "COVID Related Job", "If selected, this job will be flagged as --comment=COVID to help ACC track these jobs.", "checkbox", null, null)
         );
     }

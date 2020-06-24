@@ -79,7 +79,7 @@
                     <column>method</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="study" queryName="clinpathRuns" targetOption="merge">
+            <destination schemaName="study" queryName="clinpathRuns" bulkLoad="true" targetOption="merge">
 
             </destination>
         </transform>

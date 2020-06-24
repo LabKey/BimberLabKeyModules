@@ -381,7 +381,7 @@
         <deleteUrl />
         <pkColumnName>rowid</pkColumnName>
         <tableTitle>Predicted Damaging Variants</tableTitle>
-        <auditLogging>DETAILED</auditLogging>
+        <auditLogging>SUMMARY</auditLogging>
         <columns>
             <column columnName="rowid">
                 <isAutoInc>true</isAutoInc>
