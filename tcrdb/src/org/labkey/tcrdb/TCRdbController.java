@@ -19,7 +19,8 @@ package org.labkey.tcrdb;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.labkey.api.action.ApiSimpleResponse;
@@ -98,7 +99,7 @@ public class TCRdbController extends SpringActionController
 
     private static final FileType FASTA = new FileType("fasta");
 
-    private static final Logger _log = Logger.getLogger(TCRdbController.class);
+    private static final Logger _log = LogManager.getLogger(TCRdbController.class);
 
     public TCRdbController()
     {

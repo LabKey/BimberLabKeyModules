@@ -17,7 +17,8 @@
 package org.labkey.mgap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.module.Module;
@@ -32,7 +33,7 @@ import java.util.Set;
 
 public class mGAPManager
 {
-    private static final Logger _log = Logger.getLogger(mGAPManager.class);
+    private static final Logger _log = LogManager.getLogger(mGAPManager.class);
 
     private static final mGAPManager _instance = new mGAPManager();
     public static final String ContainerPropName = "MGAPContainer";

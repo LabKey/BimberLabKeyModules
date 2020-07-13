@@ -1,16 +1,14 @@
 package org.labkey.mgap.query;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.DbSequence;
 import org.labkey.api.data.DbSequenceManager;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bimber on 3/23/2017.
@@ -19,7 +17,7 @@ public class TriggerHelper
 {
     private Container _container = null;
     private User _user = null;
-    private static final Logger _log = Logger.getLogger(TriggerHelper.class);
+    private static final Logger _log = LogManager.getLogger(TriggerHelper.class);
     private static final String SEQUENCE_NAME = "org.labkey.mgap.MGAP_ALIAS";
 
     public TriggerHelper(int userId, String containerId)

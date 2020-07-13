@@ -18,7 +18,6 @@ package org.labkey.variantdb;
 
 import org.labkey.api.data.DbSchema;
 import org.labkey.api.data.DbSchemaType;
-import org.labkey.api.data.dialect.SqlDialect;
 
 public class VariantDBSchema
 {

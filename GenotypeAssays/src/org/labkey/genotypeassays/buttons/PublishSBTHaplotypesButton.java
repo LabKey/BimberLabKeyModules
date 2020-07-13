@@ -6,7 +6,6 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.genotypeassays.GenotypeAssaysModule;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 /**
  * User: bimber

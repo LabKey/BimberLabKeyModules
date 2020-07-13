@@ -6,7 +6,6 @@ import org.labkey.api.data.ContainerManager;
 import org.labkey.api.laboratory.NavItem;
 import org.labkey.api.laboratory.SimpleSettingsItem;
 import org.labkey.api.laboratory.assay.AbstractAssayDataProvider;
-import org.labkey.api.laboratory.assay.DefaultAssayImportMethod;
 import org.labkey.api.module.Module;
 import org.labkey.api.security.User;
 import org.labkey.api.view.ViewContext;

@@ -16,14 +16,15 @@
 
 package org.labkey.variantdb;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.action.SpringActionController;
 
 public class VariantDBController extends SpringActionController
 {
     private static final DefaultActionResolver _actionResolver = new DefaultActionResolver(VariantDBController.class);
     public static final String NAME = "variantdb";
-    private static final Logger _log = Logger.getLogger(VariantDBController.class);
+    private static final Logger _log = LogManager.getLogger(VariantDBController.class);
 
     public VariantDBController()
     {

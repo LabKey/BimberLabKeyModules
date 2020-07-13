@@ -1,6 +1,5 @@
 package org.labkey.variantdb.query;
 
-import org.labkey.api.data.DbSchema;
 import org.labkey.api.sequenceanalysis.RefNtSequenceModel;
 
 import java.util.Date;

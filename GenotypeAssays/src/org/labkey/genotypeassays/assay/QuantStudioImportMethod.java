@@ -3,7 +3,6 @@ package org.labkey.genotypeassays.assay;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.labkey.api.data.Container;
-import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.laboratory.assay.AssayImportMethod;
 import org.labkey.api.laboratory.assay.AssayParser;
 import org.labkey.api.laboratory.assay.DefaultAssayParser;
@@ -17,7 +16,6 @@ import org.labkey.api.view.ViewContext;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

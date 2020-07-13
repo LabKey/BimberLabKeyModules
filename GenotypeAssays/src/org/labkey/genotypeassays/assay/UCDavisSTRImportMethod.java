@@ -1,12 +1,10 @@
 package org.labkey.genotypeassays.assay;
 
-import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.labkey.api.data.Container;
 import org.labkey.api.laboratory.assay.AssayImportMethod;
 import org.labkey.api.laboratory.assay.AssayParser;
-import org.labkey.api.laboratory.assay.DefaultAssayParser;
 import org.labkey.api.laboratory.assay.ImportContext;
 import org.labkey.api.laboratory.assay.ParserErrors;
 import org.labkey.api.query.BatchValidationException;
@@ -14,15 +12,10 @@ import org.labkey.api.security.User;
 import org.labkey.api.settings.AppProps;
 import org.labkey.api.view.ViewContext;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.

@@ -12,7 +12,7 @@ import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.gwt.client.util.StringUtils;
 import org.labkey.api.pipeline.PipelineJobException;
 import org.labkey.api.reader.Readers;

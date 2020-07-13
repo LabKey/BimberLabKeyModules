@@ -3,7 +3,6 @@ package org.labkey.flowassays.assay;
 import org.json.JSONObject;
 import org.labkey.api.laboratory.assay.AbstractAssayDataProvider;
 import org.labkey.api.laboratory.assay.AssayImportMethod;
-import org.labkey.api.laboratory.assay.DefaultAssayImportMethod;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.ViewContext;
 import org.labkey.flowassays.FlowAssaysManager;

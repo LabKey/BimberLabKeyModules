@@ -1,6 +1,8 @@
 package org.labkey.genotypeassays.assay;
 
 import org.apache.commons.lang3.StringUtils;
+import org.labkey.api.assay.AssayProtocolSchema;
+import org.labkey.api.assay.AssayProvider;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ForeignKey;
@@ -9,8 +11,6 @@ import org.labkey.api.data.TableSelector;
 import org.labkey.api.exp.api.ExpProtocol;
 import org.labkey.api.laboratory.assay.ImportContext;
 import org.labkey.api.security.User;
-import org.labkey.api.assay.AssayProtocolSchema;
-import org.labkey.api.assay.AssayProvider;
 
 import java.util.Collections;
 import java.util.Map;

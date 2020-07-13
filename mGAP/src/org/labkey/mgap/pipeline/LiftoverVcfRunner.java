@@ -1,6 +1,6 @@
 package org.labkey.mgap.pipeline;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.pipeline.PipelineJobException;
 import org.labkey.api.sequenceanalysis.SequenceAnalysisService;
@@ -8,7 +8,6 @@ import org.labkey.api.sequenceanalysis.run.PicardWrapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 public class LiftoverVcfRunner extends PicardWrapper

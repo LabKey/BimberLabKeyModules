@@ -1,7 +1,5 @@
 package org.labkey.mgap.columnTransforms;
 
-import org.apache.log4j.Logger;
-
 import java.util.Map;
 
 /**

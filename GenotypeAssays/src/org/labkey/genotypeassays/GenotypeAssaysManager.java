@@ -16,9 +16,13 @@
 
 package org.labkey.genotypeassays;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.labkey.api.assay.AssayProtocolSchema;
+import org.labkey.api.assay.AssayProvider;
+import org.labkey.api.assay.AssayService;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.CompareType;
@@ -40,9 +44,6 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.ValidationException;
 import org.labkey.api.security.User;
-import org.labkey.api.assay.AssayProtocolSchema;
-import org.labkey.api.assay.AssayProvider;
-import org.labkey.api.assay.AssayService;
 import org.labkey.api.util.FileUtil;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.Pair;
@@ -63,7 +64,7 @@ public class GenotypeAssaysManager
 {
     private static final GenotypeAssaysManager _instance = new GenotypeAssaysManager();
 
-    private static final Logger _log = Logger.getLogger(GenotypeAssaysManager.class);
+    private static final Logger _log = LogManager.getLogger(GenotypeAssaysManager.class);
 
     public static final String GENOTYPE_ASSAY_PROVIDER = "Genotype Assay";
     public static final String SNP_ASSAY_PROVIDER = "SNP Assay";

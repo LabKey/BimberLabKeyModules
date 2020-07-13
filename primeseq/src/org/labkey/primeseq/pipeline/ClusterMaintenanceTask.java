@@ -3,7 +3,8 @@ package org.labkey.primeseq.pipeline;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.labkey.api.cluster.ClusterService;
@@ -48,7 +49,7 @@ import java.util.Set;
  */
 public class ClusterMaintenanceTask implements SystemMaintenance.MaintenanceTask
 {
-    private static final Logger _log = Logger.getLogger(ClusterMaintenanceTask.class);
+    private static final Logger _log = LogManager.getLogger(ClusterMaintenanceTask.class);
 
     public ClusterMaintenanceTask()
     {

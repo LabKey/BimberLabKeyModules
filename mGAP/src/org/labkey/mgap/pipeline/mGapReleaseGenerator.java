@@ -13,7 +13,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -1749,7 +1750,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
 
     public static class TestCase extends Assert
     {
-        private final Logger _log = Logger.getLogger(TestCase.class);
+        private final Logger _log = LogManager.getLogger(TestCase.class);
 
         @Test
         public void testOMIMParse() throws Exception

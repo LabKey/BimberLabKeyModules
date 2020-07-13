@@ -16,7 +16,8 @@
 
 package org.labkey.tcrdb;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.labkey.api.data.Container;
 import org.labkey.api.laboratory.LaboratoryService;
@@ -105,7 +106,7 @@ public class TCRdbModule extends ExtendedSimpleModule
 
     public static class PipelineStartup
     {
-        private static final Logger _log = Logger.getLogger(PipelineStartup.class);
+        private static final Logger _log = LogManager.getLogger(PipelineStartup.class);
         private static boolean _hasRegistered = false;
 
         public PipelineStartup()

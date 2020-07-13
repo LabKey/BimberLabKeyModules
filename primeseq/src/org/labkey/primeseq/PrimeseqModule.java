@@ -16,7 +16,8 @@
 
 package org.labkey.primeseq;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.labkey.api.cluster.ClusterService;
 import org.labkey.api.data.Container;
@@ -88,7 +89,7 @@ public class PrimeseqModule extends ExtendedSimpleModule
 
     public static class PipelineStartup
     {
-        private static final Logger _log = Logger.getLogger(PipelineStartup.class);
+        private static final Logger _log = LogManager.getLogger(PipelineStartup.class);
         private static boolean _hasRegistered = false;
 
         public PipelineStartup()

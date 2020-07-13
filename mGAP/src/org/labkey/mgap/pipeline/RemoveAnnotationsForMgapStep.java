@@ -1,7 +1,7 @@
 package org.labkey.mgap.pipeline;
 
 import htsjdk.samtools.util.Interval;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.pipeline.PipelineJobException;
 import org.labkey.api.sequenceanalysis.SequenceAnalysisService;

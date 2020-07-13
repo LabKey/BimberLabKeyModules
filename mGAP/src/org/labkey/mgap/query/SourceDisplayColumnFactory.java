@@ -1,7 +1,8 @@
 package org.labkey.mgap.query;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.DataColumn;
 import org.labkey.api.data.DisplayColumn;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public class SourceDisplayColumnFactory implements DisplayColumnFactory
 {
-    private static final Logger _log = Logger.getLogger(SourceDisplayColumnFactory.class);
+    private static final Logger _log = LogManager.getLogger(SourceDisplayColumnFactory.class);
 
     @Override
     public DisplayColumn createRenderer(ColumnInfo colInfo)

@@ -20,7 +20,8 @@ import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.labkey.api.action.ApiSimpleResponse;
@@ -111,7 +112,7 @@ public class mGAPController extends SpringActionController
 {
     private static final DefaultActionResolver _actionResolver = new DefaultActionResolver(mGAPController.class);
     public static final String NAME = "mgap";
-    public static final Logger _log = Logger.getLogger(mGAPController.class);
+    public static final Logger _log = LogManager.getLogger(mGAPController.class);
 
     public mGAPController()
     {

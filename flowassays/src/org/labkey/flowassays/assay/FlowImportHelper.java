@@ -2,15 +2,12 @@ package org.labkey.flowassays.assay;
 
 import org.json.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
-import org.labkey.api.data.Table;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.api.exp.api.ExpProtocol;
 import org.labkey.api.gwt.client.util.StringUtils;
 import org.labkey.api.laboratory.assay.ImportContext;
 import org.labkey.flowassays.FlowAssaysSchema;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

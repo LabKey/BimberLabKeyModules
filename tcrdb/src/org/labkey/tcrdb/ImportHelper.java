@@ -1,6 +1,7 @@
 package org.labkey.tcrdb;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.TableInfo;
@@ -23,7 +24,7 @@ public class ImportHelper
     private TableInfo _table;
     private TableInfo _sortTable;
 
-    private static final Logger _log = Logger.getLogger(ImportHelper.class);
+    private static final Logger _log = LogManager.getLogger(ImportHelper.class);
 
     private Map<String, UserSchema> _userSchemaMap = new HashMap<>();
 

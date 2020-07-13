@@ -16,7 +16,8 @@
 
 package org.labkey.primeseq;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.labkey.api.action.ApiResponse;
@@ -53,7 +54,7 @@ public class PrimeseqController extends SpringActionController
 {
     private static final DefaultActionResolver _actionResolver = new DefaultActionResolver(PrimeseqController.class);
     public static final String NAME = "primeseq";
-    private static final Logger _log = Logger.getLogger(PrimeseqController.class);
+    private static final Logger _log = LogManager.getLogger(PrimeseqController.class);
 
     public PrimeseqController()
     {

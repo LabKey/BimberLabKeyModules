@@ -16,7 +16,8 @@
 
 package org.labkey.mgap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.labkey.api.audit.AuditLogService;
@@ -92,7 +93,7 @@ public class mGAPModule extends ExtendedSimpleModule
 
     public static class PipelineStartup
     {
-        private static final Logger _log = Logger.getLogger(mGAPModule.PipelineStartup.class);
+        private static final Logger _log = LogManager.getLogger(mGAPModule.PipelineStartup.class);
         private static boolean _hasRegistered = false;
 
         public PipelineStartup()

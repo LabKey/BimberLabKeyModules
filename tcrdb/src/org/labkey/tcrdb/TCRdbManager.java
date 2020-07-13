@@ -22,7 +22,8 @@ import io.repseq.core.VDJCGene;
 import io.repseq.core.VDJCLibrary;
 import io.repseq.core.VDJCLibraryRegistry;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ContainerManager;
@@ -54,7 +55,7 @@ import java.util.Map;
 public class TCRdbManager
 {
     private static final TCRdbManager _instance = new TCRdbManager();
-    private static final Logger _log = Logger.getLogger(TCRdbManager.class);
+    private static final Logger _log = LogManager.getLogger(TCRdbManager.class);
 
     private TCRdbManager()
     {

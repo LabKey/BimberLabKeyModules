@@ -1,7 +1,6 @@
 package org.labkey.variantdb.pipeline;
 
 import org.labkey.api.data.Container;
-import org.labkey.api.exp.api.ExpData;
 import org.labkey.api.pipeline.PipeRoot;
 import org.labkey.api.pipeline.PipelineJob;
 import org.labkey.api.pipeline.PipelineJobService;

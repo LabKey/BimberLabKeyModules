@@ -3,7 +3,7 @@ package org.labkey.variantdb.analysis.Imputation;
 import au.com.bytecode.opencsv.CSVWriter;
 import htsjdk.variant.variantcontext.Genotype;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.labkey.variantdb.analysis.ImputationAnalysis;
 import org.labkey.variantdb.run.ImputationRunner;
 
