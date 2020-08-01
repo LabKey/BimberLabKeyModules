@@ -23,7 +23,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         alwaysShow: true
     },{
         name: 'animalId',
-        labels: ['Animal Id', 'SubjectId', 'Subject Id'],
+        labels: ['Animal', 'Animal Id', 'SubjectId', 'Subject Id'],
         allowRowSpan: true,
         allowBlank: false,
         transform: 'animal'
@@ -41,6 +41,12 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         allowRowSpan: true,
         transform: 'effector',
         allowBlank: false
+    },{
+        name: 'tissue',
+        labels: ['Tissue', 'Tissue Sample'],
+        alwaysShow: false,
+        allowRowSpan: true,
+        allowBlank: true
     },{
         name: 'stim',
         labels: ['Stim', 'Peptide Only Conditions'],
@@ -83,12 +89,12 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         transform: 'cells'
     },{
         name: 'hto_library_index',
-        labels: ['HTO Library Index', 'HTO Index'],
+        labels: ['HTO Library Index', 'HTO Index', 'MultiSeq Index', 'MultiSeq Library Index'],
         allowRowSpan: true,
         transform: 'htoIndex'
     },{
         name: 'hto_library_conc',
-        labels: ['HTO Library Conc', 'HTO Library Conc (ng/uL)', 'HTO (qubit) ng/uL', 'HTO (quibit) ng/uL'],
+        labels: ['HTO Library Conc', 'HTO Library Conc (ng/uL)', 'HTO (qubit) ng/uL', 'HTO (quibit) ng/uL', 'MultiSeq Library Conc', 'MultiSeq Library (qubit) ng/uL', 'MultiSeq Library Conc (qubit) ng/uL'],
         allowRowSpan: true
     },{
         name: 'citeseqpanel',
@@ -96,7 +102,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         allowRowSpan: true
     },{
         name: 'citeseq_library_index',
-        labels: ['Cite-Seq Library Index', 'Cite-Seq Index', 'CiteSeq Library Index', 'CiteSeq Index', 'Cite Seq Library Index', 'Cite Seq Index'],
+        labels: ['Cite-Seq Library Index', 'Cite-Seq Index', 'CiteSeq Library Index', 'CiteSeq Index', 'Cite-Seq Library Index', 'Cite-Seq Index', 'CiteSeq Library (qubit) ng/uL'],
         allowRowSpan: true,
         transform: 'citeSeqTenXBarcode'
     },{
@@ -172,9 +178,14 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             }
             else if (val) {
                 var type = panel.down('#hashingType').getValue();
-                if (type === 'MultiSeq' && String(val).startsWith('MS')) {
+                if (type === 'MultiSeq') {
                     val = String(val);
-                    val = val.replace(/^MS(-)*/ig, 'MultiSeq-Idx-RP');
+                    if (val.match(/^MS-[0-9]+$/i)) {
+                        val = val.replace(/^MS(-)*/ig, 'MultiSeq-Idx-RP');
+                    }
+
+                    val = val.replace(/^MS[- ]Idx/ig, 'MultiSeq-Idx');
+                    val = val.replace(/^MultiSeq[- ]Idx[- ]RP/ig, 'MultiSeq-Idx-RP');
 
                     return val;
                 }
@@ -477,7 +488,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
             itemId: 'hashingType',
             forceSelection: true,
             storeValues: ['CD298', 'MultiSeq'],
-            value: 'CD298'
+            value: 'MultiSeq'
         },{
             xtype: 'textarea',
             fieldLabel: 'Paste Data Below',
@@ -580,6 +591,26 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
         var colArray = [];
         var colNames = {};
         Ext4.Array.forEach(headerRow, function(headerText, idx){
+            //replace common terms:
+            if (headerText.match(/ng\/ul/i) || headerText.match(/qubit/i)) {
+                headerText = headerText.replace(/( )+(\()*ng\/ul(\))*/i, '');
+                headerText = headerText.replace(/( )+(\()*qubit(\))*/i, '');
+                headerText = Ext4.String.trim(headerText);
+                if (!headerText.match(/Conc/i)) {
+                    headerText = headerText + ' Conc';
+                }
+            }
+            headerText = headerText.replace(/CiteSeq/i, 'Cite-Seq');
+            headerText = headerText.replace(/Cite Seq/i, 'Cite-Seq');
+            headerText = headerText.replace(/^MS /i, 'MultiSeq ');
+            headerText = headerText.replace(/Multi Seq/i, 'MultiSeq');
+            headerText = headerText.replace(/Multi-Seq/i, 'MultiSeq');
+            headerText = headerText.replace(/Library Index/i, 'Index');
+
+            headerText = headerText.replace(/5'[- ]*GEX/i, 'GEX');
+            headerText = headerText.replace(/5[- ]GEX/i, 'GEX');
+            headerText = Ext4.String.trim(headerText);
+
             var colData = this.COLUMN_MAP[headerText.toLowerCase()];
             if (colData){
                 colNames[colData.name] = idx;
@@ -704,6 +735,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                     date: row.sampleDate,
                     stim: row.stim,
                     effector: row.effector,
+                    tissue: row.tissue,
                     treatment: row.treatment || 'None',
                     objectId: guid,
                     workbook: row.workbook

@@ -1,7 +1,7 @@
 Ext4.define('TCRdb.panel.cDNAImportPanel', {
     extend: 'TCRdb.panel.PoolImportPanel',
 
-    IGNORED_COLUMNS: ['animalId', 'sampleDate', 'stimId', 'population', 'sortId', 'hto', 'cells', 'stim', 'effector', 'stim_num'],
+    IGNORED_COLUMNS: ['animalId', 'sampleDate', 'stimId', 'population', 'sortId', 'hto', 'cells', 'stim', 'effector', 'tissue', 'stim_num'],
 
     initComponent: function () {
         this.COLUMN_MAP = {};
@@ -144,7 +144,7 @@ Ext4.define('TCRdb.panel.cDNAImportPanel', {
             itemId: 'hashingType',
             forceSelection: true,
             storeValues: ['CD298', 'MultiSeq'],
-            value: 'CD298'
+            value: 'MultiSeq'
         }, {
             xtype: 'textarea',
             fieldLabel: 'Paste Data Below',

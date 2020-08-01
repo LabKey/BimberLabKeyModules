@@ -4,13 +4,11 @@ import org.labkey.api.data.Container;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.exp.api.ExpProtocol;
 import org.labkey.api.laboratory.LaboratoryService;
+import org.labkey.api.laboratory.NavItem;
 import org.labkey.api.laboratory.QueryCountNavItem;
 import org.labkey.api.laboratory.SummaryNavItem;
 import org.labkey.api.laboratory.TabbedReportItem;
 import org.labkey.api.laboratory.assay.AbstractAssayDataProvider;
-import org.labkey.api.laboratory.assay.AssayImportMethod;
-import org.labkey.api.laboratory.assay.AssayNavItem;
-import org.labkey.api.laboratory.NavItem;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.query.FieldKey;
@@ -40,6 +38,12 @@ public class FlowDataProvider extends AbstractAssayDataProvider
     private boolean areModulesActive(Container c)
     {
         return c.getActiveModules().contains(ModuleLoader.getInstance().getModule(FlowAssaysManager.FLOW_NAME)) && c.getActiveModules().contains(_module);
+    }
+
+    @Override
+    public boolean isModuleEnabled(Container c)
+    {
+        return super.isModuleEnabled(c) && areModulesActive(c);
     }
 
     @Override

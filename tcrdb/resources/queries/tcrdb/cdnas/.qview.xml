@@ -6,6 +6,7 @@
         <column name="sortId/stimId/date" />
         <column name="sortId/stimId/stim" />
         <column name="sortId/stimId/treatment" />
+        <column name="sortId/stimId/tissue" />
         <column name="sortId/population" />
         <column name="sortId/replicate" />
         <column name="sortId/cells" />

@@ -148,15 +148,34 @@ public class ClusterMaintenanceTask implements SystemMaintenance.MaintenanceTask
             //TODO: inspect WorkDirFactory for base path?
             //WorkDirFactory wdf = PipelineJobService.get().getWorkDirFactory();
 
+            log.info("total active pipeline jobs: " + _jobGuids.size());
+
             //hacky, but this is only planned to be used by us
-            File workDirBase = new File("/home/exacloud/lustre1/prime-seq/workDir/");
+            inspectFolder(log, new File("/home/exacloud/lustre1/prime-seq/workDir/"));
+            inspectFolder(log, new File("/home/exacloud/lustre1/prime-seq/cachedData/"));
+        }
+
+        private void deleteDirectory(File child, Logger log)
+        {
+            try
+            {
+                FileUtils.deleteDirectory(child);
+            }
+            catch (IOException e)
+            {
+                log.error(e);
+            }
+        }
+
+        private void inspectFolder(Logger log, File workDirBase)
+        {
+            log.info("Inspecting folder: " + workDirBase.getPath());
+
             if (!workDirBase.exists())
             {
                 log.error("Unable to find workdir: " + workDirBase.getPath());
                 return;
             }
-
-            log.info("total active pipeline jobs: " + _jobGuids.size());
 
             File[] subdirs = workDirBase.listFiles();
             log.info("total work directories found: " + subdirs.length);
@@ -197,17 +216,6 @@ public class ClusterMaintenanceTask implements SystemMaintenance.MaintenanceTask
             }
         }
 
-        private void deleteDirectory(File child, Logger log)
-        {
-            try
-            {
-                FileUtils.deleteDirectory(child);
-            }
-            catch (IOException e)
-            {
-                log.error(e);
-            }
-        }
     }
 
     public static class TestCase extends Assert

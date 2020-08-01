@@ -22,6 +22,7 @@ import org.labkey.api.data.DbSchema;
 import org.labkey.api.laboratory.LaboratoryService;
 import org.labkey.api.ldk.ExtendedSimpleModule;
 import org.labkey.api.module.ModuleContext;
+import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.WebPartFactory;
 import org.labkey.flowassays.assay.ICSDataProvider;
@@ -73,7 +74,11 @@ public class FlowAssaysModule extends ExtendedSimpleModule
         LaboratoryService.get().registerDataProvider(new FlowAssaysDataProvider(this));
         LaboratoryService.get().registerDataProvider(new ImmunophenotypingDataProvider(this));
         LaboratoryService.get().registerDataProvider(new ICSDataProvider(this));
-        LaboratoryService.get().registerDataProvider(new FlowDataProvider(this));
+
+        if (ModuleLoader.getInstance().getModule(FlowAssaysManager.FLOW_NAME) != null)
+        {
+            LaboratoryService.get().registerDataProvider(new FlowDataProvider(this));
+        }
     }
 
     @Override
