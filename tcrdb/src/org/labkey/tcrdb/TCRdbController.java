@@ -294,10 +294,9 @@ public class TCRdbController extends SpringActionController
         }
 
         @Override
-        public NavTree appendNavTrail(NavTree root)
+        public void addNavTrail(NavTree root)
         {
             root.addChild("TCR Data Export"); //necessary to set page title, it seems
-            return root;
         }
     }
 
