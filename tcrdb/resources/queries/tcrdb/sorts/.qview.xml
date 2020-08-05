@@ -5,6 +5,7 @@
         <column name="stimId/animalId" />
         <column name="stimId/date" />
         <column name="stimId/stim" />
+        <column name="stimId/tissue" />
         <column name="stimId/treatment" />
         <column name="population" />
         <column name="replicate" />

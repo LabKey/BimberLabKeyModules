@@ -15,7 +15,7 @@
                     <column>comment</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="laboratory" queryName="project_usage" targetOption="truncate">
+            <destination schemaName="laboratory" queryName="project_usage" targetOption="truncate" bulkLoad="true">
 
             </destination>
         </transform>

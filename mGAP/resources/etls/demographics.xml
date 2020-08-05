@@ -29,7 +29,7 @@
                     <column>death</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="laboratory" queryName="subjects" targetOption="truncate" batchSize="1000">
+            <destination schemaName="laboratory" queryName="subjects" targetOption="truncate" batchSize="1000" bulkLoad="true">
                 <columnTransforms>
                     <column source="Id" target="subjectname"/>
                     <column source="Id/parents/sire" target="father"/>

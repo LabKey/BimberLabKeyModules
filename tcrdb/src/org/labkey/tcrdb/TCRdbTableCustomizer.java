@@ -100,6 +100,8 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
 
     private void customizeSorts(AbstractTableInfo ti)
     {
+        LDKService.get().applyNaturalSort(ti, "plateId");
+
         String name = "numLibraries";
         if (ti.getColumn(name) == null)
         {

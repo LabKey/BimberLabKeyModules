@@ -99,7 +99,7 @@
 
     <table tableName="stims" tableDbType="TABLE" useColumnOrder="true">
         <javaCustomizer class="org.labkey.laboratory.query.LaboratoryTableCustomizer" />
-        <tableTitle>TCR Stims</tableTitle>
+        <tableTitle>TCR Stims/Samples</tableTitle>
         <titleColumn>rowid</titleColumn>
         <columns>
             <column columnName="rowid">
@@ -112,6 +112,10 @@
                 <columnTitle>Animal/Cell</columnTitle>
                 <conceptURI>http://cpas.labkey.com/Study#ParticipantId</conceptURI>
                 <nullable>false</nullable>
+            </column>
+            <column columnName="tissue">
+                <columnTitle>Tissue</columnTitle>
+                <nullable>true</nullable>
             </column>
             <column columnName="effector">
                 <columnTitle>Effectors</columnTitle>

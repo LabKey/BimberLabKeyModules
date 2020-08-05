@@ -147,7 +147,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
             boolean hasCachedIndex = AlignerIndexUtil.hasCachedIndex(this.getPipelineCtx(), getIndexCachedDirName(getPipelineCtx().getJob()), referenceGenome);
             if (!hasCachedIndex)
             {
-                getPipelineCtx().getLogger().info("Creating FASTA for CellRanger VDJ Index");
+                getPipelineCtx().getLogger().info("Creating FASTA for CellRanger VDJ Index for genome: " + referenceGenome.getName());
                 File fasta = getGenomeFasta();
                 try (PrintWriter writer = PrintWriters.getPrintWriter(fasta))
                 {

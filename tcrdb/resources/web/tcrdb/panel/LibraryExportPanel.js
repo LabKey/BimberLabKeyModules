@@ -99,7 +99,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
                                                 '235-2\tHTO\tHiSeq1\tBNB-HTO-1<br>' +
                                                 'H235-2\tHiSeq1\tBNB-HTO-1<br>' +
                                                 '235-2\tHTO\tHiSeq2\tBNB-HTO-1<br>' +
-                                                'H235-2\tHiSeq1\tBNB-HTO-1' +
+                                                'H235-2\tHiSeq1\tBNB-HTO-1<br>' +
                                                 'C235-2\tHiSeq1\tBNB-HTO-1' +
                                             '</pre>',
                                     border: false
@@ -319,6 +319,8 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
             return;
         }
 
+        plateIds = Ext4.unique(plateIds);
+
         var instrument = btn.up('tcrdb-libraryexportpanel').down('#instrument').getValue();
         var application = btn.up('tcrdb-libraryexportpanel').down('#application') ? btn.up('tcrdb-libraryexportpanel').down('#application').getValue() :  null;
         var defaultVolume = btn.up('tcrdb-libraryexportpanel').down('#defaultVolume') ? btn.up('tcrdb-libraryexportpanel').down('#defaultVolume').getValue() :  '';
@@ -342,7 +344,7 @@ Ext4.define('TCRdb.panel.LibraryExportPanel', {
             }
             else if (readsetApplication === 'RNA-seq, Single Cell'){
                 application = rowLevelApplication || application;
-                return (libraryType === '10x 5\' GEX' && application === '10x GEX') || (libraryType === '10x 5\' VDJ (Rhesus A/B/G)' && application === '10x VDJ');
+                return (libraryType.match(/^10x [35]\' GEX/) && application === '10x GEX') || (libraryType.match(/^10x 5' VDJ/) && application === '10x VDJ');
             }
             else if (readsetApplication === 'Cell Hashing'){
                 application = rowLevelApplication || application;

@@ -41,6 +41,12 @@ public class FlowDataProvider extends AbstractAssayDataProvider
     }
 
     @Override
+    public boolean isModuleEnabled(Container c)
+    {
+        return super.isModuleEnabled(c) && areModulesActive(c);
+    }
+
+    @Override
     public List<NavItem> getDataNavItems(Container c, User u)
     {
         List<NavItem> items = new ArrayList<NavItem>();

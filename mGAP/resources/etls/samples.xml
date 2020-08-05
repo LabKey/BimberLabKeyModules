@@ -43,7 +43,7 @@
                     <column>remove_comment</column>
                 </sourceColumns>
             </source>
-            <destination schemaName="laboratory" queryName="samples" targetOption="truncate">
+            <destination schemaName="laboratory" queryName="samples" targetOption="truncate" bulkLoad="true">
 
             </destination>
         </transform>

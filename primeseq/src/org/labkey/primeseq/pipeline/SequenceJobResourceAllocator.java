@@ -7,6 +7,7 @@ import org.labkey.api.cluster.ClusterResourceAllocator;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.pipeline.PipelineJob;
 import org.labkey.api.pipeline.RemoteExecutionEngine;
+import org.labkey.api.pipeline.TaskFactory;
 import org.labkey.api.pipeline.TaskId;
 import org.labkey.api.reader.Readers;
 import org.labkey.api.sequenceanalysis.pipeline.HasJobParams;
@@ -17,6 +18,7 @@ import org.labkey.api.util.FileUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -469,6 +471,17 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
             if (engine.getType().equals("SlurmEngine"))
             {
                 job.getLogger().debug("qos as supplied by job: " + qos);
+
+                //Exempt specific task types:
+                TaskFactory factory = job.getActiveTaskFactory();
+                String activeTask = factory == null ? null : factory.getId().getNamespaceClass().getSimpleName();
+                job.getLogger().debug("Active task simplename: " + activeTask);
+                if (Arrays.asList("PrepareAlignerIndexesTask", "CacheAlignerIndexesTask", "AlignmentInitTask", "VariantProcessingScatterRemotePrepareTask").contains(activeTask))
+                {
+                    job.getLogger().info("Using default queue for task: " + activeTask);
+                    qos = "Default";
+                }
+
                 String qosName = null;
                 switch (qos)
                 {
