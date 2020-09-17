@@ -365,7 +365,7 @@ public class CellRangerVDJUtils
         long lineCount = SequencePipelineService.get().getLineCount(htoBarcodeWhitelist);
         if (lineCount == 1)
         {
-            _log.info("Only a HTO is used, will not use hashing");
+            _log.info("Only one HTO is used, will not use hashing");
             return null;
         }
 

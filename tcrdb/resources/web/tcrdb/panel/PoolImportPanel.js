@@ -541,6 +541,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                 date: r.sampleDate,
                 stim: r.stim,
                 treatment: r.treatment || 'None',
+                tissue: r.tissue,
                 objectId: r.objectId,
                 population: r.population,
                 workbook: r.workbook
@@ -763,7 +764,6 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
                     population: row.population,
                     replicate: row.replicate,
                     cells: row.cells,
-                    plateId: row.plateId,
                     well: row.well || 'Pool',
                     hto: row.hto,
                     buffer: row.buffer,
@@ -1008,7 +1008,7 @@ Ext4.define('TCRdb.panel.PoolImportPanel', {
     },
 
     getStimKey: function(data){
-        return [data.stimId, data.animalId, data.stim, data.treatment].join('|');
+        return [data.stimId, data.animalId, data.stim, data.treatment, data.tissue].join('|');
     },
 
     getSortKey: function(data){

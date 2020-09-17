@@ -10,6 +10,9 @@ Ext4.define('TCRdb.panel.cDNAImportPanel', {
                 return;
             }
 
+            //Do not allow rowspan for this type of import
+            col.allowRowSpan = false;
+
             this.COLUMN_MAP[col.name.toLowerCase()] = col;
             Ext4.Array.forEach(col.labels, function (alias) {
                 this.COLUMN_MAP[alias.toLowerCase()] = col;

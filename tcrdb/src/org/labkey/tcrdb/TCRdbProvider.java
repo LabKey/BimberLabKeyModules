@@ -185,12 +185,16 @@ public class TCRdbProvider extends AbstractSequenceDataProvider
         TabbedReportItem sorts = new QueryTabbedReportItem(cache, this, TCRdbSchema.NAME, TCRdbSchema.TABLE_SORTS, "TCR Sorts", category);
         sorts.setSubjectIdFieldKey(FieldKey.fromString("stimId/animalId"));
         sorts.setSampleDateFieldKey(FieldKey.fromString("stimId/date"));
+        sorts.setAllProjectsFieldKey(FieldKey.fromString("stimId/allProjectsPivot"));
+        sorts.setOverlappingProjectsFieldKey(FieldKey.fromString("stimId/overlappingProjectsPivot"));
         sorts.setOwnerKey(owner.getPropertyManagerKey());
         items.add(sorts);
 
         TabbedReportItem cdnas = new QueryTabbedReportItem(cache, this, TCRdbSchema.NAME, TCRdbSchema.TABLE_CDNAS, "TCR cDNA Libraries", category);
         cdnas.setSubjectIdFieldKey(FieldKey.fromString("sortId/stimId/animalId"));
         cdnas.setSampleDateFieldKey(FieldKey.fromString("sortId/stimId/date"));
+        cdnas.setAllProjectsFieldKey(FieldKey.fromString("sortId/stimId/allProjectsPivot"));
+        cdnas.setOverlappingProjectsFieldKey(FieldKey.fromString("sortId/stimId/overlappingProjectsPivot"));
         cdnas.setOwnerKey(owner.getPropertyManagerKey());
         items.add(cdnas);
 

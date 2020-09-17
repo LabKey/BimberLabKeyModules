@@ -238,7 +238,7 @@
                 <nullable>false</nullable>
             </column>
             <column columnName="plateId">
-                <nullable>false</nullable>
+                <nullable>true</nullable>
             </column>
             <column columnName="well">
                 <nullable>false</nullable>

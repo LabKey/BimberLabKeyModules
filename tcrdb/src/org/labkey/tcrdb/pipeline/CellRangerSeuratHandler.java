@@ -4,8 +4,10 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import htsjdk.samtools.util.IOUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONObject;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.DbSchema;
@@ -14,9 +16,14 @@ import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.Table;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
+import org.labkey.api.exp.api.ExpData;
+import org.labkey.api.exp.api.ExpRun;
+import org.labkey.api.exp.api.ExperimentService;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.pipeline.PipelineJob;
 import org.labkey.api.pipeline.PipelineJobException;
+import org.labkey.api.pipeline.PipelineService;
+import org.labkey.api.pipeline.PipelineStatusFile;
 import org.labkey.api.pipeline.RecordedAction;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.reader.Readers;
@@ -35,6 +42,7 @@ import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.PrintWriters;
 import org.labkey.tcrdb.TCRdbModule;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -55,7 +63,7 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
 
     public CellRangerSeuratHandler()
     {
-        super(ModuleLoader.getInstance().getModule(TCRdbModule.class), "Run Seurat", "This will run a standard seurat-based pipeline on the selected 10x/cellranger data and save the resulting Seurat object as an rds file for external use.", new LinkedHashSet<>(), getDefaultParams());
+        super(ModuleLoader.getInstance().getModule(TCRdbModule.class), "Run Seurat", "This will run a standard seurat-based pipeline on the selected 10x/cellranger data and save the resulting Seurat object as an rds file for external use.", new LinkedHashSet<>(PageFlowUtil.set("sequenceanalysis/field/GenomeFileSelectorField.js")), getDefaultParams());
     }
 
     private static List<ToolParameterDescriptor> getDefaultParams()
@@ -94,7 +102,13 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
                 ToolParameterDescriptor.create("mergeMethod", "Merge Method", "This determines whether any batch correction will be applied when merging datasets.", "ldk-simplecombo", new JSONObject(){{
                     put("storeValues", "simple;cca");
                 }}, "simple"),
-                ToolParameterDescriptor.create(SEURAT_MAX_THREADS, "Seurat Max Threads", "Because seurat can behave badly with multiple threads, this allows a separate cap to be used from the main job.  This will allow CITE-Seq-Count and other tools to run with more threads.", "ldk-integerfield", null, 1)
+                ToolParameterDescriptor.create(SEURAT_MAX_THREADS, "Seurat Max Threads", "Because seurat can behave badly with multiple threads, this allows a separate cap to be used from the main job.  This will allow CITE-Seq-Count and other tools to run with more threads.", "ldk-integerfield", null, 1),
+                ToolParameterDescriptor.createExpDataParam("gtfFile", "Gene File", "This is the ID of a GTF file containing genes from this genome.", "sequenceanalysis-genomefileselectorfield", new JSONObject()
+                {{
+                    put("extensions", Arrays.asList("gtf"));
+                    put("width", 400);
+                    put("allowBlank", false);
+                }}, null)
         ));
 
         ret.addAll(CellRangerCellHashingHandler.getDefaultHashingParams(false));
@@ -151,6 +165,8 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
 
     public class Processor implements SequenceOutputProcessor
     {
+        private static final String GTF_FILE_ID = "gtfFileIf";
+
         @Override
         public void init(PipelineJob job, SequenceAnalysisJobSupport support, List<SequenceOutputFile> inputFiles, JSONObject params, File outputDir, List<RecordedAction> actions, List<SequenceOutputFile> outputsToCreate) throws UnsupportedOperationException, PipelineJobException
         {
@@ -167,6 +183,66 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
             }
 
             new CellRangerVDJUtils(job.getLogger(), outputDir).prepareHashingAndCiteSeqFilesIfNeeded(job, support,"readsetId", params.optBoolean("excludeFailedcDNA", true), false, false);
+
+            Set<Integer> gtfIds = new HashSet<>();
+            for (SequenceOutputFile so : inputFiles)
+            {
+                ExpData gtf = null;
+                ExpRun run = ExperimentService.get().getExpRun(so.getRunId());
+                if (run != null)
+                {
+                    List<? extends ExpData> gtfDatas = run.getInputDatas("GTF File", null);
+                    if (!gtfDatas.isEmpty())
+                    {
+                        gtf = gtfDatas.get(0);
+                    }
+                    else
+                    {
+                        //Because existing runs didnt explicitly track GTF as an input, try to infer:
+                        PipelineStatusFile sf = PipelineService.get().getStatusFile(run.getJobId());
+                        if (sf != null)
+                        {
+                            File log = new File(sf.getFilePath());
+                            File paramFile = new File(log.getParentFile(), "sequenceAnalysis.json");
+                            if (paramFile.exists())
+                            {
+                                try (BufferedReader reader = Readers.getReader(paramFile))
+                                {
+                                    List<String> lines = IOUtils.readLines(reader);
+
+                                    JSONObject json = lines.isEmpty() ? new JSONObject() : new JSONObject(StringUtils.join(lines, '\n'));
+                                    Integer expData = json.optInt("alignment.CellRanger.gtfFile", -1);
+                                    if (expData == -1)
+                                    {
+
+                                    }
+
+                                    gtf = ExperimentService.get().getExpData(expData);
+                                }
+                                catch (IOException e)
+                                {
+                                    throw new PipelineJobException(e);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (gtf == null)
+                {
+                    throw new PipelineJobException("Unable to find GTF for output: " + so.getRowid());
+                }
+
+                gtfIds.add(gtf.getRowId());
+            }
+
+            if (gtfIds.size() != 1)
+            {
+                throw new PipelineJobException("All inputs must use the same GTF file, found: " + StringUtils.join(gtfIds, ","));
+            }
+
+            support.cacheExpData(ExperimentService.get().getExpData(gtfIds.iterator().next()));
+            support.cacheObject(GTF_FILE_ID, gtfIds.iterator().next());
         }
 
         @Override
@@ -180,6 +256,14 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
         {
             RecordedAction action = new RecordedAction(getName());
             ctx.addActions(action);
+
+            int gtfId = ctx.getSequenceSupport().getCachedObject(GTF_FILE_ID, Integer.class);
+            File gtfFile = ctx.getSequenceSupport().getCachedData(gtfId);
+            if (!gtfFile.exists())
+            {
+                throw new PipelineJobException("Unable to find GTF file: " + gtfFile.getPath());
+            }
+            ctx.getFileManager().addInput(action, "GTF File", gtfFile);
 
             Set<String> rsNames = new HashSet<>();
             for (SequenceOutputFile so : inputFiles)
@@ -321,6 +405,17 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
 
                     writer.println(v + " <- " + val);
                 }
+
+                //GTF file:
+                File gtfCopy = new File(ctx.getWorkingDirectory(), gtfId + ".gtf");
+                if (gtfCopy.exists())
+                {
+                    gtfCopy.delete();
+                }
+                IOUtil.copyFile(gtfFile, gtfCopy);
+                ctx.getFileManager().addIntermediateFile(gtfCopy);
+
+                writer.println("gtfFile <- " + gtfCopy.getName());
 
                 String mergeMethod = StringUtils.trimToNull(ctx.getParams().optString("mergeMethod"));
                 mergeMethod = mergeMethod == null ? "NULL" : "'" + mergeMethod + "'";
@@ -926,7 +1021,9 @@ public class CellRangerSeuratHandler extends AbstractParameterizedOutputHandler<
                 Map<String, Object> r = new HashMap<>();
                 r.put("category", line[0]);
                 r.put("metricname", line[1]);
-                r.put("metricvalue", line[2]);
+
+                String fieldName = NumberUtils.isCreatable(line[2]) ? "metricvalue" : "qualvalue";
+                r.put(fieldName, line[2]);
                 r.put("analysis_id", so.getAnalysis_id());
                 r.put("dataid", so.getDataId());
                 r.put("readset", so.getReadset());
