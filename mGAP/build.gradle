@@ -8,6 +8,7 @@ dependencies {
     BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:dataintegration", depProjectConfig: "apiJarFile")
 	external "com.github.samtools:htsjdk:${htsjdkVersion}"
     implementation "com.sun.mail:jakarta.mail:${javaMailVersion}"
+    implementation "net.sf.opencsv:opencsv:${opencsvVersion}"
 
     BuildUtils.addLabKeyDependency(project: project, config: "modules", depProjectPath: ":server:modules:dataintegration", depProjectConfig: "published", depExtension: "module")
     BuildUtils.addLabKeyDependency(project: project, config: "modules", depProjectPath: ":server:modules:LabDevKitModules:LDK", depProjectConfig: "published", depExtension: "module")
