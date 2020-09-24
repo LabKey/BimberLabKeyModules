@@ -70,7 +70,8 @@ public class GeneticsTableCustomizer extends AbstractTableCustomizer implements 
             ti.addColumn(newCol3);
 
             //# disabled
-            SQLFragment sql4 = new SQLFragment("(select count(*) as expr from sequenceanalysis.alignment_summary_junction j WHERE j.status = 0 AND j.analysis_id = " + ExprColumn.STR_TABLE_ALIAS + ".rowid)");
+            SQLFragment sql4 = new SQLFragment("(select count(*) as expr from sequenceanalysis.alignment_summary_junction j WHERE j.status = ? AND j.analysis_id = " + ExprColumn.STR_TABLE_ALIAS + ".rowid)");
+            sql4.add(false);
             ExprColumn newCol4 = new ExprColumn(ti, "numReadsDisabled", sql4, JdbcType.INTEGER, ti.getColumn("rowid"));
             newCol.setLabel("# Allele Calls Disabled");
             ti.addColumn(newCol4);
