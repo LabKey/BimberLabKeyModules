@@ -149,71 +149,66 @@ public class VariantDBManager
 
                 final Pair<Integer, Integer> matches = Pair.of(0, 0);
                 TableSelector variantTs = new TableSelector(VariantDBSchema.getInstance().getSchema().getTable(VariantDBSchema.TABLE_VARIANTS), variantFilter, null);
-                variantTs.forEach(new Selector.ForEachBlock<Variant>()
-                {
-                    @Override
-                    public void exec(Variant v) throws SQLException
+                variantTs.forEach(Variant.class, v -> {
+                    String name = resolveSequenceName(v.getSequenceId());
+                    if (name != null)
                     {
-                        String name = resolveSequenceName(v.getSequenceId());
-                        if (name != null)
+                        matches.second++;
+
+                        //only delete once
+                        deletePs.setString(1, v.getObjectid());
+                        deletePs.addBatch();
+
+                        v.setSequenceName(name);
+                        for (Integer targetId : liftOverMap.keySet())
                         {
-                            matches.second++;
-
-                            //only delete once
-                            deletePs.setString(1, v.getObjectid());
-                            deletePs.addBatch();
-
-                            v.setSequenceName(name);
-                            for (Integer targetId : liftOverMap.keySet())
+                            LiftedVariant lv = VariantDBManager.get().liftOverVariant(liftOverMap.get(targetId), v, chainFileMap.get(targetId));
+                            if (lv.successfulLiftover())
                             {
-                                LiftedVariant lv = VariantDBManager.get().liftOverVariant(liftOverMap.get(targetId), v, chainFileMap.get(targetId));
-                                if (lv.successfulLiftover())
-                                {
-                                    matches.first++;
-                                }
-
-                                //variantid, sequenceid, startPosition, endPosition, reference, allele, referenceVariantId, referenceAlleleId, batchId, chainFile, created, createdBy, modified, modifiedBy
-                                insertPs.setString(1, v.getObjectid());
-                                if (lv.successfulLiftover())
-                                {
-                                    insertPs.setInt(2, lv.getSequenceId());
-                                    insertPs.setInt(3, lv.getStartPosition());
-                                    insertPs.setInt(4, lv.getEndPosition());
-                                }
-                                else
-                                {
-                                    insertPs.setInt(2, -1);
-                                    insertPs.setInt(3, 0);
-                                    insertPs.setInt(4, 0);
-                                }
-                                insertPs.setString(5, null);
-                                insertPs.setString(6, null);
-
-                                insertPs.setString(7, v.getReferenceVariantId());
-                                insertPs.setString(8, v.getReferenceAlleleId());
-                                insertPs.setString(9, batchId);
-                                insertPs.setInt(10, lv.getChainFile());
-                                insertPs.setDate(11, new Date(System.currentTimeMillis()));
-                                insertPs.setInt(12, u.getUserId());
-                                insertPs.setDate(13, new Date(System.currentTimeMillis()));
-                                insertPs.setInt(14, u.getUserId());
-
-                                insertPs.addBatch();
+                                matches.first++;
                             }
 
-                            if (matches.second % batchSize == 0)
+                            //variantid, sequenceid, startPosition, endPosition, reference, allele, referenceVariantId, referenceAlleleId, batchId, chainFile, created, createdBy, modified, modifiedBy
+                            insertPs.setString(1, v.getObjectid());
+                            if (lv.successfulLiftover())
                             {
-                                log.info("processed: " + matches.second + "  variants");
-                                deletePs.executeBatch();
-                                insertPs.executeBatch();
+                                insertPs.setInt(2, lv.getSequenceId());
+                                insertPs.setInt(3, lv.getStartPosition());
+                                insertPs.setInt(4, lv.getEndPosition());
                             }
+                            else
+                            {
+                                insertPs.setInt(2, -1);
+                                insertPs.setInt(3, 0);
+                                insertPs.setInt(4, 0);
+                            }
+                            insertPs.setString(5, null);
+                            insertPs.setString(6, null);
+
+                            insertPs.setString(7, v.getReferenceVariantId());
+                            insertPs.setString(8, v.getReferenceAlleleId());
+                            insertPs.setString(9, batchId);
+                            insertPs.setInt(10, lv.getChainFile());
+                            insertPs.setDate(11, new Date(System.currentTimeMillis()));
+                            insertPs.setInt(12, u.getUserId());
+                            insertPs.setDate(13, new Date(System.currentTimeMillis()));
+                            insertPs.setInt(14, u.getUserId());
+
+                            insertPs.addBatch();
                         }
-                        else
+
+                        if (matches.second % batchSize == 0)
                         {
-                            log.error("unable to resolve sequenceId: " + v.getSequenceId());
+                            log.info("processed: " + matches.second + "  variants");
+                            deletePs.executeBatch();
+                            insertPs.executeBatch();
                         }
                     }
-                }, Variant.class);
+                    else
+                    {
+                        log.error("unable to resolve sequenceId: " + v.getSequenceId());
+                    }
+                });
 
                 //execute any remaining commands
                 log.info("processed: " + matches.second + "  variants");
