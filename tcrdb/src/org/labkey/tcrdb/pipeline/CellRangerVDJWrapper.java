@@ -154,7 +154,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
                     final AtomicInteger i = new AtomicInteger(0);
                     UserSchema us = QueryService.get().getUserSchema(getPipelineCtx().getJob().getUser(), getPipelineCtx().getJob().getContainer(), "sequenceanalysis");
                     List<Integer> seqIds = new TableSelector(us.getTable("reference_library_members", null), PageFlowUtil.set("ref_nt_id"), new SimpleFilter(FieldKey.fromString("library_id"), referenceGenome.getGenomeId()), null).getArrayList(Integer.class);
-                    new TableSelector(us.getTable("ref_nt_sequences", null), new SimpleFilter(FieldKey.fromString("rowid"), seqIds, CompareType.IN), null).forEach(nt -> {
+                    new TableSelector(us.getTable("ref_nt_sequences", null), new SimpleFilter(FieldKey.fromString("rowid"), seqIds, CompareType.IN), null).forEach(RefNtSequenceModel.class, nt -> {
 
                         if (nt.getLocus() == null)
                         {
@@ -209,7 +209,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
                             writer.write(seq + "\n");
                         }
                         nt.clearCachedSequence();
-                    }, RefNtSequenceModel.class);
+                    });
                 }
                 catch (IllegalArgumentException | IOException e)
                 {

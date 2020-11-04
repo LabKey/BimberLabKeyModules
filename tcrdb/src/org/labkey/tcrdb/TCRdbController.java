@@ -136,44 +136,38 @@ public class TCRdbController extends SpringActionController
 
             TableInfo ti = us.getTable("data");
             final Map<File, List<AssayRecord>> VDJMap = new HashMap<>();
-            List<Integer> rowIds = new ArrayList<>();
-            rowIds.addAll(Arrays.asList(form.getAssayRowIds()));
+            List<Integer> rowIds = new ArrayList<>(Arrays.asList(form.getAssayRowIds()));
 
             TableSelector ts = new TableSelector(ti, new SimpleFilter(FieldKey.fromString("rowid"), rowIds, CompareType.IN), null);
             final StringWriter writer = new StringWriter();
 
-            ts.forEach(new Selector.ForEachBlock<AssayRecord>()
-            {
-                @Override
-                public void exec(AssayRecord r) throws SQLException, StopIteratingException
+            ts.forEach(AssayRecord.class, r -> {
+                if (r.getVdjFile() == null)
                 {
-                    if (r.getVdjFile() == null)
-                    {
-                        writer.write("ERROR: Row lacks VDJCA file: " + r.getRowId() + "\n");
-                        return;
-                    }
-
-                    ExpData d = ExperimentService.get().getExpData(r.getVdjFile());
-                    if (d == null)
-                    {
-                        writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", ExpData: " + r.getVdjFile() + "\n");
-                        return;
-                    }
-
-                    if (!d.getFile().exists())
-                    {
-                        writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", file does not exist: " + d.getFile().getPath() + "\n");
-                        return;
-                    }
-
-                    if (!VDJMap.containsKey(d.getFile()))
-                    {
-                        VDJMap.put(d.getFile(), new ArrayList<>());
-                    }
-
-                    VDJMap.get(d.getFile()).add(r);
+                    writer.write("ERROR: Row lacks VDJCA file: " + r.getRowId() + "\n");
+                    return;
                 }
-            }, AssayRecord.class);
+
+                ExpData d = ExperimentService.get().getExpData(r.getVdjFile());
+                if (d == null)
+                {
+                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", ExpData: " + r.getVdjFile() + "\n");
+                    return;
+                }
+
+                if (!d.getFile().exists())
+                {
+                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", file does not exist: " + d.getFile().getPath() + "\n");
+                    return;
+                }
+
+                if (!VDJMap.containsKey(d.getFile()))
+                {
+                    VDJMap.put(d.getFile(), new ArrayList<>());
+                }
+
+                VDJMap.get(d.getFile()).add(r);
+            });
 
             if (VDJMap.isEmpty())
             {
