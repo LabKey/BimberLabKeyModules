@@ -68,6 +68,7 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
 
     public static final String TARGET_ASSAY = "targetAssay";
     public static final String DELETE_EXISTING_ASSAY_DATA = "deleteExistingAssayData";
+    public static final String INNER_ENRICHMENT_PRIMERS = "innerEnrichmentPrimers";
 
     public static class VDJProvider extends AbstractAlignmentStepProvider<AlignmentStep>
     {
@@ -81,6 +82,13 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
                     }}, null),
                     ToolParameterDescriptor.createCommandLineParam(CommandLineParam.create("--force-cells"), "force-cells", "Force Cells", "Force pipeline to use this number of cells, bypassing the cell detection algorithm. Use this if the number of cells estimated by Cell Ranger is not consistent with the barcode rank plot.", "ldk-integerfield", new JSONObject(){{
                         put("minValue", 0);
+                    }}, null),
+                    ToolParameterDescriptor.createCommandLineParam(CommandLineParam.createSwitch("--disable-ui"), "disable-ui", "Disable UI", "If checked, this will run cellranger with the optional web-based UI disabled.", "checkbox", new JSONObject(){{
+                        put("checked", true);
+                    }}, true),
+                    ToolParameterDescriptor.create(INNER_ENRICHMENT_PRIMERS, "Inner Enrichment Primers", "An option comma-separated list of the inner primers used for TCR enrichment. These will be used for trimming.", "textarea", new JSONObject(){{
+                        put("height", 100);
+                        put("width", 400);
                     }}, null),
                     ToolParameterDescriptor.create(TARGET_ASSAY, "Target Assay", "Results will be loaded into this assay.  If no assay is selected, a table will be created with nothing in the DB.", "tcr-assayselectorfield", new JSONObject(){{
                         put("autoSelectAssay", false);
@@ -295,6 +303,32 @@ public class CellRangerVDJWrapper extends AbstractCommandWrapper
 
             File indexDir = AlignerIndexUtil.getIndexDir(referenceGenome, getIndexCachedDirName(getPipelineCtx().getJob()));
             args.add("--reference=" + indexDir.getPath());
+
+            String primers = StringUtils.trimToNull(getProvider().getParameterByName(INNER_ENRICHMENT_PRIMERS).extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), String.class, null));
+            if (primers != null)
+            {
+                primers = primers.replaceAll("\\s+", ",");
+                primers = primers.replaceAll(",+", ",");
+
+                File primerFile = new File(outputDirectory, "primers.txt");
+                try (PrintWriter writer = PrintWriters.getPrintWriter(primerFile))
+                {
+                    Arrays.stream(primers.split(",")).forEach(x -> {
+                        x = StringUtils.trimToNull(x);
+                        if (x != null)
+                        {
+                            writer.println(x);
+                        }
+                    });
+                }
+                catch (IOException e)
+                {
+                    throw new PipelineJobException(e);
+                }
+
+                output.addIntermediateFile(primerFile);
+                args.add("--inner-enrichment-primers=" + primerFile.getPath());
+            }
 
             args.addAll(getClientCommandArgs("="));
 

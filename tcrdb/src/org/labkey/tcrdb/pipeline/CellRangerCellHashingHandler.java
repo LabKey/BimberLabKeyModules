@@ -248,7 +248,7 @@ public class CellRangerCellHashingHandler extends AbstractParameterizedOutputHan
         //prepare whitelist of cell indexes
         File cellBarcodeWhitelist = utils.getValidCellIndexFile();
         Set<String> uniqueBarcodes = new HashSet<>();
-        ctx.getLogger().debug("writing cell barcodes");
+        ctx.getLogger().debug("writing cell barcodes, using file: " + perCellTsv.getPath());
         try (CSVWriter writer = new CSVWriter(PrintWriters.getPrintWriter(cellBarcodeWhitelist), ',', CSVWriter.NO_QUOTE_CHARACTER);CSVReader reader = new CSVReader(IOUtil.openFileForBufferedUtf8Reading(perCellTsv), '\t'))
         {
             int rowIdx = 0;

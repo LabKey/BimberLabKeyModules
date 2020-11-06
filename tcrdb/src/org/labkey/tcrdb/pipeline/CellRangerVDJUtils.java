@@ -376,7 +376,7 @@ public class CellRangerVDJUtils
         File cellBarcodeWhitelist = getValidCellIndexFile();
         Set<String> uniqueBarcodes = new HashSet<>();
         Set<String> uniqueBarcodesIncludingNoCDR3 = new HashSet<>();
-        _log.debug("writing cell barcodes");
+        _log.debug("writing cell barcodes, using file: " + perCellTsv.getPath());
         try (CSVWriter writer = new CSVWriter(PrintWriters.getPrintWriter(cellBarcodeWhitelist), ',', CSVWriter.NO_QUOTE_CHARACTER); CSVReader reader = new CSVReader(Readers.getReader(perCellTsv), ','))
         {
             int rowIdx = 0;
