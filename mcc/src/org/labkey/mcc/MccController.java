@@ -32,6 +32,7 @@ import org.labkey.api.data.TableSelector;
 import org.labkey.api.module.AllowedDuringUpgrade;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.security.AuthenticationManager;
 import org.labkey.api.security.IgnoresTermsOfUse;
 import org.labkey.api.security.MutableSecurityPolicy;
 import org.labkey.api.security.RequiresNoPermission;
@@ -382,7 +383,7 @@ public class MccController extends SpringActionController
             for (User u : existingUsersGivenAccess)
             {
                 Container mccContainer = MccManager.get().getMCCContainer();
-                boolean isLDAP = SecurityManager.isLdapEmail(new ValidEmail(u.getEmail()));
+                boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
                 mail.setEncodedHtmlContent("Your account request has been approved for MCC!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mccContainer.getStartURL(getUser()).toString() + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));

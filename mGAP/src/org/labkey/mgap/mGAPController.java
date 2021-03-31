@@ -54,6 +54,7 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.QueryUpdateService;
 import org.labkey.api.query.UserSchema;
+import org.labkey.api.security.AuthenticationManager;
 import org.labkey.api.security.IgnoresTermsOfUse;
 import org.labkey.api.security.MutableSecurityPolicy;
 import org.labkey.api.security.RequiresNoPermission;
@@ -434,7 +435,7 @@ public class mGAPController extends SpringActionController
             for (User u : existingUsersGivenAccess)
             {
                 Container mGapContainer = mGAPManager.get().getMGapContainer();
-                boolean isLDAP = SecurityManager.isLdapEmail(new ValidEmail(u.getEmail()));
+                boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
                 mail.setEncodedHtmlContent("Your account request has been approved for mGAP!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mGapContainer.getStartURL(getUser()).toString() + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
