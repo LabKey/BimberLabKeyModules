@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -291,17 +293,19 @@ public class AIDImportMethod extends DefaultImportMethod
 
     private enum PLATE
     {
-        spot("Spot counts:", "spots"),
-        saturation("Well's saturation values (%)", "saturation"),
-        cytokine("Cytokine Activities:", "cytokine");
+        spot("Spot counts:", "spots", Collections.singletonList("Number of Spots:")),
+        saturation("Well's saturation values (%)", "saturation", Collections.singletonList("Well's saturation values (%)")),
+        cytokine("Cytokine Activities:", "cytokine", Collections.singletonList("Activity:"));
 
         private String description;
         private String field;
+        private Collection<String> aliases;
 
-        PLATE(String description, String field)
+        PLATE(String description, String field, Collection<String> aliases)
         {
             this.description = description;
             this.field = field;
+            this.aliases = aliases;
         }
 
         public static PLATE getByDescription(String description)
@@ -310,6 +314,16 @@ public class AIDImportMethod extends DefaultImportMethod
             {
                 if (t.description.equalsIgnoreCase(description))
                     return t;
+                else if (t.aliases != null)
+                {
+                    for (String alias : t.aliases)
+                    {
+                        if (alias.equals(description))
+                        {
+                            return t;
+                        }
+                    }
+                }
             }
             return null;
         }
