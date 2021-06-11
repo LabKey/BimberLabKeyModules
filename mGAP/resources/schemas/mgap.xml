@@ -40,6 +40,13 @@
                 <isUserEditable>true</isUserEditable>
                 <shownInInsertView>false</shownInInsertView>
             </column>
+            <column columnName="otherNames">
+                <columnTitle>Other Names</columnTitle>
+                <description>A comma-separated list of alternate names</description>
+                <nullable>true</nullable>
+                <isUserEditable>true</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+            </column>
             <column columnName="biosample_accession">
                 <columnTitle>BioSample Accession</columnTitle>
                 <nullable>true</nullable>

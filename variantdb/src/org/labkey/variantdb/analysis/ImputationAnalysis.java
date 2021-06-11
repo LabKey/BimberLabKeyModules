@@ -50,7 +50,7 @@ import org.labkey.api.writer.PrintWriters;
 import org.labkey.variantdb.VariantDBModule;
 import org.labkey.variantdb.analysis.Imputation.ImputationFileUtil;
 import org.labkey.variantdb.analysis.Imputation.SubjectCounter;
-import org.labkey.variantdb.run.CombineVariantsWrapper;
+import org.labkey.variantdb.run.MergeVcfsAndGenotypesWrapper;
 import org.labkey.variantdb.run.ImputationRunner;
 import org.labkey.variantdb.run.MendelianEvaluator;
 
@@ -648,13 +648,8 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
                 sv.execute(genome.getWorkingFastaFile(), inputVcf, output, args);
             }
 
-            //then merge
-            List<String> args = new ArrayList<>();
-            //args.add("-genotypeMergeOptions");
-            //args.add("UNIQUIFY");
-
-            CombineVariantsWrapper wrapper = new CombineVariantsWrapper(log);
-            wrapper.execute(genome.getWorkingFastaFile(), subsetVcfs, mergedVcf, args);
+            MergeVcfsAndGenotypesWrapper wrapper = new MergeVcfsAndGenotypesWrapper(log);
+            wrapper.execute(genome.getWorkingFastaFile(), subsetVcfs, mergedVcf);
         }
 
         private void prepareGenotypeData(ImputationRunner runner, SampleSet ss, File setBaseDir, Logger log, File mergedVcf, File gatkPed) throws PipelineJobException

@@ -15,7 +15,9 @@
  */
 package org.labkey.test.tests.external.labModules;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.Locator;
@@ -229,6 +231,7 @@ public class ELISPOT_AssayTest extends AbstractLabModuleAssayTest
 
         Ext4FieldRef textarea = _ext4Helper.queryOne("#fileContent", Ext4FieldRef.class);
         String text = _helper.getExampleData();
+        Assert.assertNotNull("Unable to retrieve example data", StringUtils.trimToNull(text));
 
         log("Trying to save data");
         textarea.setValue(text);

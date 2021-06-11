@@ -38,6 +38,8 @@ public class MccManager
     public static final String ContainerPropName = "MCCContainer";
     public static final String NotifyPropName = "MCCContactUsers";
 
+    public static final String GROUP_NAME = "MCC Users";
+
     private static final MccManager _instance = new MccManager();
 
     private MccManager()

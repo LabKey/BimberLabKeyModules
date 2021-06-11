@@ -23,6 +23,7 @@ import org.labkey.api.action.ApiSimpleResponse;
 import org.labkey.api.action.MutatingApiAction;
 import org.labkey.api.action.SpringActionController;
 import org.labkey.api.data.Container;
+import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.CoreSchema;
 import org.labkey.api.data.DbScope;
 import org.labkey.api.data.SimpleFilter;
@@ -33,6 +34,8 @@ import org.labkey.api.module.AllowedDuringUpgrade;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.AuthenticationManager;
+import org.labkey.api.security.Group;
+import org.labkey.api.security.GroupManager;
 import org.labkey.api.security.IgnoresTermsOfUse;
 import org.labkey.api.security.MutableSecurityPolicy;
 import org.labkey.api.security.RequiresNoPermission;
@@ -51,6 +54,7 @@ import org.labkey.api.util.ConfigurationException;
 import org.labkey.api.util.ExceptionUtil;
 import org.labkey.api.util.MailHelper;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.security.xml.GroupEnumType;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
@@ -374,15 +378,19 @@ public class MccController extends SpringActionController
                 transaction.commit();
             }
 
+            Set<User> allUsers = new HashSet<>();
+            allUsers.addAll(existingUsersGivenAccess);
+
             //send emails:
             for (SecurityManager.NewUserStatus st : newUserStatusList)
             {
                 SecurityManager.sendRegistrationEmail(getViewContext(), st.getEmail(), null, st, null);
+                allUsers.add(st.getUser());
             }
 
+            Container mccContainer = MccManager.get().getMCCContainer();
             for (User u : existingUsersGivenAccess)
             {
-                Container mccContainer = MccManager.get().getMCCContainer();
                 boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
@@ -393,6 +401,14 @@ public class MccController extends SpringActionController
 
                 MailHelper.send(mail, getUser(), getContainer());
             }
+
+            Group g = GroupManager.getGroup(mccContainer, MccManager.GROUP_NAME, GroupEnumType.SITE);
+            if (g == null)
+            {
+                g = SecurityManager.createGroup(ContainerManager.getRoot(), MccManager.GROUP_NAME);
+            }
+
+            SecurityManager.addMembers(g, allUsers);
 
             response.put("success", !errors.hasErrors());
 

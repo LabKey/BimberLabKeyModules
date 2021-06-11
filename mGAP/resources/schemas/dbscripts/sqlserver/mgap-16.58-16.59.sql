@@ -1,0 +1,1 @@
+ALTER TABLE mGAP.animalMapping ADD otherNames varchar(4000);

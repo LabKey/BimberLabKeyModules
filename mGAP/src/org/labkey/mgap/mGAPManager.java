@@ -39,6 +39,7 @@ public class mGAPManager
     public static final String ContainerPropName = "MGAPContainer";
     public static final String NotifyPropName = "MGAPContactUsers";
     public static final String OmimApiKeyPropName = "OmimApiKey";
+    public static final String GROUP_NAME = "mGAP Users";
 
     private mGAPManager()
     {
