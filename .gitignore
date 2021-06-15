@@ -5,3 +5,6 @@
 /mcc/node_modules
 /mcc/resources/views/gen
 /mcc/resources/web/mcc/gen
+
+variantdb/resources/credits/dependencies.txt
+variantdb/resources/credits/jars.txt

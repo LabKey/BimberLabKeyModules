@@ -1,5 +1,0 @@
-{table}
-Filename|Component|Source|License|Purpose
-commons-net-3.8.0.jar|Commons Net|{link:Apache|http://jakarta.apache.org/commons/net/}|{link:Apache 2.0|http://www.apache.org/licenses/LICENSE-2.0}|FTPClient used to retrieve resources from other servers (e.g., GO annotations)
-commons-math3-3.6.1.jar|Commons Math|{link:Apache|http://commons.apache.org/math/}|{link:Apache 2.0|http://www.apache.org/licenses/LICENSE-2.0}|Lightweight, self-contained mathematics and statistics components
-{table}
