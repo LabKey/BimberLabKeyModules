@@ -7,7 +7,11 @@ dependencies {
    BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:LabDevKitModules:laboratory", depProjectConfig: "apiJarFile")
    BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:LabDevKitModules:LDK", depProjectConfig: "apiJarFile")
    BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: BuildUtils.getPlatformModuleProjectPath(project.gradle, "assay"), depProjectConfig: "apiJarFile")
-   external "io.repseq:repseqio:${repseqVersion}"
+   external ("io.repseq:repseqio:${repseqVersion}") {
+      // exclude logback to prevent excessive logging
+      exclude group: "ch.qos.logback", module :"logback-classic"
+      exclude group: "ch.qos.logback", module :"logback-core"
+   }
    implementation "com.github.samtools:htsjdk:${htsjdkVersion}"
    implementation "net.sf.opencsv:opencsv:${opencsvVersion}"
 
