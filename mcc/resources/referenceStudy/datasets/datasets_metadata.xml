@@ -622,6 +622,12 @@
             <column columnName="species">
                 <datatype>varchar</datatype>
             </column>
+            <column columnName="dam">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="sire">
+                <datatype>varchar</datatype>
+            </column>
             <column columnName="objectid">
                 <datatype>varchar</datatype>
                 <propertyURI>urn:ehr.labkey.org/#ObjectId</propertyURI>
@@ -635,6 +641,9 @@
                 <propertyURI>urn:ehr.labkey.org/#EndDate</propertyURI>
             </column>
             <column columnName="calculated_status">
+                <datatype>varchar</datatype>
+            </column>
+            <column columnName="u24_status">
                 <datatype>varchar</datatype>
             </column>
             <column columnName="global_id">

@@ -14,6 +14,13 @@
                 <permission>ADMIN</permission>
             </editPermissions>
         </propertyDescriptor>
+        <propertyDescriptor name="ZIMSImportPath">
+            <canSetPerContainer>true</canSetPerContainer>
+            <description>The absolute path to a folder holding the XML files from a ZIMS export. This is expected to either be the top-level folder, or the ./Animal subfolder.</description>
+            <editPermissions>
+                <permission>ADMIN</permission>
+            </editPermissions>
+        </propertyDescriptor>
     </properties>
     <clientDependencies>
 

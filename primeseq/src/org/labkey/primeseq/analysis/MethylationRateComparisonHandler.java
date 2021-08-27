@@ -195,7 +195,7 @@ public class MethylationRateComparisonHandler implements SequenceOutputHandler<S
             }
 
             Integer minDatapointsPerGroup = ctx.getParams().optInt("minDatapointsPerGroup", 0);
-            Integer minDepthPerSite = ctx.getParams().optInt("minDepthPerSite", 0);
+            int minDepthPerSite = ctx.getParams().optInt("minDepthPerSite", 0);
             String jobDescription = ctx.getParams().optString("jobDescription");
             String statisticalMethod = ctx.getParams().optString("statisticalMethod");
 
@@ -255,7 +255,7 @@ public class MethylationRateComparisonHandler implements SequenceOutputHandler<S
                                 String[] pieces = attr.split("=");
                                 if (pieces[0].equals("Depth"))
                                 {
-                                    Integer depth = Integer.parseInt(pieces[1]);
+                                    int depth = Integer.parseInt(pieces[1]);
                                     if (depth < minDepthPerSite)
                                     {
                                         skippedForDepth++;
@@ -326,25 +326,22 @@ public class MethylationRateComparisonHandler implements SequenceOutputHandler<S
                             continue;
                         }
 
-                        if (minDatapointsPerGroup != null)
+                        boolean doSkip = false;
+                        if (group1.size() < minDatapointsPerGroup)
                         {
-                            boolean doSkip = false;
-                            if (group1.size() < minDatapointsPerGroup)
-                            {
-                                group1Skipped++;
-                                doSkip = true;
-                            }
+                            group1Skipped++;
+                            doSkip = true;
+                        }
 
-                            if (group2.size() < minDatapointsPerGroup)
-                            {
-                                group2Skipped++;
-                                doSkip = true;
-                            }
+                        if (group2.size() < minDatapointsPerGroup)
+                        {
+                            group2Skipped++;
+                            doSkip = true;
+                        }
 
-                            if (doSkip)
-                            {
-                                continue;
-                            }
+                        if (doSkip)
+                        {
+                            continue;
                         }
 
                         totalPassingPositions++;

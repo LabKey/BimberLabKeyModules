@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml" standalone="false">
+    <name>WNPRC_Parentage_Data</name>
+    <description>WNPRC Parentage Data</description>
+    <transforms>
+        <transform type="SimpleQueryTransformStep" id="parentageSire">
+            <description>Copy to target</description>
+            <source schemaName="study" queryName="demographics">
+                <sourceColumns>
+                    <column>Id</column>
+                    <column>date</column>
+                    <column>sire</column>
+                    <column>objectid</column>
+                </sourceColumns>
+                <sourceFilters>
+                    <sourceFilter column="sire" operator="isnonblank" value=""/>
+                </sourceFilters>
+            </source>
+            <destination schemaName="study" queryName="parentage" targetOption="truncate" bulkLoad="true">
+                <columnTransforms>
+                    <column source="sire" target="parent"/>
+                    <column source="objectid" target="objectid" transformClass="org.labkey.mcc.etl.ParentageObjectIdTransform"/>
+                </columnTransforms>
+                <constants>
+                    <column name="relationship" type="VARCHAR" value="Sire"/>
+                </constants>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+
+        <transform type="SimpleQueryTransformStep" id="parentageDam">
+            <description>Copy to target</description>
+            <source schemaName="study" queryName="demographics">
+                <sourceColumns>
+                    <column>Id</column>
+                    <column>date</column>
+                    <column>dam</column>
+                    <column>objectid</column>
+                </sourceColumns>
+                <sourceFilters>
+                    <sourceFilter column="dam" operator="isnonblank" value=""/>
+                </sourceFilters>
+            </source>
+            <destination schemaName="study" queryName="parentage" targetOption="append" bulkLoad="true">
+                <columnTransforms>
+                    <column source="dam" target="parent"/>
+                    <column source="objectid" target="objectid" transformClass="org.labkey.mcc.etl.ParentageObjectIdTransform"/>
+                </columnTransforms>
+                <constants>
+                    <column name="relationship" type="VARCHAR" value="Dam"/>
+                </constants>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+    </transforms>
+</etl>

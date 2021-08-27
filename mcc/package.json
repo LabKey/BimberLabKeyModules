@@ -13,11 +13,13 @@
   "dependencies": {
     "@labkey/api": "^1.0.0",
     "chart.js": "^3.2.1",
+    "nanoid": "^3.1.24",
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^16.14.0",
+    "react-tooltip": "^4.2.21"
   },
   "devDependencies": {
-    "@labkey/build": "^2.1.0",
+    "@labkey/build": "^3.0.0",
     "@types/jest": "^26.0.23",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",

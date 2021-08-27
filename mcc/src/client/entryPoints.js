@@ -10,5 +10,10 @@ module.exports = {
     permission: 'read',
     path: './src/client/Dashboard/webpart',
     generateLib: true
+  },{
+    name: 'animalRequest',
+    title: 'Animal Requests',
+    permission: 'read',
+    path: './src/client/AnimalRequest'
   }]
 };

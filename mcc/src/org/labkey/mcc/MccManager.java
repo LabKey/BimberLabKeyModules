@@ -28,6 +28,7 @@ import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
 import org.labkey.api.security.ValidEmail;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class MccManager
 
     public static final String ContainerPropName = "MCCContainer";
     public static final String NotifyPropName = "MCCContactUsers";
+    public static final String ZIMSImportPath = "ZIMSImportPath";
 
     public static final String GROUP_NAME = "MCC Users";
 
@@ -61,6 +63,19 @@ public class MccManager
             return null;
 
         return ContainerManager.getForPath(path);
+    }
+
+    public File getZimsImportFolder(Container c)
+    {
+        Module m = ModuleLoader.getInstance().getModule(MccModule.NAME);
+        ModuleProperty mp = m.getModuleProperties().get(MccManager.ZIMSImportPath);
+        String val = StringUtils.trimToNull(mp.getValueContainerSpecific(c));
+        if (val == null)
+        {
+            return null;
+        }
+
+        return new File(val);
     }
 
     public Set<User> getNotificationUsers()

@@ -2,6 +2,7 @@ import './dashboard.css';
 
 import React, { useState, useEffect } from 'react';
 import { Query } from '@labkey/api';
+import { getServerContext } from "@labkey/api";
 
 import PieChart from './PieChart';
 import BarChart from './BarChart';
@@ -10,8 +11,19 @@ export function Dashboard() {
     const [demographics, setDemographics] = useState(null);
     const [living, setLiving] = useState(null);
 
+    const ctx = getServerContext().getModuleContext('mcc') || {};
+    const containerPath = ctx.MCCContainer || null;
+    if (!containerPath) {
+        return (
+            <div className="loading">
+                <div>Error: must set the MCCContainer module property</div>
+            </div>
+        );
+    }
+
     useEffect(() => {
         Query.selectRows({
+                containerPath: containerPath,
                 schemaName: 'study',
                 queryName: 'demographics',
                 columns: 'Id,birth,death,gender/meaning,species,colony,calculated_status,Id/age/AgeFriendly,Id/ageClass/label',
@@ -20,7 +32,8 @@ export function Dashboard() {
                     setDemographics(results.rows);
                 },
                 failure: function(response) {
-                    alert('It didnt work!');
+                    alert('There was an error loading data');
+                    console.log(response);
                 },
                 scope: this
             });

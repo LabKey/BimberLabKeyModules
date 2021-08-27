@@ -1,0 +1,6 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="objectid"/>
+        <column name="source_modified"/>
+    </columns>
+</customView>
