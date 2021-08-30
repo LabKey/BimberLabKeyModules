@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 
  * Copyright (c) 2020 LabKey Corporation
  *
@@ -160,6 +160,271 @@
                 <shownInInsertView>false</shownInInsertView>
                 <shownInUpdateView>false</shownInUpdateView>
                 <nullable>true</nullable>
+                <isHidden>true</isHidden>
+            </column>
+        </columns>
+    </table>
+
+    <table tableName="rowsToDelete" tableDbType="TABLE" useColumnOrder="true">
+        <!--<javaCustomizer class="org.labkey.ldk.query.DefaultTableCustomizer" />-->
+        <pkColumnName>objectid</pkColumnName>
+        <tableTitle>ETL Rows To Delete</tableTitle>
+        <auditLogging>NONE</auditLogging>
+        <columns>
+            <column columnName="objectid">
+                <isUserEditable>false</isUserEditable>
+                <isHidden>false</isHidden>
+                <columnTitle>Key</columnTitle>
+                <shownInDetailsView>true</shownInDetailsView>
+            </column>
+            <column columnName="source_modified">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <shownInDetailsView>true</shownInDetailsView>
+                <nullable>false</nullable>
+                <isHidden>false</isHidden>
+            </column>
+            <column columnName="container">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="createdby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="created">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modifiedby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modified">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <isHidden>true</isHidden>
+            </column>
+        </columns>
+    </table>
+
+    <table tableName="animalrequests" tableDbType="TABLE">
+        <pkColumnName>rowid</pkColumnName>
+        <columns>
+            <column columnName="rowid">
+                <columnTitle>Row Id</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="objectid">
+                <columnTitle>Object Id</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="lastname">
+                <columnTitle>Last Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="firstname">
+                <columnTitle>First Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="middleinitial">
+                <columnTitle>Middle Initial</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="isprincipalinvestigator">
+                <columnTitle>Is Principal Investigator</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutionname">
+                <columnTitle>Institution Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutioncity">
+                <columnTitle>Institution City</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutionstate">
+                <columnTitle>Institution State</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutioncountry">
+                <columnTitle>Institution Country</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutiontype">
+                <columnTitle>Institution Type</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="officiallastname">
+                <columnTitle>Official Last Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="officialfirstname">
+                <columnTitle>Official First Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="officialemail">
+                <columnTitle>Official Email</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="fundingsource">
+                <columnTitle>Funding Source</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="experimentalrationale">
+                <columnTitle>Experimental Rationale</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="numberofanimals">
+                <columnTitle>Number of Animals</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="othercharacteristics">
+                <columnTitle>Other Characteristics</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="methodsproposed">
+                <columnTitle>Methods Proposed</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="collaborations">
+                <columnTitle>Collaborations</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="isbreedinganimals">
+                <columnTitle>Breeding Animals?</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="ofinterestcenters">
+                <columnTitle>Of Interest NIH centers</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="researcharea">
+                <columnTitle>Research Area</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="otherjustification">
+                <columnTitle>Justification if "other" picked on Research Area</columnTitle>
+                <nullable>true</nullable>
+            </column>
+            <column columnName="existingmarmosetcolony">
+                <columnTitle>Existing marmoset colony?</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="existingnhpfacilities">
+                <columnTitle>Existing NHP facilities?</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="animalwelfare">
+                <columnTitle>Animal Welfare</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="certify">
+                <columnTitle>Request Certified Checkbox Status</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="vetlastname">
+                <columnTitle>Veterinarian Last Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="vetfirstname">
+                <columnTitle>Veterinarian First Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="vetemail">
+                <columnTitle>Veterinarian email</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="iacucapproval">
+                <columnTitle>IACUC Approval Status</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="container">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="createdby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="created">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <scale>29</scale>
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modifiedby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modified">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <scale>29</scale>
+                <isHidden>true</isHidden>
+            </column>
+        </columns>
+    </table>
+    <table tableName="coinvestigators" tableDbType="TABLE">
+        <pkColumnName>rowid</pkColumnName>
+        <columns>
+            <column columnName="rowid">
+                <columnTitle>Row ID</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="requestid">
+                <columnTitle>Request ID</columnTitle>
+                <nullable>false</nullable>
+
+                <fk>
+                    <fkDbSchema>mcc</fkDbSchema>
+                    <fkTable>animalrequests</fkTable>
+                    <fkColumnName>objectid</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="lastname">
+                <columnTitle>Last Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="firstname">
+                <columnTitle>First Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="middleinitial">
+                <columnTitle>Middle Initial</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="institutionname">
+                <columnTitle>Institution Name</columnTitle>
+                <nullable>false</nullable>
+            </column>
+            <column columnName="container">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="createdby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="created">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <scale>29</scale>
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modifiedby">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="modified">
+                <isUserEditable>false</isUserEditable>
+                <shownInInsertView>false</shownInInsertView>
+                <shownInUpdateView>false</shownInUpdateView>
+                <nullable>true</nullable>
+                <scale>29</scale>
                 <isHidden>true</isHidden>
             </column>
         </columns>

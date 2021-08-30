@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml" standalone="false">
+    <name>SNPRC_Datasets</name>
+    <!--NOTE: folder is: /Marmoset R24-->
+    <!--See also: https://github.com/LabKey/snprcEHRModules/blob/develop/snprc_r24/resources/referenceStudy/datasets/datasets_metadata.xml-->
+    <description>SNPRC Dataset Data</description>
+    <transforms>
+        <transform type="RemoteQueryTransformStep" id="demographics">
+            <description>Copy to target</description>
+            <source remoteSource="SNPRC" schemaName="study" queryName="Demographics">
+                <sourceColumns>
+                    <column>AnimalId</column>
+                    <column>date</column>
+                    <column>gender</column>
+                    <column>geographic_origin</column>
+                    <column>birth</column>
+                    <column>death</column>
+                    <column>species</column>
+                    <column>status</column>
+                    <column>objectid</column>
+                    <column>dam</column>
+                    <column>sire</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="study" queryName="Demographics" targetOption="merge" bulkLoad="true">
+                <constants>
+                    <column name="colony" type="VARCHAR" value="SNPRC"/>
+                </constants>
+                <columnTransforms>
+                    <column source="AnimalId" target="Id"/>
+                    <column source="status" target="calculated_status"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <!--NOTE: this is a LK bug-->
+                    <column name="participantid"/>
+                </alternateKeys>
+            </destination>
+
+        </transform>
+
+        <!--<transform type="RemoteQueryTransformStep" id="parentage">-->
+            <!--<description>Copy to target</description>-->
+            <!--<source remoteSource="SNPRC" schemaName="study" queryName="parentage">-->
+                <!--<sourceColumns>-->
+                    <!--<column>AnimalId</column>-->
+                    <!--<column>date</column>-->
+                    <!--<column>parent</column>-->
+                    <!--<column>relationship</column>-->
+                    <!--<column>method</column>-->
+                    <!--<column>objectid</column>-->
+                <!--</sourceColumns>-->
+            <!--</source>-->
+            <!--<destination schemaName="study" queryName="parentage" targetOption="merge" bulkLoad="true">-->
+                    <!--<columnTransforms>-->
+                        <!--<column source="AnimalId" target="Id"/>-->
+                    <!--</columnTransforms>-->
+            <!--</destination>-->
+
+        <!--</transform>-->
+
+        <!--NOTE: restore once we can filter on date is not null-->
+        <!--<transform type="RemoteQueryTransformStep" id="birth">-->
+            <!--<description>Copy to target</description>-->
+            <!--<source remoteSource="SNPRC" schemaName="study" queryName="Demographics">-->
+                <!--<sourceColumns>-->
+                    <!--<column>AnimalId</column>-->
+                    <!--<column>birth</column>-->
+                    <!--<column>gender</column>-->
+                    <!--<column>species</column>-->
+                    <!--<column>dam</column>-->
+                    <!--<column>sire</column>-->
+                    <!--<column>objectid</column>-->
+                <!--</sourceColumns>-->
+            <!--</source>-->
+            <!--<destination schemaName="study" queryName="birth" targetOption="merge" bulkLoad="true">-->
+                <!--<columnTransforms>-->
+                    <!--<column source="AnimalId" target="Id"/>-->
+                    <!--<column source="birth" target="date" />-->
+                <!--</columnTransforms>-->
+            <!--</destination>-->
+
+        <!--</transform>-->
+
+        <transform type="RemoteQueryTransformStep" id="assignment">
+            <description>Copy to target</description>
+            <source remoteSource="SNPRC" schemaName="study" queryName="AccountAssignments">
+                <sourceColumns>
+                    <column>AnimalId</column>
+                    <column>date</column>
+                    <column>enddate</column>
+                    <column>assignment</column>
+                    <column>objectid</column>
+                </sourceColumns>
+                <sourceFilters>
+                    <sourceFilter column="assignment" value="Other" operator="neqornull"/>
+                </sourceFilters>
+            </source>
+            <destination schemaName="study" queryName="flags" targetOption="merge" bulkLoad="true">
+                <columnTransforms>
+                    <column source="AnimalId" target="Id"/>
+                    <column source="assignment" target="flag" transformClass="org.labkey.mcc.etl.ProjectAssignmentTransform"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+
+        <!--<transform type="RemoteQueryTransformStep" id="deaths">-->
+            <!--<description>Copy to target</description>-->
+            <!--<source remoteSource="SNPRC" schemaName="study" queryName="deaths">-->
+                <!--<sourceColumns>-->
+                    <!--<column>AnimalId</column>-->
+                    <!--<column>date</column>-->
+                    <!--<column>cause</column>-->
+                    <!--<column>objectid</column>-->
+                <!--</sourceColumns>-->
+            <!--</source>-->
+            <!--<destination schemaName="study" queryName="deaths" targetOption="merge" bulkLoad="true">-->
+                <!--<columnTransforms>-->
+                    <!--<column source="AnimalId" target="Id"/>-->
+                <!--</columnTransforms>-->
+                <!--<alternateKeys>-->
+                    <!--<column name="objectid"/>-->
+                <!--</alternateKeys>-->
+            <!--</destination>-->
+
+        <!--</transform>-->
+
+        <transform type="RemoteQueryTransformStep" id="weight">
+            <description>Copy to target</description>
+            <source remoteSource="SNPRC" schemaName="study" queryName="weight" sourceTimeout="0">
+                <sourceColumns>
+                    <column>AnimalId</column>
+                    <column>date</column>
+                    <column>weight</column>
+                    <column>objectid</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="study" queryName="weight" targetOption="merge" bulkLoad="true" batchSize="20000">
+                <columnTransforms>
+                    <column source="AnimalId" target="Id"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+
+        </transform>
+
+    </transforms>
+
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified" >
+        <!--TODO: need to fix LK FilterStrategy.init() bug before this can be enabled-->
+        <!--<deletedRowsSource schemaName="mcc" queryName="rowsToDelete" targetKeyColumnName="objectid" deletedSourceKeyColumnName="objectid" timestampColumnName="source_modified"/>-->
+    </incrementalFilter>
+    <schedule>
+        <!--11PM-->
+        <cron expression="0 0 23 * * ?"/>
+    </schedule>
+</etl>

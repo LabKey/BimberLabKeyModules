@@ -5,6 +5,7 @@ import { jest, beforeEach, describe, expect, test } from '@jest/globals';
 
 import { Dashboard } from './Dashboard';
 import { Query } from '@labkey/api';
+import { getServerContext } from '@labkey/api';
 import { Chart } from 'chart.js';
 
 jest.mock('chart.js');
@@ -12,6 +13,16 @@ jest.mock('@labkey/api', () => {
     return {
         Query: {
             selectRows: jest.fn()
+        },
+
+        getServerContext: function() {
+            return {
+                getModuleContext: function() {
+                    return {
+                        MCCContainer: '/home'
+                    }
+                }
+            };
         }
     }
 });

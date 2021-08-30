@@ -1,4 +1,4 @@
-<view xmlns="http://labkey.org/data/xml/view" title="MCC Dashboard Webpart">
+<view xmlns="http://labkey.org/data/xml/view" title="MCC Dashboard">
     <permissions>
         <permission name="read"/>
     </permissions>

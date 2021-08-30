@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml" standalone="false">
+    <name>WNPRC_Deletes</name>
+    <description>WNPRC Deletes</description>
+    <transforms>
+        <transform type="RemoteQueryTransformStep" id="deletes">
+            <description>Copy to target</description>
+            <source remoteSource="WNPRC" schemaName="wnprc_u24" queryName="RowsToDelete">
+                <sourceColumns>
+                    <column>modified</column>
+                    <column>objectid</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="mcc" queryName="rowsToDelete" targetOption="merge" bulkLoad="true">
+                <columnTransforms>
+                    <column source="modified" target="source_modified"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+    </transforms>
+
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified">
+
+    </incrementalFilter>
+</etl>

@@ -221,19 +221,21 @@ public class ELISPOT_AssayTest extends AbstractLabModuleAssayTest
         DataRegionTable templates = new DataRegionTable("query", this);
         clickAndWait(Locator.linkWithText("Enter Results").findElement(templates.findCell(0, 0)));
 
-        //use the same data included with this assay
-        Locator btn = Locator.linkContainingText("Download Example Data");
-        waitForElement(btn);
+        //Wait for grid to load:
+        waitForElement(Locator.tagWithText("span", "Sample Records"));
+        waitForElement(Locator.tagWithClass("div", "x4-grid-cell-inner").containing("A1"));
 
+        //use the same data included with this assay
+        Ext4FieldRef.waitForField(this, "Instrument");
+        Ext4FieldRef.getForLabel(this, "Instrument").waitForEnabled();
         assertEquals("Incorrect value for field", "AID Plate Reader", Ext4FieldRef.getForLabel(this, "Instrument").getValue());
         assertEquals("Incorrect value for field", Double.valueOf(0.05), Ext4FieldRef.getForLabel(this, "Positivity Threshold").getValue());
-        waitAndClick(btn);
 
-        Ext4FieldRef textarea = _ext4Helper.queryOne("#fileContent", Ext4FieldRef.class);
-        String text = _helper.getExampleData();
+        String text = _helper.clickAndGetExampleData();
         Assert.assertNotNull("Unable to retrieve example data", StringUtils.trimToNull(text));
 
         log("Trying to save data");
+        Ext4FieldRef textarea = _ext4Helper.queryOne("#fileContent", Ext4FieldRef.class);
         textarea.setValue(text);
         waitAndClick(Ext4Helper.Locators.ext4Button("Upload"));
         waitForElement(Ext4Helper.Locators.window("Success"), WAIT_FOR_PAGE);

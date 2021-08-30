@@ -19,7 +19,9 @@ package org.labkey.mcc;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.labkey.api.action.ApiSimpleResponse;
+import org.labkey.api.action.ConfirmAction;
 import org.labkey.api.action.MutatingApiAction;
 import org.labkey.api.action.SpringActionController;
 import org.labkey.api.data.Container;
@@ -31,6 +33,7 @@ import org.labkey.api.data.Table;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.module.AllowedDuringUpgrade;
+import org.labkey.api.pipeline.PipelineUrls;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.AuthenticationManager;
@@ -52,11 +55,16 @@ import org.labkey.api.settings.AppProps;
 import org.labkey.api.settings.LookAndFeelProperties;
 import org.labkey.api.util.ConfigurationException;
 import org.labkey.api.util.ExceptionUtil;
+import org.labkey.api.util.HtmlString;
 import org.labkey.api.util.MailHelper;
 import org.labkey.api.util.PageFlowUtil;
+import org.labkey.api.util.URLHelper;
+import org.labkey.api.view.HtmlView;
+import org.labkey.mcc.etl.ZimsImportTask;
 import org.labkey.security.xml.GroupEnumType;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -535,6 +543,42 @@ public class MccController extends SpringActionController
         public void setComment(String comment)
         {
             _comment = comment;
+        }
+    }
+
+    @RequiresPermission(AdminPermission.class)
+    public class ResetZimsRuntimeAction extends ConfirmAction<Object>
+    {
+        @Override
+        public ModelAndView getConfirmView(Object o, BindException errors) throws Exception
+        {
+            setTitle("Reset ZIMs Last Run Time");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("This will reset the last run time for ZIMs import, causing any existing XML files to be re-imported. Do you want to continue?");
+
+            return new HtmlView(HtmlString.unsafe(sb.toString()));
+        }
+
+        @Override
+        public boolean handlePost(Object o, BindException errors) throws Exception
+        {
+            ZimsImportTask.saveLastRun(getContainer(), null);
+
+            return true;
+        }
+
+        @Override
+        public void validateCommand(Object o, Errors errors)
+        {
+
+        }
+
+        @NotNull
+        @Override
+        public URLHelper getSuccessURL(Object o)
+        {
+            return PageFlowUtil.urlProvider(PipelineUrls.class).urlBegin(getContainer());
         }
     }
 }

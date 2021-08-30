@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>ZIMS_Import</name>
+    <description>ZIMS Demographics Import</description>
+    <transforms>
+        <transform id="zims" type="TaskrefTransformStep">
+            <taskref ref="org.labkey.mcc.etl.ZimsImportTask">
+
+            </taskref>
+        </transform>
+    </transforms>
+    <schedule>
+        <cron expression="0 0 22 * * ?"/>
+    </schedule>
+</etl>

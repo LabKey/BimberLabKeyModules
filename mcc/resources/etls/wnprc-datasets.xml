@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml" standalone="false">
+    <name>WNPRC_Datasets</name>
+    <description>WNPRC Dataset Data</description>
+    <!--TODO: because u24_assignments does not exist locally, this is failing in ModifiedSinceFilterStrategy.getTsCol()-->
+    <transforms>
+        <transform type="RemoteQueryTransformStep" id="demographics">
+            <description>Copy to target</description>
+            <source remoteSource="WNPRC" schemaName="study" queryName="Demographics">
+                <sourceColumns>
+                    <column>Id</column>
+                    <column>date</column>
+                    <column>gender</column>
+                    <column>geographic_origin</column>
+                    <column>birth</column>
+                    <column>death</column>
+                    <column>species</column>
+                    <column>status</column>
+                    <column>dam</column>
+                    <column>sire</column>
+                    <column>sourceColony</column>
+                    <column>currentColony</column>
+                    <column>objectid</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="study" queryName="Demographics" targetOption="merge" bulkLoad="true">
+                <constants>
+                    <column name="colony" type="VARCHAR" value="WNPRC"/>
+                </constants>
+                <columnTransforms>
+                    <column source="status" target="calculated_status"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <!--Note: this is a LK bug-->
+                    <column name="participantid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+
+        <!--<transform type="RemoteQueryTransformStep" id="birth">-->
+        <!--<description>Copy to target</description>-->
+        <!--<source remoteSource="WNPRC" schemaName="study" queryName="birth">-->
+        <!--<sourceColumns>-->
+        <!--<column>Id</column>-->
+        <!--<column>date</column>-->
+        <!--<column>gender</column>-->
+        <!--<column>species</column>-->
+        <!--<column>geographic_origin</column>-->
+        <!--<column>dam</column>-->
+        <!--<column>sire</column>-->
+        <!--<column>objectid</column>-->
+        <!--</sourceColumns>-->
+        <!--</source>-->
+        <!--<destination schemaName="study" queryName="birth" targetOption="merge" bulkLoad="true">-->
+        <!--<alternateKeys>-->
+        <!--<column name="objectid"/>-->
+        <!--</alternateKeys>-->
+        <!--</destination>-->
+
+        <!--</transform>-->
+
+        <transform type="RemoteQueryTransformStep" id="weight">
+            <description>Copy to target</description>
+            <source remoteSource="WNPRC" schemaName="study" queryName="weight">
+                <sourceColumns>
+                    <column>Id</column>
+                    <column>date</column>
+                    <column>weight</column>
+                    <column>objectid</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="study" queryName="weight" targetOption="merge" bulkLoad="true">
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+
+        <transform type="RemoteQueryTransformStep" id="assignment">
+            <description>Copy to target</description>
+            <source remoteSource="WNPRC" schemaName="study" queryName="u24_assignments">
+                <sourceColumns>
+                    <column>Id</column>
+                    <column>date</column>
+                    <column>enddate</column>
+                    <column>title</column>
+                    <column>objectid</column>
+                </sourceColumns>
+            </source>
+            <destination schemaName="study" queryName="flags" targetOption="merge" bulkLoad="true">
+                <columnTransforms>
+                    <column source="title" target="flag" transformClass="org.labkey.mcc.etl.ProjectAssignmentTransform"/>
+                </columnTransforms>
+                <alternateKeys>
+                    <column name="objectid"/>
+                </alternateKeys>
+            </destination>
+        </transform>
+
+        <!--<transform type="RemoteQueryTransformStep" id="deaths">-->
+        <!--<description>Copy to target</description>-->
+        <!--<source remoteSource="WNPRC" schemaName="study" queryName="deaths">-->
+        <!--<sourceColumns>-->
+        <!--<column>Id</column>-->
+        <!--<column>date</column>-->
+        <!--<column>cause</column>-->
+        <!--<column>objectid</column>-->
+        <!--</sourceColumns>-->
+        <!--</source>-->
+        <!--<destination schemaName="study" queryName="deaths" targetOption="merge" bulkLoad="true">-->
+        <!--<alternateKeys>-->
+        <!--<column name="objectid"/>-->
+        <!--</alternateKeys>-->
+        <!--</destination>-->
+        <!--</transform>-->
+
+    </transforms>
+
+    <incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified">
+        <!--TODO: need to fix LK FilterStrategy.init() bug before this can be enabled-->
+        <!--<deletedRowsSource schemaName="mcc" queryName="rowsToDelete" targetKeyColumnName="objectId" deletedSourceKeyColumnName="objectId" timestampColumnName="source_modified"/>-->
+    </incrementalFilter>
+</etl>

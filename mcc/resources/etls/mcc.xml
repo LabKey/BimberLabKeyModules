@@ -15,6 +15,7 @@
                     <column>species</column>
                     <column>status</column>
                     <column>calculated_status</column>
+                    <column>u24_status</column>
                     <column>mostRecentWeight</column>
                     <column>colony</column>
                     <column>dam</column>

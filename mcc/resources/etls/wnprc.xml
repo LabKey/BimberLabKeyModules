@@ -3,152 +3,30 @@
     <name>WNPRC_Data</name>
     <description>WNPRC Clinical/Demographics Data</description>
     <transforms>
-        <transform type="RemoteQueryTransformStep" id="demographics">
-            <description>Copy to target</description>
-            <source remoteSource="WNPRC" schemaName="study" queryName="Demographics">
-                <sourceColumns>
-                    <column>Id</column>
-                    <column>date</column>
-                    <column>gender</column>
-                    <column>geographic_origin</column>
-                    <column>birth</column>
-                    <column>death</column>
-                    <column>species</column>
-                    <column>status</column>
-                    <column>dam</column>
-                    <column>sire</column>
-                    <column>sourceColony</column>
-                    <column>currentColony</column>
-                    <column>objectid</column>
-                </sourceColumns>
-            </source>
-            <destination schemaName="study" queryName="Demographics" targetOption="truncate" bulkLoad="true">
-                <constants>
-                    <column name="colony" type="VARCHAR" value="WNPRC"/>
-                </constants>
-                <columnTransforms>
-                    <column source="status" target="calculated_status"/>
-                </columnTransforms>
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
-            </destination>
+        <transform id="deletes" type="TaskrefTransformStep">
+            <taskref ref="org.labkey.di.steps.QueueJobTask">
+                <settings>
+                    <setting name="transformId" value="{MCC}/wnprc-deletes"/>
+                </settings>
+            </taskref>
         </transform>
 
-        <transform type="SimpleQueryTransformStep" id="parentageSire">
-            <description>Copy to target</description>
-            <source schemaName="study" queryName="demographics">
-                <sourceColumns>
-                    <column>Id</column>
-                    <column>date</column>
-                    <column>sire</column>
-                    <column>objectid</column>
-                </sourceColumns>
-                <sourceFilters>
-                    <sourceFilter column="sire" operator="isnonblank" value=""/>
-                </sourceFilters>
-            </source>
-            <destination schemaName="study" queryName="parentage" targetOption="truncate" bulkLoad="true">
-                <columnTransforms>
-                    <column source="sire" target="parent"/>
-                    <column source="objectid" target="objectid" transformClass="org.labkey.mcc.etl.ParentageObjectIdTransform"/>
-                </columnTransforms>
-                <constants>
-                    <column name="relationship" type="VARCHAR" value="Sire"/>
-                </constants>
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
-            </destination>
+        <transform id="datasets" type="TaskrefTransformStep">
+            <taskref ref="org.labkey.di.steps.QueueJobTask">
+                <settings>
+                    <setting name="transformId" value="{MCC}/wnprc-datasets"/>
+                </settings>
+            </taskref>
         </transform>
 
-        <transform type="SimpleQueryTransformStep" id="parentageDam">
-            <description>Copy to target</description>
-            <source schemaName="study" queryName="demographics">
-                <sourceColumns>
-                    <column>Id</column>
-                    <column>date</column>
-                    <column>dam</column>
-                    <column>objectid</column>
-                </sourceColumns>
-                <sourceFilters>
-                    <sourceFilter column="dam" operator="isnonblank" value=""/>
-                </sourceFilters>
-            </source>
-            <destination schemaName="study" queryName="parentage" targetOption="append" bulkLoad="true">
-                <columnTransforms>
-                    <column source="dam" target="parent"/>
-                    <column source="objectid" target="objectid" transformClass="org.labkey.mcc.etl.ParentageObjectIdTransform"/>
-                </columnTransforms>
-                <constants>
-                    <column name="relationship" type="VARCHAR" value="Dam"/>
-                </constants>
-                <alternateKeys>
-                    <column name="objectid"/>
-                </alternateKeys>
-            </destination>
+        <transform id="parentage" type="TaskrefTransformStep">
+            <taskref ref="org.labkey.di.steps.QueueJobTask">
+                <settings>
+                    <setting name="transformId" value="{MCC}/wnprc-parentage"/>
+                </settings>
+            </taskref>
         </transform>
-
-        <!--<transform type="RemoteQueryTransformStep" id="birth">-->
-            <!--<description>Copy to target</description>-->
-            <!--<source remoteSource="WNPRC" schemaName="study" queryName="birth">-->
-                <!--<sourceColumns>-->
-                    <!--<column>Id</column>-->
-                    <!--<column>date</column>-->
-                    <!--<column>gender</column>-->
-                    <!--<column>species</column>-->
-                    <!--<column>geographic_origin</column>-->
-                    <!--<column>dam</column>-->
-                    <!--<column>sire</column>-->
-                    <!--<column>objectid</column>-->
-                <!--</sourceColumns>-->
-            <!--</source>-->
-            <!--<destination schemaName="study" queryName="birth" targetOption="truncate" bulkLoad="true">-->
-                <!--<alternateKeys>-->
-                    <!--<column name="objectid"/>-->
-                <!--</alternateKeys>-->
-            <!--</destination>-->
-
-        <!--</transform>-->
-
-        <!--<transform type="RemoteQueryTransformStep" id="weight">-->
-            <!--<description>Copy to target</description>-->
-            <!--<source remoteSource="WNPRC" schemaName="study" queryName="weight">-->
-                <!--<sourceColumns>-->
-                    <!--<column>Id</column>-->
-                    <!--<column>date</column>-->
-                    <!--<column>weight</column>-->
-                    <!--<column>objectid</column>-->
-                <!--</sourceColumns>-->
-            <!--</source>-->
-            <!--<destination schemaName="study" queryName="weight" targetOption="truncate" bulkLoad="true">-->
-                <!--<alternateKeys>-->
-                    <!--<column name="objectid"/>-->
-                <!--</alternateKeys>-->
-            <!--</destination>-->
-        <!--</transform>-->
-
-        <!--<transform type="RemoteQueryTransformStep" id="deaths">-->
-            <!--<description>Copy to target</description>-->
-            <!--<source remoteSource="WNPRC" schemaName="study" queryName="deaths">-->
-                <!--<sourceColumns>-->
-                    <!--<column>Id</column>-->
-                    <!--<column>date</column>-->
-                    <!--<column>cause</column>-->
-                    <!--<column>objectid</column>-->
-                <!--</sourceColumns>-->
-            <!--</source>-->
-            <!--<destination schemaName="study" queryName="deaths" targetOption="truncate" bulkLoad="true">-->
-                <!--<alternateKeys>-->
-                    <!--<column name="objectid"/>-->
-                <!--</alternateKeys>-->
-            <!--</destination>-->
-        <!--</transform>-->
     </transforms>
-
-    <!--<incrementalFilter className="ModifiedSinceFilterStrategy" timestampColumnName="modified">-->
-
-    <!--</incrementalFilter>-->
     <schedule>
         <!--9PM-->
         <cron expression="0 0 21 * * ?"/>

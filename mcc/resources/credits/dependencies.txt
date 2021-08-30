@@ -1,2 +1,4 @@
 # direct external dependencies for project :server:modules:BimberLabKeyModules:mcc
 htsjdk-2.21.3.jar
+jackson-databind-2.9.5.jar
+jackson-dataformat-xml-2.9.5.jar
