@@ -1,6 +1,6 @@
 {table}
 Filename|Component|Version|Source|License|LabKey Dev|Purpose
 htsjdk-2.21.3.jar|htsjdk|2.21.3|{link:htsjdk|http://samtools.github.io/htsjdk/}|{link:MIT License|http://opensource.org/licenses/MIT}|bbimber|A Java API for high-throughput sequencing data (HTS) formats
-jackson-databind-2.9.5.jar|jackson-databind|2.9.5|{link:jackson-databind|https://github.com/FasterXML/jackson-databind}|{link:Apache License 2.0|https://www.apache.org/licenses/LICENSE-2.0}|Parsing XML Data
-jackson-dataformat-2.9.5.jar|jackson-dataformat|2.9.5|{link:jackson-dataformat|https://github.com/FasterXML/jackson-databind}|{link:Apache License 2.0|https://www.apache.org/licenses/LICENSE-2.0}|Parsing XML Data
+jackson-databind-2.11.3.jar|jackson-databind|2.11.3|{link:jackson-databind|https://github.com/FasterXML/jackson-databind}|{link:Apache License 2.0|https://www.apache.org/licenses/LICENSE-2.0}|Parsing XML Data
+jackson-dataformat-2.11.3.jar|jackson-dataformat|2.11.3|{link:jackson-dataformat|https://github.com/FasterXML/jackson-databind}|{link:Apache License 2.0|https://www.apache.org/licenses/LICENSE-2.0}|Parsing XML Data
 {table}
