@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasets metaDataFile="datasets_metadata.xml" xmlns="http://labkey.org/study/xml">
-    <categories>
-        <category>ClinPath</category>
-        <category>Colony Management</category>
-        <category>Clinical</category>
-    </categories>
     <datasets>
         <dataset name="flags" id="5019" category="Colony Management" type="Standard">
             <tags/>
