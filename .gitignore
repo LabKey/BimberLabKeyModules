@@ -4,7 +4,7 @@
 /mcc/.gradle
 /mcc/node_modules
 /mcc/resources/views/gen
-/mcc/resources/web/mcc/gen
+/mcc/resources/web/gen
 
 elispot_assay/resources/credits/dependencies.txt
 elispot_assay/resources/credits/jars.txt
