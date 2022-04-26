@@ -9,6 +9,14 @@ repositories {
       }
 }
 
+repositories {
+      mavenCentral()
+      // Added for org.clojars.chapmanb:sam dependency required by com.github.samtools:htsjdk
+      maven {
+            url "https://clojars.org/repo"
+      }
+}
+
 dependencies {
       implementation "com.github.samtools:htsjdk:${htsjdkVersion}"
       BuildUtils.addExternalDependency(
