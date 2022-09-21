@@ -3,7 +3,7 @@ package org.labkey.variantdb.analysis;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.exp.api.ExpData;
 import org.labkey.api.exp.api.ExperimentService;
 import org.labkey.api.module.Module;

@@ -2,7 +2,7 @@ package org.labkey.elispot_assay.assay;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.exp.api.ExpExperiment;

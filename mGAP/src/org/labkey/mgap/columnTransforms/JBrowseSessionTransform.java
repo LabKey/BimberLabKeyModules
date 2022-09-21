@@ -1,6 +1,6 @@
 package org.labkey.mgap.columnTransforms;
 
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.DbSchema;

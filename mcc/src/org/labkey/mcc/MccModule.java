@@ -18,7 +18,7 @@ package org.labkey.mcc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.ehr.EHRService;
 import org.labkey.api.ldk.ExtendedSimpleModule;

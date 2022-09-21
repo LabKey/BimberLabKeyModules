@@ -1,6 +1,6 @@
 package org.labkey.covidseq;
 
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.laboratory.AbstractDataProvider;

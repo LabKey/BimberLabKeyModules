@@ -3,7 +3,7 @@ package org.labkey.primeseq.pipeline;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.cluster.ClusterResourceAllocator;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.pipeline.PipelineJob;

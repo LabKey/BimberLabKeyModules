@@ -1,6 +1,6 @@
 package org.labkey.genotypeassays.assay;
 
-import org.json.JSONObject;
+import org.json.old.JSONObject;
 import org.labkey.api.laboratory.assay.AbstractAssayDataProvider;
 import org.labkey.api.module.Module;
 import org.labkey.api.view.ViewContext;
