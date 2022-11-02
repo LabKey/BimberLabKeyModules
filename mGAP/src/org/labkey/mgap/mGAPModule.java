@@ -19,7 +19,7 @@ package org.labkey.mgap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.audit.AuditLogService;
 import org.labkey.api.data.ContainerFilter;
 import org.labkey.api.data.SimpleFilter;
