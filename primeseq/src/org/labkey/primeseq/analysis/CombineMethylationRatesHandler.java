@@ -41,7 +41,9 @@ public class CombineMethylationRatesHandler extends AbstractParameterizedOutputH
                     put("allowBlank", false);
                     put("height", 150);
                 }}, null),
-                ToolParameterDescriptor.create("intervals", "Intervals", "The intervals over which to merge the data.  They should be in the form: chr01:102-20394", "sequenceanalysis-intervalfield", null, null)
+                ToolParameterDescriptor.create("intervals", "Intervals", "The intervals over which to merge the data.  They should be in the form: chr01:102-20394", "sequenceanalysis-intervalfield", new JSONObject(){{
+                    put("allowBlank", false);
+                }}, null)
         ));
     }
 

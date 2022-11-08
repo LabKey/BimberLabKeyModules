@@ -84,7 +84,7 @@
         <exp:Name>count</exp:Name>
         <exp:Required>false</exp:Required>
         <exp:RangeURI>http://www.w3.org/2001/XMLSchema#int</exp:RangeURI>
-        <exp:Label>Read Count</exp:Label>
+        <exp:Label>Reads/Cells</exp:Label>
     </exp:PropertyDescriptor>
     <exp:PropertyDescriptor>
         <exp:Name>fraction</exp:Name>

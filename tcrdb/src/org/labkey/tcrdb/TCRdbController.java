@@ -538,12 +538,24 @@ public class TCRdbController extends SpringActionController
                     FieldKey.fromString("jHit"),
                     FieldKey.fromString("dHit"),
                     FieldKey.fromString("cHit"),
-                    FieldKey.fromString("libraryId/libraryId")));
+                    FieldKey.fromString("libraryId/libraryId"),
+                    FieldKey.fromString("analysisId/library_id")));
             TableSelector ts = new TableSelector(assayData, cols.values(), assayFilter, null);
             Set<String> segmentsByName = new HashSet<>();
             final String[] segmentFields = new String[]{"vHit", "jHit", "cHit"};
             ts.forEachResults(rs -> {
-                Integer libraryId = rs.getObject(FieldKey.fromString("libraryId/libraryId")) == null ? null : rs.getInt(FieldKey.fromString("libraryId/libraryId"));
+                // Allows this to work with both MiXCR and 10x data
+                Integer libraryId = null;
+                if (rs.getObject(FieldKey.fromString("libraryId/libraryId")) != null)
+                {
+                    libraryId = rs.getInt(FieldKey.fromString("libraryId/libraryId"));
+                }
+
+                if (libraryId == null && rs.getObject(FieldKey.fromString("analysisId/library_id")) != null)
+                {
+                    libraryId = rs.getInt(FieldKey.fromString("analysisId/library_id"));
+                }
+
                 for (String fn : segmentFields)
                 {
                     if (rs.getString(FieldKey.fromString(fn)) != null)
@@ -583,13 +595,18 @@ public class TCRdbController extends SpringActionController
             {
                 for (int libraryId : segmentsByLibrary.keySet())
                 {
-                    SimpleFilter ntFilter = new SimpleFilter(FieldKey.fromString("ref_nt_id/name"), segmentsByLibrary.get(libraryId), CompareType.IN);
+                    SimpleFilter ntFilter = new SimpleFilter();
                     ntFilter.addCondition(FieldKey.fromString("ref_nt_id/datedisabled"), null, CompareType.ISBLANK);
                     ntFilter.addCondition(FieldKey.fromString("library_id"), libraryId, CompareType.EQUAL);
+                    ntFilter.addClause(new SimpleFilter.OrClause(
+                            new SimpleFilter.InClause(FieldKey.fromString("ref_nt_id/name"), segmentsByLibrary.get(libraryId)),
+                            new SimpleFilter.InClause(FieldKey.fromString("ref_nt_id/lineage"), segmentsByLibrary.get(libraryId))
+                    ));
                     new TableSelector(QueryService.get().getUserSchema(getUser(), target, "sequenceanalysis").getTable("reference_library_members"), PageFlowUtil.set("ref_nt_id"), ntFilter, null).forEachResults(rs -> {
                         RefNtSequenceModel nt = RefNtSequenceModel.getForRowId(rs.getInt(FieldKey.fromString("ref_nt_id")));
                         fasta.append(">").append(nt.getName() + (nt.getSpecies() != null ? "-" + nt.getSpecies() : "")).append('\n').append(nt.getSequence()).append('\n');
                         missingSegments.remove(nt.getName());
+                        missingSegments.remove(nt.getLineage());
                     });
                 }
             }
