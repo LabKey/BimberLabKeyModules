@@ -163,7 +163,7 @@ public class TCRdbController extends SpringActionController
             SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
             for (File f : VDJMap.keySet())
             {
-                File tmp = File.createTempFile("mixcr", ".txt");
+                File tmp = FileUtil.createTempFile("mixcr", ".txt");
                 MiXCRWrapper wrapper = new MiXCRWrapper(_log);
                 //TODO:
                 //wrapper.setLibraryPath();

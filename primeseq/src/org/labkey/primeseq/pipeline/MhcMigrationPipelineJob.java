@@ -279,7 +279,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                         continue;
                     }
 
-                    File assayTmp = File.createTempFile("assay-upload", ".txt").getAbsoluteFile();
+                    File assayTmp = FileUtil.createTempFile("assay-upload", ".txt").getAbsoluteFile();
                     ViewBackgroundInfo info = getJob().getInfo();
                     ViewContext vc = ViewContext.getMockViewContext(info.getUser(), workbookMap.get(wb), info.getURL(), false);
                     final Set<Object> missingAnalyses = new HashSet<>();
