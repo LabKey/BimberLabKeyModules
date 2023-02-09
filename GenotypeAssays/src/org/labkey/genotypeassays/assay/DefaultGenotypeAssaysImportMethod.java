@@ -27,6 +27,7 @@ public class DefaultGenotypeAssaysImportMethod extends DefaultAssayImportMethod
         super(GenotypeAssaysManager.GENOTYPE_ASSAY_PROVIDER);
     }
 
+    @Override
     public AssayParser getFileParser(Container c, User u, int assayId)
     {
         return new DefaultGenotypeAssayParser(this, c, u, assayId);

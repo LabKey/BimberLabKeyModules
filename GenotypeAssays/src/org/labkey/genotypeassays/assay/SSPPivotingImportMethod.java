@@ -21,7 +21,6 @@ import java.util.ListIterator;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
  * User: bimber
  * Date: 12/9/12
  * Time: 7:58 AM
@@ -51,6 +50,7 @@ public class SSPPivotingImportMethod extends PivotingImportMethod
         return _importMethod.getMetadata(ctx, protocol);
     }
 
+    @Override
     public String getTooltip()
     {
         return "Choose this option to upload data using a template with many allele typings per row";
@@ -62,7 +62,7 @@ public class SSPPivotingImportMethod extends PivotingImportMethod
         return new Parser(this, c, u, assayId);
     }
 
-    private class Parser extends PivotingAssayParser
+    private static class Parser extends PivotingAssayParser
     {
         public Parser(PivotingImportMethod method, Container c, User u, int assayId)
         {

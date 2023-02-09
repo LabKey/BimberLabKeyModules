@@ -51,6 +51,7 @@ public class FlowAssaysDataProvider extends AbstractDataProvider
         return FlowAssaysModule.NAME;
     }
 
+    @Override
     public ActionURL getInstructionsUrl(Container c, User u)
     {
         return null;
@@ -61,11 +62,13 @@ public class FlowAssaysDataProvider extends AbstractDataProvider
         return false;
     }
 
+    @Override
     public List<NavItem> getDataNavItems(Container c, User u)
     {
         return Collections.emptyList();
     }
 
+    @Override
     public List<NavItem> getSampleNavItems(Container c, User u)
     {
         return Collections.emptyList();
@@ -87,26 +90,31 @@ public class FlowAssaysDataProvider extends AbstractDataProvider
         return items;
     }
 
+    @Override
     public JSONObject getTemplateMetadata(ViewContext ctx)
     {
         return null;
     }
 
+    @Override
     public Set<ClientDependency> getClientDependencies()
     {
         return Collections.emptySet();
     }
 
+    @Override
     public Module getOwningModule()
     {
         return _module;
     }
 
+    @Override
     public List<SummaryNavItem> getSummary(Container c, User u)
     {
         return Collections.emptyList();
     }
 
+    @Override
     public List<NavItem> getSubjectIdSummary(Container c, User u, String subjectId)
     {
         return Collections.emptyList();
