@@ -2,7 +2,7 @@ package org.labkey.mgap.pipeline;
 
 import htsjdk.samtools.util.Interval;
 import org.apache.logging.log4j.Logger;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableSelector;
 import org.labkey.api.pipeline.PipelineJob;

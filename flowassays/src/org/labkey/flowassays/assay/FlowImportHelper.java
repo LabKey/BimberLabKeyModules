@@ -1,10 +1,10 @@
 package org.labkey.flowassays.assay;
 
-import org.json.old.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
-import org.labkey.api.gwt.client.util.StringUtils;
 import org.labkey.api.laboratory.assay.ImportContext;
 import org.labkey.flowassays.FlowAssaysSchema;
 
@@ -159,6 +159,6 @@ public class FlowImportHelper
 
     private  static JSONObject getJsonObject(JSONObject parent, String key)
     {
-        return parent.containsKey(key) ? parent.getJSONObject(key): new JSONObject();
+        return parent.has(key) ? parent.getJSONObject(key): new JSONObject();
     }
 }

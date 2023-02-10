@@ -3,7 +3,7 @@ package org.labkey.variantdb.analysis;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.exp.api.ExpData;
 import org.labkey.api.exp.api.ExperimentService;
 import org.labkey.api.module.Module;
@@ -81,7 +81,7 @@ public class MendelianAnalysisHandler extends AbstractParameterizedOutputHandler
         {
             for (ToolParameterDescriptor pd : getParameters())
             {
-                if (ctx.getParams().containsKey(pd.getName()) && !StringUtils.isEmpty(ctx.getParams().getString(pd.getName())))
+                if (ctx.getParams().has(pd.getName()) && !StringUtils.isEmpty(ctx.getParams().getString(pd.getName())))
                 {
                     ExpData d = ExperimentService.get().getExpData(ctx.getParams().getInt(pd.getName()));
                     if (d != null)
@@ -140,7 +140,7 @@ public class MendelianAnalysisHandler extends AbstractParameterizedOutputHandler
                     arguments.add(g.getWorkingFastaFile().getPath());
                 }
 
-                if (ctx.getParams().containsKey("vcfFile") && !StringUtils.isEmpty(ctx.getParams().getString("vcfFile")))
+                if (ctx.getParams().has("vcfFile") && !StringUtils.isEmpty(ctx.getParams().getString("vcfFile")))
                 {
                     arguments.add("-v");
                     File f = ctx.getSequenceSupport().getCachedData(ctx.getParams().getInt("vcfFile"));
@@ -151,7 +151,7 @@ public class MendelianAnalysisHandler extends AbstractParameterizedOutputHandler
                     arguments.add(f.getPath());
                 }
 
-                if (ctx.getParams().containsKey("maskFile") && !StringUtils.isEmpty(ctx.getParams().getString("maskFile")))
+                if (ctx.getParams().has("maskFile") && !StringUtils.isEmpty(ctx.getParams().getString("maskFile")))
                 {
                     arguments.add("-m");
                     File f = ctx.getSequenceSupport().getCachedData(ctx.getParams().getInt("maskFile"));
@@ -162,7 +162,7 @@ public class MendelianAnalysisHandler extends AbstractParameterizedOutputHandler
                     arguments.add(f.getPath());
                 }
 
-                if (ctx.getParams().containsKey("cutSitesFile") && !StringUtils.isEmpty(ctx.getParams().getString("cutSitesFile")))
+                if (ctx.getParams().has("cutSitesFile") && !StringUtils.isEmpty(ctx.getParams().getString("cutSitesFile")))
                 {
                     arguments.add("-c");
                     File f = ctx.getSequenceSupport().getCachedData(ctx.getParams().getInt("cutSitesFile"));

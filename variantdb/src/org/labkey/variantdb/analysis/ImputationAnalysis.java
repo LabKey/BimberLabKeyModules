@@ -14,8 +14,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.logging.log4j.Logger;
-import org.json.old.JSONArray;
-import org.json.old.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.data.SimpleFilter;
@@ -762,9 +762,9 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
         {
             List<SampleSet> ret = new ArrayList<>();
 
-            if (params.containsKey("sampleSets"))
+            if (params.has("sampleSets"))
             {
-                for (Object o : params.getJSONArray("sampleSets").toArray())
+                for (Object o : params.getJSONArray("sampleSets").toList())
                 {
                     ret.add(new SampleSet((JSONArray) o));
                 }
@@ -1242,9 +1242,9 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
         Map<String, String> subjectToReadsetNameMap = new HashMap<>();
         TableInfo subjectTable = QueryService.get().getUserSchema(job.getUser(), (job.getContainer().isWorkbook() ? job.getContainer().getParent() : job.getContainer()), "laboratory").getTable("subjects");
         TableInfo readsetTable = QueryService.get().getUserSchema(job.getUser(), job.getContainer(), "sequenceanalysis").getTable("sequence_readsets");
-        if (params.containsKey("sampleSets"))
+        if (params.has("sampleSets"))
         {
-            for (Object o : params.getJSONArray("sampleSets").toArray())
+            for (Object o : params.getJSONArray("sampleSets").toList())
             {
                 JSONArray arr = (JSONArray) o;
                 for (int i = 0; i < arr.length(); i++)

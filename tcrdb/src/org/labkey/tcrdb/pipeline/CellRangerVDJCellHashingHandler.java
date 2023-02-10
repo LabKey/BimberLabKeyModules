@@ -3,7 +3,7 @@ package org.labkey.tcrdb.pipeline;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.ConvertHelper;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.pipeline.PipelineJob;

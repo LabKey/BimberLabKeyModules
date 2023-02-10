@@ -1,6 +1,6 @@
 package org.labkey.genotypeassays.assay;
 
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.exp.api.ExpProtocol;
@@ -51,6 +51,7 @@ public class SSPPivotingImportMethod extends PivotingImportMethod
         return _importMethod.getMetadata(ctx, protocol);
     }
 
+    @Override
     public String getTooltip()
     {
         return "Choose this option to upload data using a template with many allele typings per row";

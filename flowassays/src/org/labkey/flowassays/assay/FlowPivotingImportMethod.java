@@ -1,6 +1,6 @@
 package org.labkey.flowassays.assay;
 
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.exp.api.ExpProtocol;
 import org.labkey.api.laboratory.assay.AssayImportMethod;

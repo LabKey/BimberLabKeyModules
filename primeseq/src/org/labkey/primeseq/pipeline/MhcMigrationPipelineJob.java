@@ -1,7 +1,7 @@
 package org.labkey.primeseq.pipeline;
 
 import org.apache.commons.io.FileUtils;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.assay.AssayProvider;
 import org.labkey.api.assay.AssayService;
 import org.labkey.api.collections.CaseInsensitiveHashMap;

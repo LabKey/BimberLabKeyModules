@@ -18,8 +18,8 @@ package org.labkey.genotypeassays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.old.JSONArray;
-import org.json.old.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.labkey.api.assay.AssayProtocolSchema;
 import org.labkey.api.assay.AssayProvider;
 import org.labkey.api.assay.AssayService;
@@ -45,6 +45,7 @@ import org.labkey.api.query.QueryService;
 import org.labkey.api.query.ValidationException;
 import org.labkey.api.security.User;
 import org.labkey.api.util.FileUtil;
+import org.labkey.api.util.JsonUtil;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.Pair;
 import org.labkey.api.view.ViewContext;
@@ -197,7 +198,7 @@ public class GenotypeAssaysManager
 
         Set<Integer> analysisIds = new HashSet<>();
         final Map<Integer, List<JSONObject>> haploMap = new HashMap<>();
-        for (JSONObject row : data.toJSONObjectArray())
+        for (JSONObject row : JsonUtil.toJSONObjectList(data))
         {
             Integer analysisId = row.getInt("analysisId");
             analysisIds.add(analysisId);

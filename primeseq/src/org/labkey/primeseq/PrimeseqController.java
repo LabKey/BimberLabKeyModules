@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.action.ApiResponse;
 import org.labkey.api.action.ApiSimpleResponse;
 import org.labkey.api.action.ConfirmAction;
@@ -469,7 +469,7 @@ public class PrimeseqController extends SpringActionController
                     {
                         String name = jsonObj.getString("name");
                         String jsonName = "resourceSettings.resourceSettings." + name;
-                        if (jobParams.containsKey(jsonName) && jobParams.get(jsonName) != null)
+                        if (jobParams.has(jsonName) && jobParams.get(jsonName) != null)
                         {
                             if (!valueMap.containsKey(name))
                             {

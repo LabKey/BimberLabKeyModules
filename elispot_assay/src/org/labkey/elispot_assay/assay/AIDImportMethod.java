@@ -2,7 +2,7 @@ package org.labkey.elispot_assay.assay;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.exp.api.ExpExperiment;
@@ -74,6 +74,7 @@ public class AIDImportMethod extends DefaultImportMethod
         return super.getTemplateInstructions() + "<br><br>This import path assumes you prepared this run by creating/saving a template from this site, which defines your plate layout and sample information.  The results you enter below will be merged with that previously imported sample information using well.  When you select a saved plate template using the \'Saved Sample Information\' section above, you should see a list of the samples you uploaded.";
     }
 
+    @Override
     public AssayParser getFileParser(Container c, User u, int assayId)
     {
         return new Parser(this, c, u, assayId);

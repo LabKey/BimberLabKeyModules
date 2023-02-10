@@ -7,8 +7,8 @@ import htsjdk.samtools.fastq.FastqWriter;
 import htsjdk.samtools.fastq.FastqWriterFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.json.old.JSONArray;
-import org.json.old.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.labkey.api.assay.AssayProvider;
 import org.labkey.api.assay.AssayService;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
@@ -47,6 +47,7 @@ import org.labkey.api.sequenceanalysis.pipeline.ToolParameterDescriptor;
 import org.labkey.api.sequenceanalysis.run.PicardWrapper;
 import org.labkey.api.sequenceanalysis.run.SimpleScriptWrapper;
 import org.labkey.api.util.FileUtil;
+import org.labkey.api.util.JsonUtil;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.Pair;
 import org.labkey.api.util.Path;
@@ -295,7 +296,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
         Map<Integer, Map<String, Map<String, Integer>>> totalReadsInExportedAlignments = new HashMap<>();
         Map<Integer, Map<String, Map<String, Integer>>> totalReadsInExportedClones = new HashMap<>();
 
-        for (JSONObject library : libraries.toJSONObjectArray())
+        for (JSONObject library : JsonUtil.toJSONObjectList(libraries))
         {
             String species = library.getString("species");
             Integer rowid = library.optInt("rowid");
@@ -782,7 +783,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
         {
             getPipelineCtx().getLogger().warn("no clones exported: " + table.getPath());
             JSONArray libraries = getTcrDbs();
-            for (JSONObject library : libraries.toJSONObjectArray())
+            for (JSONObject library : JsonUtil.toJSONObjectList(libraries))
             {
                 String species = library.getString("species");
                 Integer rowid = library.optInt("rowid");

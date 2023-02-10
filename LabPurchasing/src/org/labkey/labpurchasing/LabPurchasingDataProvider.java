@@ -1,6 +1,6 @@
 package org.labkey.labpurchasing;
 
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.laboratory.AbstractDataProvider;
 import org.labkey.api.laboratory.DetailsUrlWithoutLabelNavItem;

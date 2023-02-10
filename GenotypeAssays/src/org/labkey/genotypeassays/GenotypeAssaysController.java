@@ -16,7 +16,7 @@
 
 package org.labkey.genotypeassays;
 
-import org.json.old.JSONArray;
+import org.json.JSONArray;
 import org.labkey.api.action.ApiResponse;
 import org.labkey.api.action.ApiSimpleResponse;
 import org.labkey.api.action.ConfirmAction;

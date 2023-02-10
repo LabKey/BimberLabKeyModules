@@ -1,6 +1,6 @@
 package org.labkey.primeseq.pipeline;
 
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.sequenceanalysis.pipeline.JobResourceSettings;

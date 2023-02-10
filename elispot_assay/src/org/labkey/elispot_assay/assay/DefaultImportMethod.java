@@ -7,8 +7,8 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.inference.TestUtils;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
-import org.json.old.JSONArray;
-import org.json.old.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.ConvertHelper;
@@ -21,6 +21,7 @@ import org.labkey.api.laboratory.assay.ImportContext;
 import org.labkey.api.query.BatchValidationException;
 import org.labkey.api.query.ValidationException;
 import org.labkey.api.security.User;
+import org.labkey.api.util.JsonUtil;
 import org.labkey.api.view.ViewContext;
 
 import java.text.DecimalFormat;
@@ -169,14 +170,14 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
             }
         }
 
-        Integer minspots = runProperties.containsKey(MIN_SPOTS_FIELD) ? Integer.valueOf(runProperties.getInt(MIN_SPOTS_FIELD)) : null;
+        Integer minspots = runProperties.has(MIN_SPOTS_FIELD) ? Integer.valueOf(runProperties.getInt(MIN_SPOTS_FIELD)) : null;
         if (minspots == null)
         {
             minspots = 0;
             runProperties.put(MIN_SPOTS_FIELD, minspots);
         }
 
-        Double threshold = runProperties.containsKey(THRESHOLD_FIELD) ? runProperties.getDouble(THRESHOLD_FIELD) : null;
+        Double threshold = runProperties.has(THRESHOLD_FIELD) ? runProperties.getDouble(THRESHOLD_FIELD) : null;
         if (threshold == null)
         {
             threshold = 0.05;
@@ -295,7 +296,7 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Double> negCtlCounts = new HashMap<String, Double>();
-        for (JSONObject row : rawResults.toJSONObjectArray())
+        for (JSONObject row : JsonUtil.toJSONObjectList(rawResults))
         {
             for (String prop : resultDefaults.keySet())
             {

@@ -1,7 +1,7 @@
 package org.labkey.primeseq.analysis;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.old.JSONObject;
+import org.json.JSONObject;
 import org.labkey.api.data.Container;
 import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleLoader;
@@ -136,7 +136,7 @@ public class MethylationRateComparison implements SequenceOutputHandler<Sequence
                 throw new PipelineJobException("No parameters provided");
             }
 
-            if (params.containsKey("stds"))
+            if (params.has("stds"))
             {
                 String ampliconBorders = params.getString("ampliconBorders");
                 if (StringUtils.isEmpty(ampliconBorders))

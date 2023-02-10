@@ -16,7 +16,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
-import org.json.old.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.labkey.api.collections.CaseInsensitiveHashMap;
@@ -57,6 +58,7 @@ import org.labkey.api.sequenceanalysis.run.SelectVariantsWrapper;
 import org.labkey.api.util.FileType;
 import org.labkey.api.util.FileUtil;
 import org.labkey.api.util.GUID;
+import org.labkey.api.util.JsonUtil;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.PrintWriters;
 import org.labkey.mgap.mGAPManager;
@@ -686,12 +688,12 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
                 }
 
                 JSONObject json = new JSONObject(response.toString());
-                if (json.containsKey("omim"))
+                if (json.has("omim"))
                 {
                     json = json.getJSONObject("omim");
-                    if (json.containsKey("entryList"))
+                    if (json.has("entryList"))
                     {
-                        for (JSONObject j : json.getJSONArray("entryList").toJSONObjectArray())
+                        for (JSONObject j : JsonUtil.toJSONObjectList(json.getJSONArray("entryList")))
                         {
                             String val = j.getJSONObject("entry").getJSONObject("titles").optString("preferredTitle", input);
                             if (val.contains(";"))
