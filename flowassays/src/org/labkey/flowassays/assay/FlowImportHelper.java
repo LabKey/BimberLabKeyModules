@@ -28,7 +28,7 @@ public class FlowImportHelper
 
     public void normalizePopulationField(Map<String, Object> row, String populationField, ImportContext context)
     {
-        if (!row.containsKey(populationField))
+        if (!row.containsKey(populationField) || row.get(populationField) == null)
             return;
 
         String population = StringUtils.trimToNull((String) row.get(populationField));
