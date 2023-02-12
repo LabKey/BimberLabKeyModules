@@ -107,12 +107,12 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
     {
         String delim = "/";
 
-        JSONObject runProperties = context.getRunProperties();
-        List<Map<String, Object>> newRows = new ArrayList<Map<String, Object>>();
-        Map<String, List<Double>> negWellMap = new CaseInsensitiveHashMap<List<Double>>();
-        Map<String, String> sampleKeyToNegCtlKey = new HashMap<String, String>();
+        Map<String, Object> runProperties = context.getRunProperties();
+        List<Map<String, Object>> newRows = new ArrayList<>();
+        Map<String, List<Double>> negWellMap = new CaseInsensitiveHashMap<>();
+        Map<String, String> sampleKeyToNegCtlKey = new HashMap<>();
 
-        Map<String, List<Map<String, Object>>> map = new CaseInsensitiveHashMap<List<Map<String, Object>>>();
+        Map<String, List<Map<String, Object>>> map = new CaseInsensitiveHashMap<>();
         for (Map<String, Object> row : rows)
         {
             //build a map of rows, grouped by id/date/peptide
@@ -124,7 +124,7 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
 
             List<Map<String, Object>> foundRows = map.get(key);
             if (foundRows == null)
-                foundRows = new ArrayList<Map<String, Object>>();
+                foundRows = new ArrayList<>();
 
             foundRows.add(row);
             map.put(key, foundRows);
@@ -170,14 +170,14 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
             }
         }
 
-        Integer minspots = runProperties.has(MIN_SPOTS_FIELD) ? Integer.valueOf(runProperties.getInt(MIN_SPOTS_FIELD)) : null;
+        Integer minspots = runProperties.get(MIN_SPOTS_FIELD) != null ? Integer.valueOf(runProperties.get(MIN_SPOTS_FIELD).toString()) : null;
         if (minspots == null)
         {
             minspots = 0;
             runProperties.put(MIN_SPOTS_FIELD, minspots);
         }
 
-        Double threshold = runProperties.has(THRESHOLD_FIELD) ? runProperties.getDouble(THRESHOLD_FIELD) : null;
+        Double threshold = runProperties.get(THRESHOLD_FIELD) != null ? Double.parseDouble(runProperties.get(THRESHOLD_FIELD).toString()) : null;
         if (threshold == null)
         {
             threshold = 0.05;
