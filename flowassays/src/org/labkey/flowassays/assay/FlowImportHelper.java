@@ -31,7 +31,7 @@ public class FlowImportHelper
         if (!row.containsKey(populationField) || row.get(populationField) == null)
             return;
 
-        String population = StringUtils.trimToNull((String) row.get(populationField));
+        String population = row.get(populationField) == null ? null : StringUtils.trimToNull(row.get(populationField).toString());
         if (population == null)
             return;
 
