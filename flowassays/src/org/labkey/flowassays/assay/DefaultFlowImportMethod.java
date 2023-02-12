@@ -64,7 +64,7 @@ public class DefaultFlowImportMethod extends DefaultAssayImportMethod
 
             while (rowsIter.hasNext())
             {
-                Map<String, Object> row = new CaseInsensitiveHashMap(rowsIter.next());
+                Map<String, Object> row = new CaseInsensitiveHashMap<>(rowsIter.next());
                 appendPromotedResultFields(row, context);
 
                 helper.normalizePopulationField(row, "population", context);

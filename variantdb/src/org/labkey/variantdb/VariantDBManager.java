@@ -139,7 +139,7 @@ public class VariantDBManager
             )
             {
                 log.info("querying/updating variants");
-                CaseInsensitiveHashMap batchRow = new CaseInsensitiveHashMap();
+                CaseInsensitiveHashMap<String> batchRow = new CaseInsensitiveHashMap<>();
                 final String batchId = new GUID().toString();
                 batchRow.put("batchId", batchId);
                 batchRow.put("description", "Liftover of local variants");

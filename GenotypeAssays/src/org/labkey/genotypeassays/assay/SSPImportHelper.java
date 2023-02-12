@@ -84,7 +84,7 @@ public class SSPImportHelper
 
         TableSelector ts = new TableSelector(ti);
         Map<String, Object>[] rows = ts.getMapArray();
-        Map<String, String> ret = new CaseInsensitiveHashMap();
+        Map<String, String> ret = new CaseInsensitiveHashMap<>();
         for (Map<String, Object> row : rows)
         {
             ret.put((String)row.get("result"), (String)row.get("result"));

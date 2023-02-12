@@ -72,7 +72,7 @@ public class SSPAssayDefaultImportMethod extends DefaultAssayImportMethod
 
             while (rowsIter.hasNext())
             {
-                Map<String, Object> row = new CaseInsensitiveHashMap(rowsIter.next());
+                Map<String, Object> row = new CaseInsensitiveHashMap<>(rowsIter.next());
                 appendPromotedResultFields(row, context);
 
                 helper.normalizeResultField(row, context);

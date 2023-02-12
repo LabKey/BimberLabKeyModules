@@ -192,11 +192,11 @@ public class DbSnpImportTask extends PipelineJob.Task<DbSnpImportTask.Factory>
                 new BaseColumnInfo("status", JdbcType.VARCHAR)
         ));
 
-        try (FeatureReader reader = AbstractFeatureReader.getFeatureReader(localFile.getAbsolutePath(), new VCFCodec(), false))
+        try (FeatureReader<VariantContext> reader = AbstractFeatureReader.getFeatureReader(localFile.getAbsolutePath(), new VCFCodec(), false))
         {
             VCFHeader header = (VCFHeader)reader.getHeader();
 
-            CaseInsensitiveHashMap batchRow = new CaseInsensitiveHashMap();
+            CaseInsensitiveHashMap<String> batchRow = new CaseInsensitiveHashMap<>();
             batchRow.put("batchId", batchId);
             batchRow.put("description", "Automatic import of data from the NCBI/dbSNP FTP site");
             batchRow.put("source", "dbSNP");

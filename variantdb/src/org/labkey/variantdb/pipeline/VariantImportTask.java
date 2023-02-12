@@ -142,7 +142,7 @@ public class VariantImportTask extends PipelineJob.Task<VariantImportTask.Factor
     {
         String batchId = new GUID().toString();
 
-        CaseInsensitiveHashMap batchRow = new CaseInsensitiveHashMap();
+        CaseInsensitiveHashMap<String> batchRow = new CaseInsensitiveHashMap<>();
         batchRow.put("batchId", batchId);
         batchRow.put("description", "Import of data from local VCF files");
         batchRow.put("source", "Local VCF");

@@ -79,7 +79,7 @@ public class FlowImportHelper
 
     public Map<String, String> getGuessedValues(Map<String, String> allowable)
     {
-        Map<String, String> guesses = new CaseInsensitiveHashMap();
+        Map<String, String> guesses = new CaseInsensitiveHashMap<>();
         for (String key : allowable.keySet())
         {
             String guess = key.replaceAll(" ", "");
@@ -103,7 +103,7 @@ public class FlowImportHelper
         TableInfo ti = FlowAssaysSchema.getInstance().getTable(FlowAssaysSchema.TABLE_POPULATIONS);
         TableSelector ts = new TableSelector(ti);
         Map<String, Object>[] rows = ts.getMapArray();
-        Map<String, String> ret = new CaseInsensitiveHashMap();
+        Map<String, String> ret = new CaseInsensitiveHashMap<>();
         for (Map<String, Object> row : rows)
         {
             ret.put((String)row.get(NAME_FIELD), (String)row.get(NAME_FIELD));
