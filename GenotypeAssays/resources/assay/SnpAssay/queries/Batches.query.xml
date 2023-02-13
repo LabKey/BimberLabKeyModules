@@ -11,7 +11,7 @@
                     <column columnName="Hypothesis">
                         <shownInInsertView>false</shownInInsertView>
                     </column>
-                    <column columnName="Comments">
+                    <column columnName="comments">
                         <shownInInsertView>false</shownInInsertView>
                     </column>
                     <column columnName="importMethod">
