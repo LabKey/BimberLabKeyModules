@@ -38,7 +38,7 @@ function beforeUpsert(row, oldRow, errors) {
 
     if (!triggerHelper.hasPermission(row.status)) {
         errors._form = 'Insufficient permissions to update request with status: ' + row.status;
-        return;
+
     }
 }
 

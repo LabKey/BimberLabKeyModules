@@ -44,6 +44,7 @@ public class VariantDBUserSchema extends SimpleUserSchema
 
         DefaultSchema.registerProvider(VariantDBSchema.NAME, new DefaultSchema.SchemaProvider(m)
         {
+            @Override
             public QuerySchema createSchema(final DefaultSchema schema, Module module)
             {
                 return new VariantDBUserSchema(schema.getUser(), schema.getContainer(), dbSchema);

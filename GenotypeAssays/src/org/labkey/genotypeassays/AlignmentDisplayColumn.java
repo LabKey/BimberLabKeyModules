@@ -71,7 +71,7 @@ public class AlignmentDisplayColumn extends DataColumn
             Integer analysisId = ctx.get(new FieldKey(getBoundColumn().getFieldKey().getParent(), "analysis_id"), Integer.class);
             if (lineages != null)
             {
-                out.write("<br><a class=\"labkey-text-link\" style=\"max-width: 500px;\" onclick=\"GenotypeAssays.window.EditAlignmentsWindow.editLineage(" + PageFlowUtil.jsString(analysisId.toString()) + "," + PageFlowUtil.jsString(lineages.toString()) + ", " + PageFlowUtil.jsString(ctx.getCurrentRegion().getName()) + ", " + PageFlowUtil.jsString(filterOperator) + ", " + PageFlowUtil.jsString(String.valueOf(filterVal)) + ");\">");
+                out.write("<br><a class=\"labkey-text-link\" style=\"max-width: 500px;\" onclick=\"GenotypeAssays.window.EditAlignmentsWindow.editLineage(" + PageFlowUtil.jsString(analysisId.toString()) + "," + PageFlowUtil.jsString(lineages) + ", " + PageFlowUtil.jsString(ctx.getCurrentRegion().getName()) + ", " + PageFlowUtil.jsString(filterOperator) + ", " + PageFlowUtil.jsString(String.valueOf(filterVal)) + ");\">");
                 out.write("Edit Lineage</a>");
             }
         }

@@ -7,7 +7,7 @@ import org.labkey.api.module.ModuleLoader;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.genotypeassays.GenotypeAssaysModule;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: bimber
@@ -18,7 +18,7 @@ public class HaplotypeReviewButton extends SimpleButtonConfigFactory
 {
     public HaplotypeReviewButton()
     {
-        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Haplotype Review", "GenotypeAssays.buttons.haplotypeHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("genotypeassays/buttons.js")));
+        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Haplotype Review", "GenotypeAssays.buttons.haplotypeHandler(dataRegionName);", List.of(ClientDependency.supplierFromPath("genotypeassays/buttons.js")));
     }
 
     @Override

@@ -43,7 +43,7 @@ public class PopulateIdsStep implements TaskRefTask
         targetSchema(),
         targetQuery(),
         targetColumn(),
-        targetAliasColumn();
+        targetAliasColumn()
     }
 
     @Override

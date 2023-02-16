@@ -74,7 +74,7 @@ import java.util.TreeMap;
  */
 public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputHandler.SequenceOutputProcessor>
 {
-    private final FileType _vcfType = new FileType(Arrays.asList(".vcf"), ".vcf", false, FileType.gzSupportLevel.SUPPORT_GZ);
+    private final FileType _vcfType = new FileType(List.of(".vcf"), ".vcf", false, FileType.gzSupportLevel.SUPPORT_GZ);
 
     public ImputationAnalysis()
     {
@@ -353,7 +353,7 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
                     job.getLogger().info("Starting set " + idx + " of " + sets.size());
                     job.setStatus(PipelineJob.TaskStatus.running, "Set " + idx + " of " + sets.size());
 
-                    File baseDir = new File(job.getJobSupport(FileAnalysisJobSupport.class).getAnalysisDirectory(), "Set-" + idx.toString());
+                    File baseDir = new File(job.getJobSupport(FileAnalysisJobSupport.class).getAnalysisDirectory(), "Set-" + idx);
                     if (!baseDir.exists())
                     {
                         baseDir.mkdirs();
@@ -933,7 +933,6 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
                             addReader(readerMap, sampleName, ss.getImputationInputForImputedSample(sampleName), inputFiles, referenceVcfNameMap);
                         }
 
-                        OUTER:
                         while ((imputedLine = imputedReader.readLine()) != null)
                         {
                             markerNumber1Based++;
@@ -1025,7 +1024,7 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
                             int totalNonCallRef = 0;
                             int subjectNumber = 0;
                             int consistentIVs = Integer.parseInt(consistentIVLine);
-                            double ivPct = (double)consistentIVs / 10000.0;
+                            double ivPct = (double) consistentIVs / 10000.0;
                             if (ivPct < 0.75)
                             {
                                 job.getLogger().warn("low fraction of consistent IVs: " + ivPct + " at " + chr + " " + markerName);
@@ -1035,7 +1034,7 @@ public class ImputationAnalysis implements SequenceOutputHandler<SequenceOutputH
                             {
                                 if (!ss.imputedSampleIdStrings.contains(subject))
                                 {
-                                   // job.getLogger().info("skipping non-imputed subject: " + subject);
+                                    // job.getLogger().info("skipping non-imputed subject: " + subject);
                                     genotypePosition += 2;
                                     subjectNumber++;
 

@@ -170,7 +170,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
             @Override
             public List<String> getProtocolActionNames()
             {
-                return Arrays.asList("Migrate MHC Data");
+                return List.of("Migrate MHC Data");
             }
 
             @Override
@@ -347,7 +347,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
             // 191 / 115
             // 203 / 129
             // 215 / 140
-            List<Integer> toUpdate = Arrays.asList(12);
+            List<Integer> toUpdate = List.of(12);
             for (int workbook : toUpdate)
             {
                 replaceEntireTable("sequenceanalysis", "quality_metrics", Arrays.asList("dataid", "dataid/DatafileUrl", "dataid/Name", "runid/JobId/FilePath", "category", "metricname", "metricvalue", "qualvalue", "analysis_id", "readset", "readset/runid/JobId", "readset/runid/JobId/FilePath", "dataid/Run/JobId/FilePath"), null, true, workbookMap.get(workbook), getPipelineJob().remoteServerFolder + workbook + "/");
@@ -366,7 +366,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
 
                 //NOTE: split by workbook to avoid huge API calls:
                 SelectRowsCommand srWB = new SelectRowsCommand("core", "workbooks");
-                srWB.setColumns(Arrays.asList("Name"));
+                srWB.setColumns(List.of("Name"));
 
                 SelectRowsResponse srrWB = srWB.execute(getConnection(), getPipelineJob().remoteServerFolder);
                 List<Object> workbooks = srrWB.getRows().stream().map(x -> x.get("Name")).collect(Collectors.toList());
@@ -588,7 +588,6 @@ public class MhcMigrationPipelineJob extends PipelineJob
                             else
                             {
                                 getJob().getLogger().warn("Unable to find job root: " + r.getValue("dataid/DatafileUrl"));
-                                return;
                             }
                         }
                     });
@@ -852,7 +851,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                             }
 
                             BatchValidationException bve = new BatchValidationException();
-                            List<Map<String, Object>> created = libraryTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, Arrays.asList(toCreate), bve, null, null);
+                            List<Map<String, Object>> created = libraryTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, List.of(toCreate), bve, null, null);
                             if (bve.hasErrors())
                             {
                                 throw new RuntimeException(bve);
@@ -981,7 +980,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                             }
 
                             BatchValidationException bve = new BatchValidationException();
-                            List<Map<String, Object>> created = outputTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, Arrays.asList(toCreate), bve, null, null);
+                            List<Map<String, Object>> created = outputTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, List.of(toCreate), bve, null, null);
                             if (bve.hasErrors())
                             {
                                 throw new RuntimeException(bve);
@@ -1137,7 +1136,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                             }
 
                             BatchValidationException bve = new BatchValidationException();
-                            List<Map<String, Object>> created = analysisTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, Arrays.asList(toCreate), bve, null, null);
+                            List<Map<String, Object>> created = analysisTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, List.of(toCreate), bve, null, null);
                             if (bve.hasErrors())
                             {
                                 throw new RuntimeException(bve);
@@ -1307,7 +1306,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                                 }
 
                                 BatchValidationException bve = new BatchValidationException();
-                                List<Map<String, Object>> created = readdataTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, Arrays.asList(toCreate), bve, null, null);
+                                List<Map<String, Object>> created = readdataTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, List.of(toCreate), bve, null, null);
                                 if (bve.hasErrors())
                                 {
                                     throw new RuntimeException(bve);
@@ -1485,7 +1484,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
                             }
 
                             BatchValidationException bve = new BatchValidationException();
-                            List<Map<String, Object>> created = readsetTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, Arrays.asList(toCreate), bve, null, null);
+                            List<Map<String, Object>> created = readsetTable.getUpdateService().insertRows(getJob().getUser(), getPipelineJob().targetContainer, List.of(toCreate), bve, null, null);
                             if (bve.hasErrors())
                             {
                                 throw new RuntimeException(bve);
@@ -1715,7 +1714,7 @@ public class MhcMigrationPipelineJob extends PipelineJob
 
                 srr.getRowset().forEach(wb -> {
                     String localTitle = (String) wb.getValue("Title");
-                    String description = wb.getValue("Description") != null ? String.valueOf(wb.getValue("Description")) + ". " : "";
+                    String description = wb.getValue("Description") != null ? wb.getValue("Description") + ". " : "";
                     description = description + "Originally PRIMe workbook: " + wb.getValue("Name");
 
                     SimpleFilter wbFilter = new SimpleFilter(FieldKey.fromString("Title"), localTitle);

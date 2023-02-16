@@ -318,7 +318,7 @@ public class TriggerHelper
         toUpdate.put("colony", destination);
 
         BatchValidationException bve = new BatchValidationException();
-        ti.getUpdateService().updateRows(_user, _container, Arrays.asList(toUpdate), Arrays.asList(Map.of("lsid", lsid)), null, null);
+        ti.getUpdateService().updateRows(_user, _container, List.of(toUpdate), List.of(Map.of("lsid", lsid)), null, null);
         if (bve.hasErrors())
         {
             throw bve;

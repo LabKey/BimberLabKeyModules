@@ -101,7 +101,7 @@ public class MethylationRateComparisonHandler implements SequenceOutputHandler<S
     @Override
     public LinkedHashSet<String> getClientDependencies()
     {
-        return new LinkedHashSet<>(Arrays.asList("/LDK/field/ExpDataField.js"));
+        return new LinkedHashSet<>(List.of("/LDK/field/ExpDataField.js"));
     }
 
     @Override

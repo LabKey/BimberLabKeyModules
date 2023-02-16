@@ -58,7 +58,7 @@ public class CellRangerVDJUtils
 {
     public static final String TCR_HASHING_CALLS = "Cell Hashing TCR Calls";
 
-    private Logger _log;
+    private final Logger _log;
 
     public CellRangerVDJUtils(Logger log)
     {
@@ -550,7 +550,7 @@ public class CellRangerVDJUtils
         private String cHit;
         private int cdna;
 
-        private Set<String> barcodes = new HashSet<>();
+        private final Set<String> barcodes = new HashSet<>();
         private String coalescedContigName;
     }
 

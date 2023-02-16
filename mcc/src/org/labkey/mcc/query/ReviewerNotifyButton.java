@@ -7,12 +7,13 @@ import org.labkey.mcc.MccModule;
 import org.labkey.mcc.security.MccRequestAdminPermission;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ReviewerNotifyButton extends SimpleButtonConfigFactory
 {
     public ReviewerNotifyButton()
     {
-        super(ModuleLoader.getInstance().getModule(MccModule.class), "Notify Reviewers", "MCC.window.ReviewerNotifyWindow.buttonHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("mcc/window/ReviewerNotifyWindow.js")));
+        super(ModuleLoader.getInstance().getModule(MccModule.class), "Notify Reviewers", "MCC.window.ReviewerNotifyWindow.buttonHandler(dataRegionName);", List.of(ClientDependency.supplierFromPath("mcc/window/ReviewerNotifyWindow.js")));
         setPermission(MccRequestAdminPermission.class);
     }
 }

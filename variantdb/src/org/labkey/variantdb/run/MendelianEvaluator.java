@@ -34,7 +34,7 @@ import java.util.Map;
 public class MendelianEvaluator
 {
     private double _minGenotypeQuality = 20;
-    private Map<String, Pair<String, String>> _pedigree;
+    private final Map<String, Pair<String, String>> _pedigree;
 
     public MendelianEvaluator(File gatkPedigree) throws IOException
     {
@@ -213,9 +213,7 @@ public class MendelianEvaluator
                 {
                     return false;
                 }
-                else if (isViolation(gMom, gDad, gChild)){
-                    return true;
-                }
+                else return isViolation(gMom, gDad, gChild);
             }
         }
 
@@ -230,12 +228,7 @@ public class MendelianEvaluator
                 return false;
             }
 
-            if ((gDad.isHomRef() && gChild.isHomVar()) || (gDad.isHomVar() && gChild.isHomRef()) || (countAllelesShared(gChild, gDad) == 0))
-            {
-                return true;
-            }
-
-            return false;
+            return (gDad.isHomRef() && gChild.isHomVar()) || (gDad.isHomVar() && gChild.isHomRef()) || (countAllelesShared(gChild, gDad) == 0);
         }
         else if(!gDad.isCalled()){
             if (gMom.getPhredScaledQual() < _minGenotypeQuality)
@@ -243,12 +236,7 @@ public class MendelianEvaluator
                 return false;
             }
 
-            if ((gMom.isHomRef() && gChild.isHomVar()) || (gMom.isHomVar() && gChild.isHomRef()) || (countAllelesShared(gChild, gMom) == 0))
-            {
-                return true;
-            }
-
-            return false;
+            return (gMom.isHomRef() && gChild.isHomVar()) || (gMom.isHomVar() && gChild.isHomRef()) || (countAllelesShared(gChild, gMom) == 0);
         }
         //Both parents have genotype information
         return !(gMom.getAlleles().contains(gChild.getAlleles().get(0)) && gDad.getAlleles().contains(gChild.getAlleles().get(1)) ||
@@ -257,8 +245,8 @@ public class MendelianEvaluator
 
     public class NoCallGenotype extends Genotype
     {
-        private Genotype _orig = null;
-        private List<Allele> _alleles = Arrays.asList(Allele.NO_CALL, Allele.NO_CALL);
+        private final Genotype _orig = null;
+        private final List<Allele> _alleles = Arrays.asList(Allele.NO_CALL, Allele.NO_CALL);
 
         public NoCallGenotype(String sampleName)
         {

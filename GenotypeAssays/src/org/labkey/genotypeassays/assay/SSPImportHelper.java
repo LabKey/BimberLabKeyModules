@@ -23,10 +23,10 @@ import java.util.Map;
 public class SSPImportHelper
 {
     private Map<String, String> _allowableResults = null;
-    private ExpProtocol _protocol;
-    private AssayProvider _provider;
-    private User _u;
-    private Container _c;
+    private final ExpProtocol _protocol;
+    private final AssayProvider _provider;
+    private final User _u;
+    private final Container _c;
 
     public SSPImportHelper(ExpProtocol protocol, AssayProvider provider, User u, Container c)
     {

@@ -35,26 +35,26 @@ import java.util.Map;
  */
 public class PrepareGenotypeFilesForChrRunner extends Job
 {
-    private ImputationAnalysis.Processor.SampleSet _ss;
-    private String _sampleName;
-    private File _vcf;
-    private ImputationFileUtil.GiGiType _giGiType;
-    private File _outputDir;
-    private Logger _log;
-    private ImputationFileUtil.MarkerType _markerType;
-    private String _chr;
-    private @Nullable Integer _denseMarkerBatchIdx;
-    private List<Interval> _intervalList;
-    private File _gatkPed;
-    private List<List<String>> _alleleNameList;
-    private Map<String, List<Interval>> _genotypeBlacklist;
-    private List<String> _frameworkMarkerNames;
-    private boolean _maskNonFramework;
+    private final ImputationAnalysis.Processor.SampleSet _ss;
+    private final String _sampleName;
+    private final File _vcf;
+    private final ImputationFileUtil.GiGiType _giGiType;
+    private final File _outputDir;
+    private final Logger _log;
+    private final ImputationFileUtil.MarkerType _markerType;
+    private final String _chr;
+    private final @Nullable Integer _denseMarkerBatchIdx;
+    private final List<Interval> _intervalList;
+    private final File _gatkPed;
+    private final List<List<String>> _alleleNameList;
+    private final Map<String, List<Interval>> _genotypeBlacklist;
+    private final List<String> _frameworkMarkerNames;
+    private final boolean _maskNonFramework;
 
     private int _minGenotypeQual = 0;
     private int _minGenotypeDepth = 0;
 
-    private Map<String, List<String>> _messages = new HashMap<>();
+    private final Map<String, List<String>> _messages = new HashMap<>();
 
     public PrepareGenotypeFilesForChrRunner(ImputationAnalysis.Processor.SampleSet ss, File vcf, String sampleName, ImputationFileUtil.GiGiType giGiType, File outputDir, Logger log, ImputationFileUtil.MarkerType markerType, String chr, @Nullable Integer denseMarkerBatchIdx, List<Interval> intervalList, File gatkPed, List<List<String>> alleleNameList, int minGenotypeQual, int minGenotypeDepth, Map<String, List<Interval>> genotypeBlacklist, List<String> frameworkMarkerNames, boolean maskNonFramework)
     {

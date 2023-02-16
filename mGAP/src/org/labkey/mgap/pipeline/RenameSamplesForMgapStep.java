@@ -64,9 +64,7 @@ public class RenameSamplesForMgapStep extends AbstractPipelineStep implements Va
     {
         public Provider()
         {
-            super("RenameSamplesForMgap", "Rename Sample For mGAP", "RenameSamplesForMgapStep", "This will rename the samples in the VCF based on the mGAP animal mapping table.  If the VCF contains samples not found in this table it will throw an error.", Arrays.asList(
-
-            ), null, null);
+            super("RenameSamplesForMgap", "Rename Sample For mGAP", "RenameSamplesForMgapStep", "This will rename the samples in the VCF based on the mGAP animal mapping table.  If the VCF contains samples not found in this table it will throw an error.", List.of(), null, null);
         }
 
         @Override

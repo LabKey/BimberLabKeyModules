@@ -18,8 +18,8 @@ import java.util.Set;
  */
 public class SubjectCounter
 {
-    private String _subject;
-    private CSVWriter _afWriter;
+    private final String _subject;
+    private final CSVWriter _afWriter;
     public int totalGenotypesInspected = 0;
     public int genotypesMatchingRef = 0;
     public int incorrectImputation = 0;

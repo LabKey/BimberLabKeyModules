@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class CovidseqDataProvider extends AbstractDataProvider
 {
-    private Module _module;
+    private final Module _module;
 
     public CovidseqDataProvider(Module m)
     {
@@ -54,15 +54,16 @@ public class CovidseqDataProvider extends AbstractDataProvider
     {
         QueryCache cache = new QueryCache();
 
-        return Arrays.asList(
-            new QueryImportNavItem(this, CovidseqSchema.NAME, CovidseqSchema.TABLE_SAMPLES, "COVID Samples", LaboratoryService.NavItemCategory.samples, "Samples", cache){
-                @Override
-                public ActionURL getImportUrl(Container c, User u)
+        return List.of(
+                new QueryImportNavItem(this, CovidseqSchema.NAME, CovidseqSchema.TABLE_SAMPLES, "COVID Samples", LaboratoryService.NavItemCategory.samples, "Samples", cache)
                 {
-                    TableInfo ti = getTableInfo(c, u);
-                    return ti == null ? null : ti.getImportDataURL(c);
+                    @Override
+                    public ActionURL getImportUrl(Container c, User u)
+                    {
+                        TableInfo ti = getTableInfo(c, u);
+                        return ti == null ? null : ti.getImportDataURL(c);
+                    }
                 }
-            }
         );
     }
 

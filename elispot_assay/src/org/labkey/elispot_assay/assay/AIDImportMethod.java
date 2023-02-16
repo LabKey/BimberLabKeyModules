@@ -71,7 +71,7 @@ public class AIDImportMethod extends DefaultImportMethod
     @Override
     public String getTemplateInstructions()
     {
-        return super.getTemplateInstructions() + "<br><br>This import path assumes you prepared this run by creating/saving a template from this site, which defines your plate layout and sample information.  The results you enter below will be merged with that previously imported sample information using well.  When you select a saved plate template using the \'Saved Sample Information\' section above, you should see a list of the samples you uploaded.";
+        return super.getTemplateInstructions() + "<br><br>This import path assumes you prepared this run by creating/saving a template from this site, which defines your plate layout and sample information.  The results you enter below will be merged with that previously imported sample information using well.  When you select a saved plate template using the 'Saved Sample Information' section above, you should see a list of the samples you uploaded.";
     }
 
     @Override
@@ -298,9 +298,9 @@ public class AIDImportMethod extends DefaultImportMethod
         saturation("Well's saturation values (%)", "saturation", Collections.singletonList("Well's saturation values (%)")),
         cytokine("Cytokine Activities:", "cytokine", Collections.singletonList("Activity:"));
 
-        private String description;
-        private String field;
-        private Collection<String> aliases;
+        private final String description;
+        private final String field;
+        private final Collection<String> aliases;
 
         PLATE(String description, String field, Collection<String> aliases)
         {

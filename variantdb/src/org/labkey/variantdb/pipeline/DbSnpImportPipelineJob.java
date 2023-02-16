@@ -18,8 +18,8 @@ import java.io.File;
  */
 public class DbSnpImportPipelineJob extends PipelineJob
 {
-    private String _remoteDirName;
-    private int _genomeId;
+    private final String _remoteDirName;
+    private final int _genomeId;
 
     public DbSnpImportPipelineJob(Container c, User user, ActionURL url, PipeRoot pipeRoot, String remoteDirName, int genomeId)
     {

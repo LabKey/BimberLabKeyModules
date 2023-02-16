@@ -80,32 +80,38 @@ public class DbSnpImportTask extends PipelineJob.Task<DbSnpImportTask.Factory>
             //setLocation("webserver");
         }
 
+        @Override
         public List<FileType> getInputTypes()
         {
             return Collections.emptyList();
         }
 
+        @Override
         public String getStatusName()
         {
             return PipelineJob.TaskStatus.running.toString();
         }
 
+        @Override
         public List<String> getProtocolActionNames()
         {
-            return Arrays.asList("dbSNP Import");
+            return List.of("dbSNP Import");
         }
 
+        @Override
         public PipelineJob.Task createTask(PipelineJob job)
         {
             return new DbSnpImportTask(this, job);
         }
 
+        @Override
         public boolean isJobComplete(PipelineJob job)
         {
             return false;
         }
     }
 
+    @Override
     public RecordedActionSet run() throws PipelineJobException
     {
         String batchId = new GUID().toString();
@@ -565,7 +571,7 @@ public class DbSnpImportTask extends PipelineJob.Task<DbSnpImportTask.Factory>
         return action;
     }
 
-    private Map<String, String> _clinsigMap = new HashMap<String, String>()
+    private final Map<String, String> _clinsigMap = new HashMap<String, String>()
     {
         {
             put("0", "Uncertain significance");
@@ -716,9 +722,9 @@ public class DbSnpImportTask extends PipelineJob.Task<DbSnpImportTask.Factory>
 
     private TempTableInfo createTempTable(DbSchema schema, String name, List<ColumnInfo> columnInfos)
     {
-        TempTableInfo tt = new TempTableInfo(name, columnInfos, Arrays.asList("objectid"));
+        TempTableInfo tt = new TempTableInfo(name, columnInfos, List.of("objectid"));
 
-        String sql = "CREATE TABLE " + tt.toString() + " ( ";
+        String sql = "CREATE TABLE " + tt + " ( ";
         String delim = "\n";
         for (ColumnInfo col : columnInfos)
         {

@@ -818,6 +818,7 @@ public class BismarkWrapper extends AbstractCommandWrapper
             ), null, "http://www.bioinformatics.babraham.ac.uk/projects/bismark/");
         }
 
+        @Override
         public BismarkExtractorStep create(PipelineContext context)
         {
             return new BismarkExtractorStep(this, context);

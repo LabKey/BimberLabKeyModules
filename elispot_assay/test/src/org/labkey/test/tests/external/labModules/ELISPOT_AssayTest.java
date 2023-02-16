@@ -142,6 +142,7 @@ public class ELISPOT_AssayTest extends AbstractLabModuleAssayTest
         PROJECT_NAME = "ELISPOT_AssayVerifyProject" + TRICKY_CHARACTERS_FOR_PROJECT_NAMES;
     }
 
+    @Override
     @Test
     public void testSteps() throws Exception
     {

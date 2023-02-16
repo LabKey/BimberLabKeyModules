@@ -13,7 +13,7 @@ import org.labkey.api.sequenceanalysis.run.AbstractCommandPipelineStep;
 import org.labkey.api.util.FileUtil;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: bimber
@@ -31,9 +31,7 @@ public class BisSnpIndelRealignerStep extends AbstractCommandPipelineStep<BisSnp
     {
         public Provider()
         {
-            super("BisSnpIndelRealigner", "BisSNP Indel Realigner", "BisSNP", "The step runs BisSNP's IndelRealigner tool.  It is similar to GATK's, except adapted for bisulfite data.", Arrays.asList(
-
-            ), null, "https://sourceforge.net/projects/bissnp/");
+            super("BisSnpIndelRealigner", "BisSNP Indel Realigner", "BisSNP", "The step runs BisSNP's IndelRealigner tool.  It is similar to GATK's, except adapted for bisulfite data.", List.of(), null, "https://sourceforge.net/projects/bissnp/");
         }
 
         @Override

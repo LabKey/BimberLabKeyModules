@@ -28,9 +28,8 @@ public class GeneticsTableCustomizer extends AbstractTableCustomizer implements 
     @Override
     public void customize(TableInfo table)
     {
-        if (table instanceof AbstractTableInfo)
+        if (table instanceof AbstractTableInfo ti)
         {
-            AbstractTableInfo ti = (AbstractTableInfo) table;
             if (matches(ti, "sequenceanalysis", "sequence_analyses"))
             {
                 customizeAnalyses(ti);

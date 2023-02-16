@@ -50,8 +50,8 @@ public class LabPurchasingDataProvider extends AbstractDataProvider
     @Override
     public List<NavItem> getSettingsItems(Container c, User u)
     {
-        return Arrays.asList(
-            new DetailsUrlWithoutLabelNavItem(this, "Purchasing", DetailsURL.fromString("/labpurchasing/begin.view"), LaboratoryService.NavItemCategory.misc, "Purchasing")
+        return List.of(
+                new DetailsUrlWithoutLabelNavItem(this, "Purchasing", DetailsURL.fromString("/labpurchasing/begin.view"), LaboratoryService.NavItemCategory.misc, "Purchasing")
         );
     }
 

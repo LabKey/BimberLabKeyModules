@@ -32,13 +32,13 @@ public class ImputationFileUtil
         return new File(setBaseDir, type.name() + "_" + sampleName + "." + gigiType.name() + (denseMarkerBatchIdx == null ? "" : "-" + denseMarkerBatchIdx) + ".geno");
     }
 
-    public static enum MarkerType
+    public enum MarkerType
     {
         framework(),
         dense()
     }
 
-    public static enum GiGiType
+    public enum GiGiType
     {
         experimental()
     }

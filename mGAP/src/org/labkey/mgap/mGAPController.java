@@ -243,7 +243,7 @@ public class mGAPController extends SpringActionController
         }
     }
 
-    public static class RequestUserForm extends Object
+    public static class RequestUserForm
     {
         private String email;
         private String emailConfirmation;
@@ -447,7 +447,7 @@ public class mGAPController extends SpringActionController
                 boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
-                mail.setEncodedHtmlContent("Your account request has been approved for mGAP!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mGapContainer.getStartURL(getUser()).toString() + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
+                mail.setEncodedHtmlContent("Your account request has been approved for mGAP!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mGapContainer.getStartURL(getUser()) + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
                 mail.setFrom(getReplyEmail(getContainer()));
                 mail.setSubject("mGap Account Request");
                 mail.addRecipients(Message.RecipientType.TO, u.getEmail());
@@ -481,7 +481,7 @@ public class mGAPController extends SpringActionController
         return email;
     }
 
-    public static class ApproveUserRequestsForm extends Object
+    public static class ApproveUserRequestsForm
     {
         private int[] requestIds;
 
@@ -541,6 +541,7 @@ public class mGAPController extends SpringActionController
     @IgnoresTermsOfUse
     public static class DownloadBundleAction extends ExportAction<DownloadBundleForm>
     {
+        @Override
         public void export(DownloadBundleForm form, HttpServletResponse response, BindException errors) throws Exception
         {
             Map<String, Object> row = getReleaseRow(getUser(), form, errors);

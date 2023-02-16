@@ -53,6 +53,7 @@ public class GenotypeAssaysController extends SpringActionController
     @RequiresPermission(ReadPermission.class)
     public class MigrateLegacySSPAction extends ConfirmAction<Object>
     {
+        @Override
         public void validateCommand(Object form, Errors errors)
         {
 
@@ -68,6 +69,7 @@ public class GenotypeAssaysController extends SpringActionController
                 return new HtmlView("This allows an admin to copy any primers stored in the original SSP Assay module into the new genotyping module.  Any data has already been copied.  Do you want to continue?");
         }
 
+        @Override
         public boolean handlePost(Object form, BindException errors) throws Exception
         {
             try
@@ -101,6 +103,7 @@ public class GenotypeAssaysController extends SpringActionController
             }
         }
 
+        @Override
         public URLHelper getSuccessURL(Object form)
         {
             return getContainer().getStartURL(getUser());
@@ -110,6 +113,7 @@ public class GenotypeAssaysController extends SpringActionController
     @RequiresPermission(UpdatePermission.class)
     public class CacheAnalysesAction extends MutatingApiAction<CacheAnalysesForm>
     {
+        @Override
         public ApiResponse execute(CacheAnalysesForm form, BindException errors)
         {
             Map<String, Object> resultProperties = new HashMap<>();
@@ -188,6 +192,7 @@ public class GenotypeAssaysController extends SpringActionController
     @RequiresPermission(UpdatePermission.class)
     public class CacheHaplotypesAction extends MutatingApiAction<CacheAnalysesForm>
     {
+        @Override
         public ApiResponse execute(CacheAnalysesForm form, BindException errors)
         {
             Map<String, Object> resultProperties = new HashMap<>();

@@ -61,7 +61,7 @@ public class mGAPUserNotification extends AbstractNotification
 
         String url = getExecuteQueryUrl(target, mGAPSchema.NAME, mGAPSchema.TABLE_USER_REQUESTS, "Pending Requests");
 
-        return new StringBuilder("There are " + count + " pending mGAP user requests.  <a href='" + url + "'>Click here to view them.</a>").toString();
+        return "There are " + count + " pending mGAP user requests.  <a href='" + url + "'>Click here to view them.</a>";
     }
 
     @Override

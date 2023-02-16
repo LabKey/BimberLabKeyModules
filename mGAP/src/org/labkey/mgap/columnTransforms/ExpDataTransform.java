@@ -26,7 +26,7 @@ public class ExpDataTransform extends ColumnTransform
             File f = new File(uri);
             if (!f.exists())
             {
-                getStatusLogger().error("File not found: " + uri.toString());
+                getStatusLogger().error("File not found: " + uri);
             }
 
             ExpData d = ExperimentService.get().getExpDataByURL(String.valueOf(inputValue), getContainerUser().getContainer());
@@ -42,7 +42,7 @@ public class ExpDataTransform extends ColumnTransform
         }
         catch (URISyntaxException e)
         {
-            getStatusLogger().error("Error syncing file: " + String.valueOf(inputValue), e);
+            getStatusLogger().error("Error syncing file: " + inputValue, e);
         }
 
         return null;

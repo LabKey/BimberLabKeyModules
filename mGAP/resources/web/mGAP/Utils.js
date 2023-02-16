@@ -72,10 +72,10 @@ mGAP.Utils = (function($){
                                 return false;
                             }
                             else if (['downstream_gene_variant'].indexOf(val) > -1) {
-                                return;
+
                             }
                             else if (['upstream_gene_variant'].indexOf(val) > -1) {
-                                return;
+
                             }
                             else if (['intron_variant', 'splice_acceptor_variant', 'splice_region_variant', 'splice_donor_variant'].indexOf(val) > -1) {
                                 targets.push('Intronic/<br>Non-coding');

@@ -1,4 +1,4 @@
-import org.labkey.gradle.util.BuildUtils;
+import org.labkey.gradle.util.BuildUtils
 
 dependencies {
     BuildUtils.addLabKeyDependency(project: project, config: "modules", depProjectPath: ":server:modules:BimberLabKeyModules:mcc", depProjectConfig: "published", depExtension: "module")

@@ -94,11 +94,11 @@ public class JBrowseSessionTransform extends AbstractVariantTransform
                     dbRow.put("modifiedby", getContainerUser().getUser().getUserId());
                     dbRow.put("jsonConfig", getSessionJson());
 
-                    databases.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), Arrays.asList(dbRow), new BatchValidationException(), null, new HashMap<>());
+                    databases.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), List.of(dbRow), new BatchValidationException(), null, new HashMap<>());
                 }
                 catch (Exception e)
                 {
-                    getStatusLogger().error("Error creating database: " + String.valueOf(inputValue), e);
+                    getStatusLogger().error("Error creating database: " + inputValue, e);
                 }
             }
 
@@ -195,7 +195,7 @@ public class JBrowseSessionTransform extends AbstractVariantTransform
         row.put("modifiedby", getContainerUser().getUser().getUserId());
 
         getStatusLogger().info("creating database member for: " + jsonFileId);
-        databaseMembers.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), Arrays.asList(row), new BatchValidationException(), null, new HashMap<>());
+        databaseMembers.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), List.of(row), new BatchValidationException(), null, new HashMap<>());
     }
 
     protected TableInfo getJsonFiles()
@@ -283,12 +283,12 @@ public class JBrowseSessionTransform extends AbstractVariantTransform
                     meta.put("Website", rs.getString(FieldKey.fromString("url")));
                 }
 
-                String metaStr = meta.isEmpty() ? "" : ", metadata: " + meta.toString();
+                String metaStr = meta.isEmpty() ? "" : ", metadata: " + meta;
                 row.put("trackJson", "{\"category\":\"" + rs.getString(FieldKey.fromString("category")) + "\",\"visibleByDefault\": false" + metaStr + "}");
             }
 
             getStatusLogger().info("creating jsonfile for output: " + outputFileId);
-            List<Map<String, Object>> rows = jsonFiles.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), Arrays.asList(row), new BatchValidationException(), null, new HashMap<>());
+            List<Map<String, Object>> rows = jsonFiles.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), List.of(row), new BatchValidationException(), null, new HashMap<>());
 
             return (String) rows.get(0).get("objectid");
         }

@@ -69,7 +69,7 @@ public class GenotypeAssaysTest extends AbstractLabModuleAssayTest
         {"Subj1", "gDNA", "1", "3", "method", "3/3/2012", "TestPrimer3", "neg"}
     };
 
-    private String[][] SSP_PIVOT_DATA = new String[][]{
+    private final String[][] SSP_PIVOT_DATA = new String[][]{
         {"Subject Id","Freezer Id","Lane Number","Method","Sample Date","TestPrimer4","Sequence","TestPrimer1","TestPrimer2","TestPrimer5","Comment"},
         {"Subj1","1","1","method","1/2/2011","","atg","POS","","","comment"},
         {"Subj1","1","2","method","2/5/2012","+","","pos","Y","IND","comment"},
@@ -108,6 +108,7 @@ public class GenotypeAssaysTest extends AbstractLabModuleAssayTest
         }
     }
 
+    @Override
     @Test
     public void testSteps() throws Exception
     {

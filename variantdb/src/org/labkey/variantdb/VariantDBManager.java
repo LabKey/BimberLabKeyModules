@@ -135,7 +135,7 @@ public class VariantDBManager
 
             try (Connection connection = DbScope.getLabKeyScope().getConnection();
                  final PreparedStatement deletePs = connection.prepareStatement(deleteSql);
-                 final PreparedStatement insertPs = connection.prepareStatement(insertSql);
+                 final PreparedStatement insertPs = connection.prepareStatement(insertSql)
             )
             {
                 log.info("querying/updating variants");
@@ -220,7 +220,7 @@ public class VariantDBManager
         }
     }
 
-    private Map<Integer, String> _cachedReferences = new HashMap<>();
+    private final Map<Integer, String> _cachedReferences = new HashMap<>();
 
     private String resolveSequenceName(int sequenceId)
     {
@@ -235,9 +235,9 @@ public class VariantDBManager
 
     private class ChainFileWrapper
     {
-        private int _sourceGenomeId;
-        private int _targetGenomeId;
-        private ExpData _chainFile;
+        private final int _sourceGenomeId;
+        private final int _targetGenomeId;
+        private final ExpData _chainFile;
         private Map<String, Integer> _cachedReferences = null;
 
         public ChainFileWrapper(int sourceGenomeId, int targetGenomeId, ExpData chainFile)

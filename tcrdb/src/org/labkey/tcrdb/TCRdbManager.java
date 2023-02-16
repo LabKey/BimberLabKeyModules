@@ -223,7 +223,7 @@ public class TCRdbManager
                                 toUpdate.put("rowid", ref.getRowid());
                                 Map<String, Object> oldKeys = new CaseInsensitiveHashMap<>();
                                 oldKeys.put("rowid", ref.getRowid());
-                                refNt.getUpdateService().updateRows(u, ContainerManager.getForId(ref.getContainer()), Arrays.asList(toUpdate), Arrays.asList(oldKeys), null, null);
+                                refNt.getUpdateService().updateRows(u, ContainerManager.getForId(ref.getContainer()), List.of(toUpdate), List.of(oldKeys), null, null);
                             }
 
                             continue OUTER;
@@ -244,7 +244,7 @@ public class TCRdbManager
                 row.put("comments", StringUtils.join(comments, "\n"));
 
                 BatchValidationException errors = new BatchValidationException();
-                List<Map<String, Object>> inserted = refNt.getUpdateService().insertRows(u, target, Arrays.asList(row), errors, null, null);
+                List<Map<String, Object>> inserted = refNt.getUpdateService().insertRows(u, target, List.of(row), errors, null, null);
                 if (errors.hasErrors())
                 {
                     throw errors;

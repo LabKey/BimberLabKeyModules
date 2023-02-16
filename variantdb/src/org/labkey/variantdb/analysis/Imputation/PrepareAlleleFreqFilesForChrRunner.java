@@ -27,16 +27,16 @@ import java.util.List;
  */
 public class PrepareAlleleFreqFilesForChrRunner extends Job
 {
-    private File _alleleFreqVcf;
-    private ImputationFileUtil.MarkerType _markerType;
-    private String _chr;
-    private @Nullable Integer _denseMarkerBatchIdx;
-    private File _alleleFreqDir;
-    private Logger _log;
-    private List<Interval> _intervalList;
-    private String _freqFieldName = "AF";
+    private final File _alleleFreqVcf;
+    private final ImputationFileUtil.MarkerType _markerType;
+    private final String _chr;
+    private final @Nullable Integer _denseMarkerBatchIdx;
+    private final File _alleleFreqDir;
+    private final Logger _log;
+    private final List<Interval> _intervalList;
+    private final String _freqFieldName = "AF";
 
-    private List<List<String>> _markerToBaseList = new ArrayList<>();
+    private final List<List<String>> _markerToBaseList = new ArrayList<>();
 
     public PrepareAlleleFreqFilesForChrRunner(File alleleFreqVcf, ImputationFileUtil.MarkerType markerType, String chr, @Nullable Integer denseMarkerBatchIdx, File alleleFreqDir, Logger log, List<Interval> intervalList)
     {

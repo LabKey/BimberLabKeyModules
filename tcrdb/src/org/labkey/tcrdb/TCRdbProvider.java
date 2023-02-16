@@ -27,7 +27,7 @@ import java.util.Set;
 public class TCRdbProvider extends AbstractSequenceDataProvider
 {
     public static final String NAME = "TCRdb";
-    private Module _module;
+    private final Module _module;
 
     public TCRdbProvider(Module module)
     {

@@ -58,23 +58,23 @@ import java.util.zip.GZIPInputStream;
 public class ImputationRunner
 {
     //maps of the intervals (single positions) for the dense or framework markers.  dense markers are split into batches for error protection and multi-threading
-    private Map<String, List<Interval>> _denseIntervalMap;
-    private Map<String, List<List<Interval>>> _denseIntervalMapBatched;
-    private Map<String, List<Interval>> _frameworkIntervalMap;
-    private List<String> _frameworkMarkerNames;
-    private boolean _skipFrameworksAsDenseMarkers = false;
+    private final Map<String, List<Interval>> _denseIntervalMap;
+    private final Map<String, List<List<Interval>>> _denseIntervalMapBatched;
+    private final Map<String, List<Interval>> _frameworkIntervalMap;
+    private final List<String> _frameworkMarkerNames;
+    private final boolean _skipFrameworksAsDenseMarkers = false;
 
     //maps listing the bases that correspond to markers/genotypes in GIGI
     private Map<String, List<List<List<String>>>> _denseMarkerBaseList;
     private Map<String, List<List<String>>> _frameworkMarkerBaseList;
     
-    private Map<String, List<Interval>> _genotypeBlacklist;
+    private final Map<String, List<Interval>> _genotypeBlacklist;
 
     private int _minGenotypeQual = 5;
     private int _minGenotypeDepth = 0;
 
     private int _denseMarkerBatchSize = 2500;
-    private PipelineJob _job;
+    private final PipelineJob _job;
 
     public ImputationRunner(File denseBedFile, File frameworkBedFile, @Nullable File genotypeBlacklist, Logger log, PipelineJob job) throws PipelineJobException
     {
@@ -975,7 +975,7 @@ public class ImputationRunner
     public static boolean hasMinLineCount(File f, long minLines) throws PipelineJobException
     {
         FileType gz = new FileType(".gz");
-        try (InputStream is = gz.isType(f) ? new GZIPInputStream(new FileInputStream(f)) : new FileInputStream(f);BufferedReader reader = new BufferedReader(new InputStreamReader(is, StringUtilsLabKey.DEFAULT_CHARSET));)
+        try (InputStream is = gz.isType(f) ? new GZIPInputStream(new FileInputStream(f)) : new FileInputStream(f);BufferedReader reader = new BufferedReader(new InputStreamReader(is, StringUtilsLabKey.DEFAULT_CHARSET)))
         {
             long lineNo = 0;
             while (reader.readLine() != null)

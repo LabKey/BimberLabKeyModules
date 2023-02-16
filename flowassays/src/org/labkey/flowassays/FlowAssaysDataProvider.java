@@ -46,6 +46,7 @@ public class FlowAssaysDataProvider extends AbstractDataProvider
         _module = m;
     }
 
+    @Override
     public String getName()
     {
         return FlowAssaysModule.NAME;

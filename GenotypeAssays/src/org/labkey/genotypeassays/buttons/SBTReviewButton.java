@@ -8,6 +8,7 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.genotypeassays.GenotypeAssaysModule;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: bimber
@@ -18,7 +19,7 @@ public class SBTReviewButton extends SimpleButtonConfigFactory
 {
     public SBTReviewButton()
     {
-        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "SBT Review", "GenotypeAssays.buttons.sbtReviewHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("genotypeassays/buttons.js")));
+        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "SBT Review", "GenotypeAssays.buttons.sbtReviewHandler(dataRegionName);", List.of(ClientDependency.supplierFromPath("genotypeassays/buttons.js")));
     }
 
     @Override

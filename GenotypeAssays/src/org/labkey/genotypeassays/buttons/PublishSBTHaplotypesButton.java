@@ -6,6 +6,7 @@ import org.labkey.api.view.template.ClientDependency;
 import org.labkey.genotypeassays.GenotypeAssaysModule;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: bimber
@@ -16,6 +17,6 @@ public class PublishSBTHaplotypesButton extends SimpleButtonConfigFactory
 {
     public PublishSBTHaplotypesButton()
     {
-        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.haplotypeButtonHandler(dataRegionName);", Arrays.asList(ClientDependency.supplierFromPath("genotypeassays/window/PublishResultsWindow.js")));
+        super(ModuleLoader.getInstance().getModule(GenotypeAssaysModule.class), "Publish/Cache Selected", "GenotypeAssays.window.PublishResultsWindow.haplotypeButtonHandler(dataRegionName);", List.of(ClientDependency.supplierFromPath("genotypeassays/window/PublishResultsWindow.js")));
     }
 }

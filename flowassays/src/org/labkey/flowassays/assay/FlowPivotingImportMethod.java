@@ -55,8 +55,8 @@ public class FlowPivotingImportMethod extends PivotingImportMethod
 
     private class FlowPivotingAssayParser extends PivotingAssayParser
     {
-        private FlowImportHelper _helper = new FlowImportHelper();
-        private Map<String, String> _guessed = null;
+        private final FlowImportHelper _helper = new FlowImportHelper();
+        private final Map<String, String> _guessed = null;
 
         public FlowPivotingAssayParser(PivotingImportMethod method, Container c, User u, int assayId)
         {

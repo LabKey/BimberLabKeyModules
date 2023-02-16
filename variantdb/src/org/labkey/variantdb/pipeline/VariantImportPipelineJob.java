@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class VariantImportPipelineJob extends PipelineJob
 {
-    private List<SequenceOutputFile> _outputFiles;
-    private List<Integer> _liftOverTargetGenomes;
+    private final List<SequenceOutputFile> _outputFiles;
+    private final List<Integer> _liftOverTargetGenomes;
 
     public VariantImportPipelineJob(Container c, User user, ActionURL url, PipeRoot pipeRoot, List<SequenceOutputFile> outputFiles, List<Integer> liftOverTargetGenomes)
     {

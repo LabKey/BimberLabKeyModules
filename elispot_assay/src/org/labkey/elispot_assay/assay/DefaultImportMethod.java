@@ -116,11 +116,9 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
         for (Map<String, Object> row : rows)
         {
             //build a map of rows, grouped by id/date/peptide
-            StringBuilder sb = new StringBuilder();
-            sb.append(row.get(SUBJECT_FIELD)).append(delim);
-            sb.append(row.get(DATE_FIELD)).append(delim);
-            sb.append(row.get(PEPTIDE_FIELD)).append(delim);
-            String key = sb.toString();
+            String key = row.get(SUBJECT_FIELD) + delim +
+                    row.get(DATE_FIELD) + delim +
+                    row.get(PEPTIDE_FIELD) + delim;
 
             List<Map<String, Object>> foundRows = map.get(key);
             if (foundRows == null)
@@ -130,10 +128,8 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
             map.put(key, foundRows);
 
             //also find the negative controls for this subject/date
-            StringBuilder negSb = new StringBuilder();
-            negSb.append(row.get(SUBJECT_FIELD)).append(delim);
-            negSb.append(row.get(DATE_FIELD));
-            String negCtlKey = negSb.toString();
+            String negCtlKey = row.get(SUBJECT_FIELD) + delim +
+                    row.get(DATE_FIELD);
             sampleKeyToNegCtlKey.put(key, negCtlKey);
 
             if (TYPE.NEG.getText().equals(row.get(CATEGORY_FIELD)))
@@ -355,7 +351,7 @@ public class DefaultImportMethod extends DefaultAssayImportMethod
         NEG("Neg Control"),
         Unknown("Unknown");
 
-        private String text;
+        private final String text;
 
         TYPE (String text)
         {

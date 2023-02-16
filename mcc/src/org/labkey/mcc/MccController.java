@@ -212,7 +212,7 @@ public class MccController extends SpringActionController
         }
     }
 
-    public static class RequestUserForm extends Object
+    public static class RequestUserForm
     {
         private String email;
         private String emailConfirmation;
@@ -396,7 +396,7 @@ public class MccController extends SpringActionController
                 boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
-                mail.setEncodedHtmlContent("Your account request has been approved for MCC!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mccContainer.getStartURL(getUser()).toString() + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
+                mail.setEncodedHtmlContent("Your account request has been approved for MCC!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mccContainer.getStartURL(getUser()) + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
                 mail.setFrom(getReplyEmail(getContainer()));
                 mail.setSubject("MCC Account Request");
                 mail.addRecipients(Message.RecipientType.TO, u.getEmail());
@@ -549,10 +549,7 @@ public class MccController extends SpringActionController
         {
             setTitle("Configure MCC");
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("This will ensure various settings required by MCC are configured on this server. Do you want to continue?");
-
-            return new HtmlView(HtmlString.unsafe(sb.toString()));
+            return new HtmlView(HtmlString.unsafe("This will ensure various settings required by MCC are configured on this server. Do you want to continue?"));
         }
 
         @Override
@@ -651,10 +648,7 @@ public class MccController extends SpringActionController
         {
             setTitle("Reset ZIMs Last Run Time");
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("This will reset the last run time for ZIMs import, causing any existing XML files to be re-imported. Do you want to continue?");
-
-            return new HtmlView(HtmlString.unsafe(sb.toString()));
+            return new HtmlView(HtmlString.unsafe("This will reset the last run time for ZIMs import, causing any existing XML files to be re-imported. Do you want to continue?"));
         }
 
         @Override
@@ -687,10 +681,7 @@ public class MccController extends SpringActionController
         {
             setTitle("Import MCC Study");
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("This will import the default MCC study in this folder and set the EHRStudyContainer property to point to this container. Do you want to continue?");
-
-            return new HtmlView(HtmlString.unsafe(sb.toString()));
+            return new HtmlView(HtmlString.unsafe("This will import the default MCC study in this folder and set the EHRStudyContainer property to point to this container. Do you want to continue?"));
         }
 
         @Override

@@ -72,32 +72,38 @@ public class VariantImportTask extends PipelineJob.Task<VariantImportTask.Factor
             //setLocation("webserver-high-priority");
         }
 
+        @Override
         public List<FileType> getInputTypes()
         {
             return Collections.emptyList();
         }
 
+        @Override
         public String getStatusName()
         {
             return PipelineJob.TaskStatus.running.toString();
         }
 
+        @Override
         public List<String> getProtocolActionNames()
         {
-            return Arrays.asList("Variant Import");
+            return List.of("Variant Import");
         }
 
+        @Override
         public PipelineJob.Task createTask(PipelineJob job)
         {
             return new VariantImportTask(this, job);
         }
 
+        @Override
         public boolean isJobComplete(PipelineJob job)
         {
             return false;
         }
     }
 
+    @Override
     public RecordedActionSet run() throws PipelineJobException
     {
         String batchId = createBatch();
@@ -282,9 +288,9 @@ public class VariantImportTask extends PipelineJob.Task<VariantImportTask.Factor
 
     private TempTableInfo createTempTable(DbSchema schema, String name, List<ColumnInfo> columnInfos)
     {
-        TempTableInfo tt = new TempTableInfo(name, columnInfos, Arrays.asList("objectid"));
+        TempTableInfo tt = new TempTableInfo(name, columnInfos, List.of("objectid"));
 
-        String sql = "CREATE TABLE " + tt.toString() + " ( ";
+        String sql = "CREATE TABLE " + tt + " ( ";
         String delim = "\n";
         for (ColumnInfo col : columnInfos)
         {
@@ -300,7 +306,7 @@ public class VariantImportTask extends PipelineJob.Task<VariantImportTask.Factor
         return tt;
     }
 
-    private Map<Integer, Map<String, Integer>> _cachedReferencesByGenome = new HashMap<>();
+    private final Map<Integer, Map<String, Integer>> _cachedReferencesByGenome = new HashMap<>();
 
     private int resolveSequenceId(String refName, int genomeId) throws PipelineJobException
     {

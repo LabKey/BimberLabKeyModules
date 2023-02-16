@@ -179,7 +179,7 @@ public class MccTest extends BaseWebDriverTest
 
         sr = new SelectRowsCommand("study", "departure");
         sr.setColumns(Arrays.asList("Id", "QCState/Label"));
-        sr.setFilters(Arrays.asList(new Filter("Id", "Animal2")));
+        sr.setFilters(List.of(new Filter("Id", "Animal2")));
         srr = sr.execute(createDefaultConnection(), getProjectName() + "/Colonies/Other");
         Assert.assertEquals("Incorrect number of departures", 1, srr.getRowCount().intValue());
         srr.getRows().forEach(row -> {
@@ -218,13 +218,13 @@ public class MccTest extends BaseWebDriverTest
 
         sr = new SelectRowsCommand("study", "demographics");
         sr.setColumns(Arrays.asList("Id", "calculated_status"));
-        sr.setFilters(Arrays.asList(new Filter("Id", "Animal3")));
+        sr.setFilters(List.of(new Filter("Id", "Animal3")));
         srr = sr.execute(createDefaultConnection(), getProjectName() + "/Colonies/SNPRC");
         Assert.assertEquals("Incorrect status", "Dead", srr.getRows().get(0).get("calculated_status"));
 
         sr = new SelectRowsCommand("study", "deaths");
         sr.setColumns(Arrays.asList("Id", "cause"));
-        sr.setFilters(Arrays.asList(new Filter("Id", "Animal3")));
+        sr.setFilters(List.of(new Filter("Id", "Animal3")));
         srr = sr.execute(createDefaultConnection(), getProjectName() + "/Colonies/SNPRC");
         Assert.assertEquals("No death record", 1, srr.getRowCount().intValue());
         Assert.assertEquals("Incorrect cause", "Cause of Death Unknown", srr.getRows().get(0).get("cause"));
@@ -688,7 +688,7 @@ public class MccTest extends BaseWebDriverTest
         waitForElement(getButton("Submit"));
 
         // This omits a required field
-        setFormValues(Arrays.asList("lastName"));
+        setFormValues(List.of("lastName"));
         addCohort(0);
         waitAndClick(getButton("Submit"));
 

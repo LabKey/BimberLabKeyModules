@@ -31,6 +31,6 @@ public class VariantManagerRole extends AbstractRole
     @Override
     public boolean isApplicable(SecurityPolicy policy, SecurableResource resource)
     {
-        return resource instanceof Container ? ((Container)resource).getActiveModules().contains(ModuleLoader.getInstance().getModule(VariantDBModule.class)) : false;
+        return resource instanceof Container && ((Container) resource).getActiveModules().contains(ModuleLoader.getInstance().getModule(VariantDBModule.class));
     }
 }

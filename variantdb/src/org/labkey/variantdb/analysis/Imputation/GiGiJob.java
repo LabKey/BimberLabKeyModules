@@ -19,15 +19,15 @@ import java.util.Arrays;
  */
 public class GiGiJob extends Job
 {
-    private Logger _log;
-    private String _chr;
-    private Integer _denseMarkerIdx;
-    private File _outputDir;
-    private File _alleleFreqDir;
-    private String _callMethod;
-    private File _ivFile;
-    private File _glAutoBaseDir;
-    private int _sampledIVs;
+    private final Logger _log;
+    private final String _chr;
+    private final Integer _denseMarkerIdx;
+    private final File _outputDir;
+    private final File _alleleFreqDir;
+    private final String _callMethod;
+    private final File _ivFile;
+    private final File _glAutoBaseDir;
+    private final int _sampledIVs;
 
     public GiGiJob(Logger log, String chr, Integer denseMarkerIdx, File outputDir, File alleleFreqDir, String callMethod, File ivFile, File glAutoBaseDir, int sampledIVs)
     {

@@ -96,7 +96,7 @@ public class JBrowseHumanSessionTransform extends JBrowseSessionTransform
             row.put("trackJson", getTrackJson());
 
             getStatusLogger().info("creating jsonfile for output: " + outputFileId);
-            List<Map<String, Object>> rows = jsonFiles.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), Arrays.asList(row), new BatchValidationException(), null, new HashMap<>());
+            List<Map<String, Object>> rows = jsonFiles.getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), List.of(row), new BatchValidationException(), null, new HashMap<>());
 
             return (String) rows.get(0).get("objectid");
         }

@@ -633,7 +633,7 @@
 
             textToArray: function(val){
                 if (Ext4.isEmpty(val)){
-                    return new Array();
+                    return [];
                 }
 
                 val = val.replace(/[\s,;]+/g, ';');
@@ -643,7 +643,7 @@
                 if(val)
                     val = val.split(';');
                 else
-                    val = new Array();
+                    val = [];
 
                 return val;
             },

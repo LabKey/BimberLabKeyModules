@@ -50,14 +50,12 @@ public class SourceDisplayColumnFactory implements DisplayColumnFactory
                     }
                     else
                     {
-                        switch (parts[0])
+                        if (parts[0].equals("ClinVar"))
                         {
-                            case "ClinVar":
-                                if (!StringUtils.isEmpty(parts[1]))
-                                {
-                                    url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
-                                }
-                                break;
+                            if (!StringUtils.isEmpty(parts[1]))
+                            {
+                                url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
+                            }
                         }
                     }
                 }

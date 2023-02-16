@@ -265,7 +265,7 @@ public class TCRdbController extends SpringActionController
             //mixcr exportReadsForClones index_file alignments.vdjca.gz 0 1 2 33 54 reads.fastq.gz
             //mixcr exportAlignmentsPretty input.vdjca test.txt
 
-            return new HtmlView("MiXCR Alignments", "<div style=\"font-family:courier,Courier New,monospace;white-space:nowrap;padding:5px;\"><pre>" + writer.toString() + "</pre></div>");
+            return new HtmlView("MiXCR Alignments", "<div style=\"font-family:courier,Courier New,monospace;white-space:nowrap;padding:5px;\"><pre>" + writer + "</pre></div>");
         }
 
         private String coalesce(Object s)
@@ -501,6 +501,7 @@ public class TCRdbController extends SpringActionController
     @IgnoresTermsOfUse
     public static class DownloadSequenceAction extends ExportAction<DownloadCloneMaterialsForm>
     {
+        @Override
         public void export(DownloadCloneMaterialsForm form, HttpServletResponse response, BindException errors) throws Exception
         {
             Container target = getContainer().isWorkbook() ? getContainer().getParent() : getContainer();
@@ -644,6 +645,7 @@ public class TCRdbController extends SpringActionController
     @IgnoresTermsOfUse
     public static class DownloadCloneMaterials extends ExportAction<DownloadCloneMaterialsForm>
     {
+        @Override
         public void export(DownloadCloneMaterialsForm form, HttpServletResponse response, BindException errors) throws Exception
         {
             Container target = getContainer().isWorkbook() ? getContainer().getParent() : getContainer();

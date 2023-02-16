@@ -22,6 +22,7 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.QueryService;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TCRdbTableCustomizer extends AbstractTableCustomizer
@@ -29,9 +30,8 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
     @Override
     public void customize(TableInfo table)
     {
-        if (table instanceof AbstractTableInfo)
+        if (table instanceof AbstractTableInfo ti)
         {
-            AbstractTableInfo ti = (AbstractTableInfo) table;
             if (matches(ti, TCRdbSchema.SEQUENCE_ANALYSIS, "sequence_analyses"))
             {
                 addAssayFieldsToAnalyses(ti);
@@ -163,7 +163,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
             if (addRunColumns)
             {
                 TableInfo runs = schema.getTable("runs");
-                SQLFragment runSelectSql = QueryService.get().getSelectSQL(runs, Arrays.asList(runs.getColumn("analysisId")), null, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
+                SQLFragment runSelectSql = QueryService.get().getSelectSQL(runs, Collections.singletonList(runs.getColumn("analysisId")), null, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
                 DetailsURL runDetails = DetailsURL.fromString("/query/executeQuery.view?schemaName=assay." + ap.getName().replaceAll(" ", "") + "." + protocols.get(0).getName() + "&query.queryName=runs&query." + urlField + "~eq=${" + urlSourceCol + "}", (ti.getUserSchema().getContainer().isWorkbook() ? ti.getUserSchema().getContainer().getParent() : ti.getUserSchema().getContainer()));
 
                 SQLFragment sql5 = new SQLFragment("(select count(*) as expr FROM (").append(runSelectSql).append(") a " + whereClause + ")");

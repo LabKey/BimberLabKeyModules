@@ -27,7 +27,7 @@ import java.util.Set;
 public class VariantDBDataProvider extends AbstractSequenceDataProvider
 {
     public static final String NAME = "VariantDB";
-    private Module _module;
+    private final Module _module;
 
     public VariantDBDataProvider(Module m)
     {

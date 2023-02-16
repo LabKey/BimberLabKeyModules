@@ -45,7 +45,7 @@ public class GBSAnalysisHandler extends AbstractParameterizedOutputHandler<Seque
 
     public GBSAnalysisHandler()
     {
-        super(ModuleLoader.getInstance().getModule(VariantDBModule.class), "GBS Analysis", "This will run a series of steps to summarize GBS data", new LinkedHashSet<>(Arrays.asList("/LDK/field/ExpDataField.js")), Arrays.asList(
+        super(ModuleLoader.getInstance().getModule(VariantDBModule.class), "GBS Analysis", "This will run a series of steps to summarize GBS data", new LinkedHashSet<>(List.of("/LDK/field/ExpDataField.js")), Arrays.asList(
                 ToolParameterDescriptor.create("vcfFile", "Reference VCF", "Optional.  The DataId of a VCF file with reference variable sites.  This is used to evaluate how many covered positions overlap with these sites.", "ldk-expdatafield", null, null),
                 ToolParameterDescriptor.create("maskFile", "Masked Sites", "Optional.  The DataId of a BED file with masked regions, such as output from RepeatMasker.  This is used to evaluate how many covered positions overlap with these sites.", "ldk-expdatafield", null, null),
                 ToolParameterDescriptor.create("cutSitesFile", "Restriction Sites", "Optional.  The DataId of a BED file with predicted restriction enzyme cut sites.  This is used to evaluate the average distance for each GBS island from predicted sites.", "ldk-expdatafield", null, null)

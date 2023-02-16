@@ -29,6 +29,7 @@ public class GFF3Codec extends AsciiFeatureCodec<GFF3Feature>
         return this.decode(line);
     }
 
+    @Override
     public GFF3Feature decode(String line)
     {
         if (line.trim().isEmpty())
@@ -47,7 +48,8 @@ public class GFF3Codec extends AsciiFeatureCodec<GFF3Feature>
         }
     }
 
-    public Object readActualHeader(LineIterator reader) 
+    @Override
+    public Object readActualHeader(LineIterator reader)
     {
         return null;
     }
@@ -135,6 +137,7 @@ public class GFF3Codec extends AsciiFeatureCodec<GFF3Feature>
         return false;
     }
 
+    @Override
     public boolean canDecode(String path)
     {
         String toDecode;
@@ -150,6 +153,7 @@ public class GFF3Codec extends AsciiFeatureCodec<GFF3Feature>
         return toDecode.toLowerCase().endsWith(".gff");
     }
 
+    @Override
     public TabixFormat getTabixFormat()
     {
         return TabixFormat.GFF;

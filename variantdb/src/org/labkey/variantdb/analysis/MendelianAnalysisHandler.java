@@ -46,7 +46,7 @@ public class MendelianAnalysisHandler extends AbstractParameterizedOutputHandler
 
     public MendelianAnalysisHandler()
     {
-        super(ModuleLoader.getInstance().getModule(VariantDBModule.class), "Mendelian Check", "This will check the input VCF against the pedigree data and create two new VCFs, with passing/failing positions", new LinkedHashSet<>(Arrays.asList("/LDK/field/ExpDataField.js")), null);
+        super(ModuleLoader.getInstance().getModule(VariantDBModule.class), "Mendelian Check", "This will check the input VCF against the pedigree data and create two new VCFs, with passing/failing positions", new LinkedHashSet<>(List.of("/LDK/field/ExpDataField.js")), null);
 
     }
 

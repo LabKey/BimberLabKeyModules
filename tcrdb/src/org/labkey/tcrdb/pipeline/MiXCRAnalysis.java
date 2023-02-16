@@ -337,10 +337,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
                 String additional = StringUtils.trimToNull(library.getString("additionalParams"));
                 if (additional != null)
                 {
-                    for (String s : library.getString("additionalParams").split(";"))
-                    {
-                        alignParams.add(s);
-                    }
+                    Collections.addAll(alignParams, library.getString("additionalParams").split(";"));
                 }
             }
 
@@ -352,8 +349,8 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
             Integer threads = SequencePipelineService.get().getMaxThreads(getPipelineCtx().getJob().getLogger());
             if (threads != null)
             {
-                alignParams.add("-t " + threads.toString());
-                assembleParams.add("-t " + threads.toString());
+                alignParams.add("-t " + threads);
+                assembleParams.add("-t " + threads);
             }
 
             List<String> generalParams = new ArrayList<>();
@@ -711,7 +708,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
 
     private final int TOTAL_ADDED_FIELDS = 4;
     private final int TOTAL_EXPORTED_FIELDS_NOT_IN_DB = 0;
-    private List<String> FIELDS = Arrays.asList(
+    private final List<String> FIELDS = Arrays.asList(
             "libraryId",
             "species",
             "locus",
@@ -1016,7 +1013,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
 
     private boolean hasLines(File f) throws PipelineJobException
     {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(f.getName().endsWith(".gz") ? new GZIPInputStream(new FileInputStream(f)) : new FileInputStream(f), StringUtilsLabKey.DEFAULT_CHARSET));)
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(f.getName().endsWith(".gz") ? new GZIPInputStream(new FileInputStream(f)) : new FileInputStream(f), StringUtilsLabKey.DEFAULT_CHARSET)))
         {
             while (reader.readLine() != null)
             {
@@ -1038,7 +1035,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
         J(2),
         C(3);
 
-        private int _idx;
+        private final int _idx;
 
         SEGMENTS(int idx)
         {

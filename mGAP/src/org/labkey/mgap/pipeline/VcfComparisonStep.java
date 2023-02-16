@@ -39,14 +39,15 @@ public class VcfComparisonStep extends AbstractCommandPipelineStep<VcfComparison
     {
         public Provider()
         {
-            super("VcfComparison", "VcfComparison", "VcfComparison", "Compare the VCF to a reference VCF, producing TSV reports with site- and genotype-level concordance.", Arrays.asList(
+            super("VcfComparison", "VcfComparison", "VcfComparison", "Compare the VCF to a reference VCF, producing TSV reports with site- and genotype-level concordance.", List.of(
                     ToolParameterDescriptor.createExpDataParam(REF_VCF, "Reference VCF", "This is the file ID of the VCF to use as the reference.", "ldk-expdatafield", new JSONObject()
                     {{
                         put("allowBlank", false);
                     }}, null)
-                ), null, null);
+            ), null, null);
         }
 
+        @Override
         public VcfComparisonStep create(PipelineContext ctx)
         {
             return new VcfComparisonStep(this, ctx);

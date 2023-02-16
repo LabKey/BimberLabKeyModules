@@ -19,7 +19,7 @@ public class GFF3FeatureImpl implements GFF3Feature
     private int _end;
     private String _name;
     private Float _score;
-    private Map<String, String> _attributes =  new HashMap<>();
+    private final Map<String, String> _attributes =  new HashMap<>();
 
     public GFF3FeatureImpl(String contig, int start, int end)
     {

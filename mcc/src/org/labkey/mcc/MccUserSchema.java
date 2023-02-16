@@ -24,6 +24,7 @@ import org.labkey.mcc.security.MccRequestAdminPermission;
 import org.labkey.mcc.security.MccRequestorPermission;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class MccUserSchema extends SimpleUserSchema
 {
@@ -85,7 +86,7 @@ public class MccUserSchema extends SimpleUserSchema
         {
             SQLFragment sql = new SQLFragment("(SELECT CONCAT(COALESCE(CAST(sum(CASE WHEN r.review IS NULL THEN 0 ELSE 1 END) as varchar), '0'), ' of ', cast(count(*) as varchar), ' completed') as expr FROM mcc.requestReviews r WHERE r.requestId = " + ExprColumn.STR_TABLE_ALIAS + ".requestId)");
             ExprColumn newCol = new ExprColumn(ti, "rabReviewStatus", sql, JdbcType.VARCHAR, ti.getColumn("requestId"));
-            newCol.setSortFieldKeys(Arrays.asList(FieldKey.fromString("pendingRabReviews")));
+            newCol.setSortFieldKeys(Collections.singletonList(FieldKey.fromString("pendingRabReviews")));
 
             newCol.setLabel("RAB Review Status");
             newCol.setDisplayColumnFactory(colInfo -> {

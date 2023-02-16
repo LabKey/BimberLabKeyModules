@@ -34,9 +34,7 @@ public class RemoveAnnotationsForMgapStep extends AbstractCommandPipelineStep<Re
     {
         public Provider()
         {
-            super("RemoveAnnotations", "Remove Annotations For mGAP", "RemoveAnnotations", "This will remove annotations from the selected VCF, limiting to only those expected for mGAP.", Arrays.asList(
-
-            ), null, null);
+            super("RemoveAnnotations", "Remove Annotations For mGAP", "RemoveAnnotations", "This will remove annotations from the selected VCF, limiting to only those expected for mGAP.", List.of(), null, null);
         }
 
         @Override

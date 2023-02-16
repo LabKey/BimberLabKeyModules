@@ -256,12 +256,12 @@ public class NprcObservationStep implements TaskRefTask
     @Override
     public List<String> getRequiredSettings()
     {
-        return Collections.unmodifiableList(Arrays.asList(Settings.fileName.name()));
+        return Collections.unmodifiableList(List.of(Settings.fileName.name()));
     }
 
     private enum Settings
     {
-        fileName();
+        fileName()
     }
 
     @Override

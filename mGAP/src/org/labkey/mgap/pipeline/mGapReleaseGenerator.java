@@ -93,7 +93,7 @@ import java.util.regex.Pattern;
  */
 public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<SequenceOutputHandler.SequenceOutputProcessor>
 {
-    private final FileType _vcfType = new FileType(Arrays.asList(".vcf"), ".vcf", false, FileType.gzSupportLevel.SUPPORT_GZ);
+    private final FileType _vcfType = new FileType(List.of(".vcf"), ".vcf", false, FileType.gzSupportLevel.SUPPORT_GZ);
     public static final String MMUL_GENOME = "mmulGenome";
 
     public mGapReleaseGenerator()
@@ -104,7 +104,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
                 }}, null),
                 ToolParameterDescriptor.createExpDataParam("gtfFile", "GTF File", "The gene file used to create these annotations.", "sequenceanalysis-genomefileselectorfield", new JSONObject()
                 {{
-                    put("extensions", Arrays.asList("gtf"));
+                    put("extensions", List.of("gtf"));
                     put("width", 400);
                     put("allowBlank", false);
                 }}, null),
@@ -158,7 +158,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
 
     public static class Processor implements SequenceOutputProcessor
     {
-        private Set<String> _omimWarnings = new HashSet<>();
+        private final Set<String> _omimWarnings = new HashSet<>();
 
         public Processor()
         {
@@ -335,7 +335,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
             List<Map<String, Object>> releaseStatsRows = new ArrayList<>();
             List<Map<String, Object>> tracksPerReleaseRows = new ArrayList<>();
 
-            boolean testOnly = StringUtils.isEmpty(job.getParameters().get("testOnly")) ? false : ConvertHelper.convert(job.getParameters().get("testOnly"), boolean.class);
+            boolean testOnly = !StringUtils.isEmpty(job.getParameters().get("testOnly")) && ConvertHelper.convert(job.getParameters().get("testOnly"), boolean.class);
 
             if (outputVCFMap.isEmpty())
             {
@@ -954,7 +954,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
             else
             {
                 SelectVariantsWrapper wrapper = new SelectVariantsWrapper(ctx.getLogger());
-                wrapper.execute(sourceGenome.getWorkingFastaFile(), primaryTrackVcf, noGenotypes, Arrays.asList("--sites-only-vcf-output"));
+                wrapper.execute(sourceGenome.getWorkingFastaFile(), primaryTrackVcf, noGenotypes, List.of("--sites-only-vcf-output"));
             }
 
             SequenceOutputFile output = new SequenceOutputFile();
@@ -1180,7 +1180,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
                         {
                             i++;
 
-                            List<String> sigSplit = Arrays.asList(sigList.split("\\|"));
+                            String[] sigSplit = sigList.split("\\|");
                             List<String> diseaseSplit = Arrays.asList(clnDisease.get(i).split("\\|"));
                             int j = 0;
                             for (String sig : sigSplit)
@@ -1227,7 +1227,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
                             {
                                 Double maxScore = Collections.max(vc.getAttributeAsDoubleList("NE", 0.0));
                                 description = StringUtils.join(new String[]{
-                                        "Score: " + String.valueOf(maxScore)
+                                        "Score: " + maxScore
                                 }, ",");
                             }
                             catch (NumberFormatException e)
@@ -1333,7 +1333,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
 
         private class FieldTracker
         {
-            private Map<String, FieldData> perField;
+            private final Map<String, FieldData> perField;
 
             public FieldTracker(int size)
             {
@@ -1489,7 +1489,7 @@ public class mGapReleaseGenerator extends AbstractParameterizedOutputHandler<Seq
             //due to overlapping transcripts, this is often added.  remove these less-specific terms in order
             for (String type : Arrays.asList("intragenic_variant", "non_coding_transcript_variant", "intron_variant"))
             {
-                if (codingPotential.size() > 1 && codingPotential.contains(type))
+                if (codingPotential.size() > 1)
                 {
                     codingPotential.remove(type);
                 }

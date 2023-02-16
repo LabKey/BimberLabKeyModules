@@ -82,7 +82,7 @@ public class AnnotationStep extends AbstractCommandPipelineStep<CassandraRunner>
                     {{
                         put("checked", true);
                     }}, true)
-            ), new LinkedHashSet<String>(Arrays.asList("ldk/field/ExpDataField.js")), null);
+            ), new LinkedHashSet<String>(List.of("ldk/field/ExpDataField.js")), null);
         }
 
         @Override

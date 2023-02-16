@@ -18,10 +18,10 @@ public class GLAutoJob extends Job
     private int _mcIterations = 300000;
     private int _mcStoreInterval = 30;
 
-    private File _basedir;
-    private File _markerFile;
-    private Logger _log;
-    private String _chr;
+    private final File _basedir;
+    private final File _markerFile;
+    private final Logger _log;
+    private final String _chr;
 
     public GLAutoJob(File basedir, File markerFile, Logger log, String chr)
     {

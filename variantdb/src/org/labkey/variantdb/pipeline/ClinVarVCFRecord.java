@@ -12,7 +12,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  */
 public class ClinVarVCFRecord
 {
-    private VariantContext _ctx;
+    private final VariantContext _ctx;
 
     public ClinVarVCFRecord(VariantContext ctx)
     {

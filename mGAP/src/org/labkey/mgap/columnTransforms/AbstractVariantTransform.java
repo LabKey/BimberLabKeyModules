@@ -113,7 +113,7 @@ abstract public class AbstractVariantTransform extends ColumnTransform
             File f = new File(uri);
             if (!f.exists())
             {
-                getStatusLogger().error("File not found: " + uri.toString());
+                getStatusLogger().error("File not found: " + uri);
                 return null;
             }
             else
@@ -215,7 +215,7 @@ abstract public class AbstractVariantTransform extends ColumnTransform
                     row.put("modified", new Date());
                     row.put("modifiedby", getContainerUser().getUser().getUserId());
 
-                    List<Map<String, Object>> rows = getOutputFilesTableInfo().getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), Arrays.asList(row), new BatchValidationException(), null, new HashMap<>());
+                    List<Map<String, Object>> rows = getOutputFilesTableInfo().getUpdateService().insertRows(getContainerUser().getUser(), getContainerUser().getContainer(), List.of(row), new BatchValidationException(), null, new HashMap<>());
                     getStatusLogger().info("created outputfile: " + rows.get(0).get("rowid"));
 
                     return (Integer)rows.get(0).get("rowid");
@@ -224,7 +224,7 @@ abstract public class AbstractVariantTransform extends ColumnTransform
         }
         catch (Exception e)
         {
-            getStatusLogger().error("Error syncing file: " + String.valueOf(dataFileUrl), e);
+            getStatusLogger().error("Error syncing file: " + dataFileUrl, e);
         }
 
         return null;

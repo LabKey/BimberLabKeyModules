@@ -83,6 +83,7 @@ public class PrimeseqController extends SpringActionController
     @RequiresPermission(ReadPermission.class)
     public class GetNavItemsAction extends ReadOnlyApiAction<Object>
     {
+        @Override
         public ApiResponse execute(Object form, BindException errors)
         {
             Map<String, Object> resultProperties = new HashMap<>();
@@ -124,7 +125,7 @@ public class PrimeseqController extends SpringActionController
                 json = new JSONObject();
                 json.put("name", "Genome Browser");
                 json.put("path", publicContainer.getPath());
-                json.put("url", new ActionURL("wiki", "page", publicContainer).toString() + "name=Genome Browser Instructions");
+                json.put("url", new ActionURL("wiki", "page", publicContainer) + "name=Genome Browser Instructions");
                 json.put("canRead", publicContainer.hasPermission(getUser(), ReadPermission.class));
                 publicJson.add(json);
 
@@ -248,33 +249,31 @@ public class PrimeseqController extends SpringActionController
 
         private String generateChangeSummary(UpdateFilePathsForm form)
         {
-            StringBuilder ret = new StringBuilder();
-            ret.append("You entered the following values:");
-            ret.append("<br>");
-            ret.append("<table>");
-            ret.append("<tr><td><label for='sourcePrefix'>File Prefix to Replace:</label></td>");
-            ret.append("<td>" + HtmlString.of(form.getSourcePrefix()) + "</td>");
-            ret.append("</tr>");
-            ret.append("<td><label for='replacementPrefix'>Replacement:</label></td>");
-            ret.append("<td>" + HtmlString.of(form.getReplacementPrefix()) + "</td>");
-            ret.append("</tr></table>");
-            ret.append("<input type='hidden' name='updateDatabase' value='1'");
 
-            ret.append("The following SQL will be executed. Please check carefully before hitting confirm:");
-            ret.append("<br>");
-            ret.append("<pre>");
-            ret.append(getSql(form, true));
-            ret.append("</pre>");
-            ret.append("<br>");
-            ret.append("Note: if the URL of the folder changed you may also want to execute something like the following (manually):<br>");
-            ret.append("<pre>");
-            ret.append(HtmlString.of("UPDATE pipeline.StatusFiles SET DataUrl = replace(DataUrl, '<SOURCE_FOLDER_URL>', '<REPLACEMENT_FOLDER_URL>') "));
-            ret.append(HtmlString.of("WHERE DataUrl like '%<SOURCE_FOLDER_URL>%';"));
-            ret.append("</pre>");
+            String ret = "You entered the following values:" +
+                    "<br>" +
+                    "<table>" +
+                    "<tr><td><label for='sourcePrefix'>File Prefix to Replace:</label></td>" +
+                    "<td>" + HtmlString.of(form.getSourcePrefix()) + "</td>" +
+                    "</tr>" +
+                    "<td><label for='replacementPrefix'>Replacement:</label></td>" +
+                    "<td>" + HtmlString.of(form.getReplacementPrefix()) + "</td>" +
+                    "</tr></table>" +
+                    "<input type='hidden' name='updateDatabase' value='1'" +
+                    "The following SQL will be executed. Please check carefully before hitting confirm:" +
+                    "<br>" +
+                    "<pre>" +
+                    getSql(form, true) +
+                    "</pre>" +
+                    "<br>" +
+                    "Note: if the URL of the folder changed you may also want to execute something like the following (manually):<br>" +
+                    "<pre>" +
+                    HtmlString.of("UPDATE pipeline.StatusFiles SET DataUrl = replace(DataUrl, '<SOURCE_FOLDER_URL>', '<REPLACEMENT_FOLDER_URL>') ") +
+                    HtmlString.of("WHERE DataUrl like '%<SOURCE_FOLDER_URL>%';") +
+                    "</pre>" +
+                    "<br>";
 
-            ret.append("<br>");
-
-            return ret.toString();
+            return ret;
         }
 
         private String ensureSlashes(String input)
@@ -457,13 +456,12 @@ public class PrimeseqController extends SpringActionController
                 try
                 {
                     PipelineJob job = PipelineJob.readFromFile(json);
-                    if (!(job instanceof SequenceJob))
+                    if (!(job instanceof SequenceJob sj))
                     {
                         errors.reject(ERROR_MSG, "Altering cluster params is only supported for sequence jobs");
                         return null;
                     }
 
-                    SequenceJob sj = (SequenceJob) job;
                     JSONObject jobParams = sj.getParameterJson();
                     for (JSONObject jsonObj : resourceSettings)
                     {
@@ -549,13 +547,12 @@ public class PrimeseqController extends SpringActionController
                 try
                 {
                     job = PipelineJob.readFromFile(jobJson);
-                    if (!(job instanceof SequenceJob))
+                    if (!(job instanceof SequenceJob sj))
                     {
                         errors.reject(ERROR_MSG, "Changing cluster parameters is only supported for Sequence jobs");
                         return null;
                     }
 
-                    SequenceJob sj = (SequenceJob) job;
                     JSONObject json = sj.getParameterJson();
 
                     JSONObject paramJson = new JSONObject(form.getParamJson());

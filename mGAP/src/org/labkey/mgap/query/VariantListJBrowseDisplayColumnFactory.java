@@ -91,17 +91,15 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                         }
                         else
                         {
-                            switch (parts[0])
+                            if (parts[0].equals("ClinVar"))
                             {
-                                case "ClinVar":
-                                    if (!StringUtils.isEmpty(parts[1]))
-                                    {
-                                        String url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
-                                        out.write(delim);
-                                        out.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View in ClinVar</a>");
-                                        delim = "<br>";
-                                    }
-                                    break;
+                                if (!StringUtils.isEmpty(parts[1]))
+                                {
+                                    String url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
+                                    out.write(delim);
+                                    out.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View in ClinVar</a>");
+                                    delim = "<br>";
+                                }
                             }
                         }
                     }
