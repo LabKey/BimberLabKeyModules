@@ -74,6 +74,7 @@ Ext4.define('LabPurchasing.panel.VendorPanel', {
 
             var store = Ext4.StoreManager.get('labpurchasing||vendors||rowId||vendorName');
             if (store) {
+                store.removeAll();
                 store.load();
             }
 
