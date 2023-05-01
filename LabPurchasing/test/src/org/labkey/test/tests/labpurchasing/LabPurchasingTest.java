@@ -94,7 +94,7 @@ public class LabPurchasingTest extends BaseWebDriverTest
 
         // Adding the new vendor should have updated the combo:
         grid.clickTbarButton("Add New");
-        checker().withScreenshot("LabPurchasingBeforeVendor");
+        getArtifactCollector().dumpPageSnapshot("LabPurchasingBeforeVendor");
         grid.setGridCell(1, "vendorId", "New Vendor 1");
         try
         {
@@ -102,15 +102,15 @@ public class LabPurchasingTest extends BaseWebDriverTest
         }
         catch (AssertionError e)
         {
-            checker().withScreenshot("LabPurchasingVendor0");
+            getArtifactCollector().dumpPageSnapshot("LabPurchasingVendor0");
             WebElement el = grid.startEditing(1, "vendorId");
-            checker().withScreenshot("LabPurchasingVendor1");
+            getArtifactCollector().dumpPageSnapshot("LabPurchasingVendor1");
 
             setFormElementJS(el, "");
             el.sendKeys("New Vendor 1");
             sleep(1000);
 
-            checker().withScreenshot("LabPurchasingVendor2");
+            getArtifactCollector().dumpPageSnapshot("LabPurchasingVendor2");
 
             throw e;
         }
