@@ -72,7 +72,7 @@ Ext4.define('LabPurchasing.panel.VendorPanel', {
             this.mun(this.store, onError);
             btn.setDisabled(false);
 
-            var store = Ext4.StoreManager.get('labpurchasing||vendors||rowId||vendorName');
+            var store = Ext4.StoreManager.get('labpurchasing||vendors||rowId||vendorName||');
             if (store) {
                 store.removeAll();
                 store.load();
