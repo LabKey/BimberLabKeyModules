@@ -91,6 +91,7 @@ public class LabPurchasingTest extends BaseWebDriverTest
         waitAndClick(Ext4Helper.Locators.ext4Button("Add Vendor"));
         new Window.WindowFinder(getDriver()).withTitle("Success").waitFor();
         click(Ext4Helper.Locators.ext4Button("OK"));
+        sleep(500); // allow the client store to reset
 
         // Adding the new vendor should have updated the combo:
         grid.clickTbarButton("Add New");
@@ -105,6 +106,14 @@ public class LabPurchasingTest extends BaseWebDriverTest
             getArtifactCollector().dumpPageSnapshot("LabPurchasingVendor0");
             WebElement el = grid.startEditing(1, "vendorId");
             getArtifactCollector().dumpPageSnapshot("LabPurchasingVendor1");
+
+            boolean storeExists = executeScript("return Ext4.StoreManager.get('labpurchasing||vendors||rowId||vendorName') != null", Boolean.class);
+            log("Store exists: " + storeExists);
+            if (storeExists)
+            {
+                long recordCount = executeScript("return Ext4.StoreManager.get('labpurchasing||vendors||rowId||vendorName').getCount()", Long.class);
+                log("Record count: " + recordCount);
+            }
 
             setFormElementJS(el, "");
             el.sendKeys("New Vendor 1");
