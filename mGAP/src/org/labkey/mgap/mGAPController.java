@@ -434,7 +434,7 @@ public class mGAPController extends SpringActionController
                     }
                 }
 
-                SecurityPolicyManager.savePolicy(policy);
+                SecurityPolicyManager.savePolicy(policy, getUser());
 
                 transaction.commit();
             }

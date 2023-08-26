@@ -572,7 +572,7 @@ public class MccController extends SpringActionController
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(requestGroup, RoleManager.getRole(MccRequesterRole.class));
-                    SecurityPolicyManager.savePolicy(policy);
+                    SecurityPolicyManager.savePolicy(policy, getUser());
                 }
 
                 Group reviewGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.REQUEST_REVIEW_GROUP_NAME, GroupEnumType.SITE);
@@ -580,7 +580,7 @@ public class MccController extends SpringActionController
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(reviewGroup, RoleManager.getRole(MccRabReviewerRole.class));
-                    SecurityPolicyManager.savePolicy(policy);
+                    SecurityPolicyManager.savePolicy(policy, getUser());
                 }
 
                 Group finalGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.FINAL_REVIEW_GROUP_NAME, GroupEnumType.SITE);
@@ -588,7 +588,7 @@ public class MccController extends SpringActionController
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(finalGroup, RoleManager.getRole(MccFinalReviewerRole.class));
-                    SecurityPolicyManager.savePolicy(policy);
+                    SecurityPolicyManager.savePolicy(policy, getUser());
                 }
 
                 Group adminGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.ADMIN_GROUP_NAME, GroupEnumType.SITE);
@@ -596,7 +596,7 @@ public class MccController extends SpringActionController
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(adminGroup, RoleManager.getRole(MccDataAdminRole.class));
-                    SecurityPolicyManager.savePolicy(policy);
+                    SecurityPolicyManager.savePolicy(policy, getUser());
                 }
             }
 
@@ -608,7 +608,7 @@ public class MccController extends SpringActionController
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(dataContainer.getPolicy());
                     policy.addRoleAssignment(adminGroup, RoleManager.getRole(MccDataAdminRole.class));
-                    SecurityPolicyManager.savePolicy(policy);
+                    SecurityPolicyManager.savePolicy(policy, getUser());
                 }
             }
 
