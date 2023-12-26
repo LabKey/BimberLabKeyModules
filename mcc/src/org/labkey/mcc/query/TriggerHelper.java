@@ -35,8 +35,8 @@ import org.labkey.api.view.UnauthorizedException;
 import org.labkey.mcc.MccManager;
 import org.labkey.mcc.MccSchema;
 
-import javax.mail.Address;
-import javax.mail.Message;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;

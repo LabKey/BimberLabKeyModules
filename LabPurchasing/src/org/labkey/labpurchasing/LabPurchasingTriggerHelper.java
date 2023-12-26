@@ -16,7 +16,7 @@ import org.labkey.api.security.UserManager;
 import org.labkey.api.util.MailHelper;
 import org.labkey.api.util.PageFlowUtil;
 
-import javax.mail.Message;
+import jakarta.mail.Message;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

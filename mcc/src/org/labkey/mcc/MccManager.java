@@ -16,6 +16,7 @@
 
 package org.labkey.mcc;
 
+import jakarta.mail.Address;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +36,6 @@ import org.labkey.mcc.security.MccFinalReviewPermission;
 import org.labkey.mcc.security.MccRequestAdminPermission;
 import org.labkey.mcc.security.MccRequestorPermission;
 
-import javax.mail.Address;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
