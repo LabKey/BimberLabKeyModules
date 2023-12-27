@@ -1,7 +1,8 @@
 SELECT
 
     m.Id,
-    GROUP_CONCAT(distinct m.originalId, ',') as originalIds
+    GROUP_CONCAT(distinct m.originalId, ',') as originalIds,
+    GROUP_CONCAT(distinct m.container.name, ',') as folders
 
 FROM mcc.aggregatedDemographics m
 

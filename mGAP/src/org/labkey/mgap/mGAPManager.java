@@ -99,7 +99,7 @@ public class mGAPManager
 
             if (u == null)
             {
-                _log.error("Unknown user registered for mGAP notifcations: " + username);
+                _log.error("Unknown user registered for mGAP notifications: " + username);
             }
 
             if (u != null)

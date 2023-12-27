@@ -117,6 +117,7 @@ export default function RabReviewForm(props: {requestId: string}) {
                         <MenuItem value={"I recommend this proposal"}>I recommend this proposal</MenuItem>
                         <MenuItem value={"I recommend this proposal with conditions"}>I recommend this proposal with conditions</MenuItem>
                         <MenuItem value={"I do not recommend this proposal"}>I do not recommend this proposal</MenuItem>
+                        <MenuItem value={"I abstain from voting"}>I abstain from voting</MenuItem>
                     </Select>
                 </TableCell>
             </TableRow>

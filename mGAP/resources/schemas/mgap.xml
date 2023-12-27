@@ -1224,6 +1224,9 @@
             <column columnName="allowableValues">
                 <columnTitle>Allowable Values</columnTitle>
             </column>
+            <column columnName="inDefaultColumns">
+                <columnTitle>In Default Columns?</columnTitle>
+            </column>
             <column columnName="container">
                 <isHidden>true</isHidden>
             </column>

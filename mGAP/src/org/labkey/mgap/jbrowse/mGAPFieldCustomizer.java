@@ -50,6 +50,11 @@ public class mGAPFieldCustomizer implements JBrowseFieldCustomizer
             field.setIndexed(true);
         }
 
+        if (am.isInDefaultColumns())
+        {
+            field.setInDefaultColumns(true);
+        }
+
         if (StringUtils.trimToNull(am.getDescription()) != null)
         {
             field.setDescription(am.getDescription());

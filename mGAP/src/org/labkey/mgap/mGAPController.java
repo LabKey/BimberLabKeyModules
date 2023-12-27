@@ -1209,6 +1209,7 @@ public class mGAPController extends SpringActionController
                         getOptionalField(line, header, "FormatString", row, "formatString");
                         getOptionalField(line, header, "AllowableValues", row, "allowableValues");
                         getOptionalField(line, header, "IsIndexed", row, "isIndexed");
+                        getOptionalField(line, header, "InDefaultColumns", row, "inDefaultColumns");
 
                         toAdd.add(row);
                     }

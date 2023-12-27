@@ -1,0 +1,1 @@
+ALTER TABLE mGAP.annotations ADD inDefaultColumns boolean;

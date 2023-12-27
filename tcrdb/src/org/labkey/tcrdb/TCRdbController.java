@@ -48,6 +48,7 @@ import org.labkey.api.sequenceanalysis.RefNtSequenceModel;
 import org.labkey.api.sequenceanalysis.SequenceAnalysisService;
 import org.labkey.api.util.FileType;
 import org.labkey.api.util.FileUtil;
+import org.labkey.api.util.HtmlString;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.StringUtilsLabKey;
 import org.labkey.api.util.URLHelper;
@@ -136,13 +137,13 @@ public class TCRdbController extends SpringActionController
                 ExpData d = ExperimentService.get().getExpData(r.getVdjFile());
                 if (d == null)
                 {
-                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", ExpData: " + r.getVdjFile() + "\n");
+                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", ExpData: " + PageFlowUtil.filter(r.getVdjFile()) + "\n");
                     return;
                 }
 
                 if (!d.getFile().exists())
                 {
-                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", file does not exist: " + d.getFile().getPath() + "\n");
+                    writer.write("ERROR: Unable to find VDJCA file for row: " + r.getRowId() + ", file does not exist: " + PageFlowUtil.filter(d.getFile().getPath()) + "\n");
                     return;
                 }
 
@@ -184,20 +185,20 @@ public class TCRdbController extends SpringActionController
                 {
                     wrapper.doExportAlignmentsPretty(f, tmp, args);
 
-                    writer.write("File: " + f.getName() + '\n');
+                    writer.write("File: " + PageFlowUtil.filter(f.getName()) + '\n');
                     writer.write("Result Rows From This File: " + '\n');
                     for (AssayRecord r : VDJMap.get(f))
                     {
-                        writer.write("Sample: " + r.getSampleName() + '\n');
-                        writer.write("Sample Date: " + (r.getDate() == null ? "" : fmt.format(r.getDate())) + '\n');
-                        writer.write("CDR3: " + coalesce(r.getCDR3()) + '\n');
-                        writer.write("vHit: " + coalesce(r.getvHit()) + '\n');
-                        writer.write("dHit: " + coalesce(r.getdHit()) + '\n');
-                        writer.write("jHit: " + coalesce(r.getjHit()) + '\n');
-                        writer.write("cHit: " + coalesce(r.getcHit()) + '\n');
-                        writer.write("Read Count: " + coalesce(r.getCount()) + '\n');
-                        writer.write("Fraction: " + coalesce(r.getFraction()) + '\n');
-                        writer.write("Comments: " + coalesce(r.getComment()) + '\n');
+                        writer.write("Sample: " + PageFlowUtil.filter(r.getSampleName()) + '\n');
+                        writer.write("Sample Date: " + PageFlowUtil.filter(r.getDate() == null ? "" : fmt.format(r.getDate())) + '\n');
+                        writer.write("CDR3: " + PageFlowUtil.filter(coalesce(r.getCDR3())) + '\n');
+                        writer.write("vHit: " + PageFlowUtil.filter(coalesce(r.getvHit())) + '\n');
+                        writer.write("dHit: " + PageFlowUtil.filter(coalesce(r.getdHit())) + '\n');
+                        writer.write("jHit: " + PageFlowUtil.filter(coalesce(r.getjHit())) + '\n');
+                        writer.write("cHit: " + PageFlowUtil.filter(coalesce(r.getcHit())) + '\n');
+                        writer.write("Read Count: " + PageFlowUtil.filter(coalesce(r.getCount())) + '\n');
+                        writer.write("Fraction: " + PageFlowUtil.filter(coalesce(r.getFraction())) + '\n');
+                        writer.write("Comments: " + PageFlowUtil.filter(coalesce(r.getComment())) + '\n');
                         writer.write('\n');
                     }
                     writer.write('\n');
@@ -207,7 +208,7 @@ public class TCRdbController extends SpringActionController
                         boolean inAlignmentBlock = false;
                         while ((line = reader.readLine()) != null)
                         {
-                            line = line.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+                            line = PageFlowUtil.filter(line);
 
                             String trimmed = StringUtils.trimToEmpty(line);
                             if (StringUtils.isEmpty(trimmed))
@@ -232,7 +233,7 @@ public class TCRdbController extends SpringActionController
                                     }
                                     else
                                     {
-                                        sb.append(c);
+                                        sb.append(PageFlowUtil.filter(c));
                                     }
                                 }
 
@@ -265,7 +266,7 @@ public class TCRdbController extends SpringActionController
             //mixcr exportReadsForClones index_file alignments.vdjca.gz 0 1 2 33 54 reads.fastq.gz
             //mixcr exportAlignmentsPretty input.vdjca test.txt
 
-            return new HtmlView("MiXCR Alignments", "<div style=\"font-family:courier,Courier New,monospace;white-space:nowrap;padding:5px;\"><pre>" + writer + "</pre></div>");
+            return new HtmlView("MiXCR Alignments", HtmlString.unsafe("<div style=\"font-family:courier,Courier New,monospace;white-space:nowrap;padding:5px;\"><pre>" + writer + "</pre></div>"));
         }
 
         private String coalesce(Object s)
