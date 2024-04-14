@@ -1,13 +1,6 @@
 import org.labkey.gradle.util.BuildUtils
 import org.labkey.gradle.util.ExternalDependency
 
-configurations.all {
-    resolutionStrategy {
-        // NOTE: this should be kept in sync with SequenceAnalysis module
-        force "jakarta.xml.bind:jakarta.xml.bind-api:${jaxbApiOldVersion}"
-    }
-}
-
 dependencies {
     BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:DiscvrLabKeyModules:Studies", depProjectConfig: "apiJarFile")
     BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:DiscvrLabKeyModules:jbrowse", depProjectConfig: "apiJarFile")
