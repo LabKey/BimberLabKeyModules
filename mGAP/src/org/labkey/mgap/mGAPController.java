@@ -477,7 +477,7 @@ public class mGAPController extends SpringActionController
             Container mGapContainer = mGAPManager.get().getMGapContainer();
             for (User u : existingUsersGivenAccess)
             {
-                boolean isLDAP = AuthenticationManager.isLdapEmail(new ValidEmail(u.getEmail()));
+                boolean isLDAP = AuthenticationManager.isLdapOrSsoEmail(new ValidEmail(u.getEmail()));
 
                 MailHelper.MultipartMessage mail = MailHelper.createMultipartMessage();
                 mail.setEncodedHtmlContent("Your account request has been approved for mGAP!  " + "<a href=\"" + AppProps.getInstance().getBaseServerUrl() + mGapContainer.getStartURL(getUser()) + "\">Click here to access the site.</a>" + (isLDAP ? "  Use your normal OHSU email/password to login." : ""));
