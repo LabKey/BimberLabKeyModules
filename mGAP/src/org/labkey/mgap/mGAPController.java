@@ -399,7 +399,6 @@ public class mGAPController extends SpringActionController
         public Object execute(ApproveUserRequestsForm form, BindException errors) throws Exception
         {
             ApiSimpleResponse response = new ApiSimpleResponse();
-            MutableSecurityPolicy policy = new MutableSecurityPolicy(mGAPManager.get().getMGapContainer().getPolicy());
             List<SecurityManager.NewUserStatus> newUserStatusList = new ArrayList<>();
             List<User> existingUsersGivenAccess = new ArrayList<>();
             try (DbScope.Transaction transaction = CoreSchema.getInstance().getScope().ensureTransaction())
@@ -433,7 +432,7 @@ public class mGAPController extends SpringActionController
                             u.setLastName((String)map.get("lastName"));
                             UserManager.updateUser(getUser(), u);
 
-                            if (st.isLdapEmail())
+                            if (st.isLdapOrSsoEmail())
                             {
                                 existingUsersGivenAccess.add(st.getUser());
                             }
@@ -449,9 +448,13 @@ public class mGAPController extends SpringActionController
                     row.put("userId", u.getUserId());
                     Table.update(getUser(), ti, row, requestId);
 
-                    if (!policy.hasPermission(u, ReadPermission.class))
+                    Container mGapContainer = mGAPManager.get().getMGapContainer();
+
+                    if (!mGapContainer.hasPermission(u, ReadPermission.class))
                     {
+                        MutableSecurityPolicy policy = new MutableSecurityPolicy(mGapContainer.getPolicy());
                         policy.addRoleAssignment(u, ReaderRole.class);
+                        SecurityPolicyManager.savePolicy(policy, getUser());
                     }
                     else
                     {
@@ -459,13 +462,10 @@ public class mGAPController extends SpringActionController
                     }
                 }
 
-                SecurityPolicyManager.savePolicy(policy, getUser());
-
                 transaction.commit();
             }
 
-            Set<User> allUsers = new HashSet<>();
-            allUsers.addAll(existingUsersGivenAccess);
+            Set<User> allUsers = new HashSet<>(existingUsersGivenAccess);
 
             //send emails:
             for (SecurityManager.NewUserStatus st : newUserStatusList)

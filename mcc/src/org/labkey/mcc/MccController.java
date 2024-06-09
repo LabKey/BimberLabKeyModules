@@ -373,7 +373,7 @@ public class MccController extends SpringActionController
                             u.setLastName((String)map.get("lastName"));
                             UserManager.updateUser(getUser(), u);
 
-                            if (st.isLdapEmail())
+                            if (st.isLdapOrSsoEmail())
                             {
                                 existingUsersGivenAccess.add(st.getUser());
                             }
