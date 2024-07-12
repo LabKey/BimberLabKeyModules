@@ -1,8 +1,8 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Manage Reference Item">
-    <permissions>
-        <permission name="update"/>
-        <permission name="delete"/>
-    </permissions>
+    <permissionClasses>
+        <permissionClass name="org.labkey.api.security.permissions.UpdatePermission"/>
+        <permissionClass name="org.labkey.api.security.permissions.DeletePermission"/>
+    </permissionClasses>
     <dependencies>
         <dependency path="laboratory.context" />
     </dependencies>

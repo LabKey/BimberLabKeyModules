@@ -1,8 +1,8 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Order Item(s)">
-    <permissions>
-        <permission name="insert"/>
-        <permission name="update"/>
-    </permissions>
+    <permissionClasses>
+        <permissionClass name="org.labkey.api.security.permissions.InsertPermission"/>
+        <permissionClass name="org.labkey.api.security.permissions.UpdatePermission"/>
+    </permissionClasses>
     <dependencies>
         <dependency path="laboratory.context" />
         <dependency path="labpurchasing/window/ReorderPreviousWindow.js"/>
