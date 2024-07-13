@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="MCC Dashboard">
-    <permissions>
-        <permission name="read"/>
-    </permissions>
+    <permissionClasses>
+        <permissionClass name="org.labkey.api.security.permissions.ReadPermission"/>
+    </permissionClasses>
     <dependencies>
         <dependency path="gen/dashboardWebpart"/>
     </dependencies>

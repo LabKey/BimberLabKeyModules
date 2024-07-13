@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Macaque Phenotypes and Disease Models">
-    <permissions>
-        <permission name="read"/>
-    </permissions>
+    <permissionClasses>
+        <permissionClass name="org.labkey.api.security.permissions.ReadPermission"/>
+    </permissionClasses>
     <dependencies>
         <dependency path="ldk.context"/>
         <dependency path="internal/jQuery"/>
