@@ -1,7 +1,5 @@
 <view xmlns="http://labkey.org/data/xml/view" title="mGAP Login">
-    <permissions>
-        <permission name="none"/>
-    </permissions>
+    <requiresNoPermission/>
     <dependencies>
         <dependency path="internal/jQuery"/>
         <dependency path="login.css"/>

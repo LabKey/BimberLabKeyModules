@@ -1,7 +1,5 @@
 <view xmlns="http://labkey.org/data/xml/view" title="MCC Login">
-    <permissions>
-        <permission name="none"/>
-    </permissions>
+    <requiresNoPermission/>
     <dependencies>
         <dependency path="login.css"/>
         <dependency path="login.js"/>
