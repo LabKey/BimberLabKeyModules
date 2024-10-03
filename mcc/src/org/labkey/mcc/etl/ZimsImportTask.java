@@ -7,6 +7,7 @@ import org.labkey.api.collections.CaseInsensitiveHashMap;
 import org.labkey.api.data.CompareType;
 import org.labkey.api.data.Container;
 import org.labkey.api.data.PropertyManager;
+import org.labkey.api.data.PropertyManager.WritablePropertyMap;
 import org.labkey.api.data.SimpleFilter;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.TableSelector;
@@ -231,7 +232,7 @@ public class ZimsImportTask implements TaskRefTask
 
     public static void saveLastRun(Container container, Date jobStart)
     {
-        PropertyManager.PropertyMap map = PropertyManager.getWritableProperties(container, PROP_CATEGORY, true);
+        WritablePropertyMap map = PropertyManager.getWritableProperties(container, PROP_CATEGORY, true);
         if (jobStart != null)
         {
             map.put(lastRunTime, String.valueOf(jobStart.getTime()));
