@@ -51,10 +51,6 @@ dependencies {
                     ExternalDependency.APACHE_2_LICENSE_NAME,
                     ExternalDependency.APACHE_2_LICENSE_URL,
                     "Parsing XML Data"
-            ),
-            {
-                // Exclude in favor of angus activation from API
-                exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
-            }
+            )
     )
 }
