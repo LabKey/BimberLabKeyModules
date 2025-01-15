@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Manually Assign MCC ID">
-    <permissionClasses>
+    <requiresPermissions>
         <permissionClass name="org.labkey.mcc.security.MccDataAdminPermission"/>
-    </permissionClasses>
+    </requiresPermissions>
     <dependencies>
         <dependency path="mcc.context" />
     </dependencies>

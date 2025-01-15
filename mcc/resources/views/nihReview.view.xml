@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="MCC NIH Review Dashboard">
-    <permissionClasses>
+    <requiresPermissions>
         <permissionClass name="org.labkey.mcc.security.MccFinalReviewPermission"/>
-    </permissionClasses>
+    </requiresPermissions>
     <dependencies>
         <dependency path="ldk.context" />
         <dependency path="mcc.context" />

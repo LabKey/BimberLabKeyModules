@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="MCC Animal Requests">
-    <permissionClasses>
+    <requiresPermissions>
         <permissionClass name="org.labkey.mcc.security.MccRequestorPermission"/>
-    </permissionClasses>
+    </requiresPermissions>
     <dependencies>
         <dependency path="ldk.context" />
         <dependency path="mcc.context" />

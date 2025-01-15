@@ -1,7 +1,7 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Diseases/Phenotypes Implicated By Variant Data">
-    <permissionClasses>
+    <requiresPermissions>
         <permissionClass name="org.labkey.api.security.permissions.ReadPermission"/>
-    </permissionClasses>
+    </requiresPermissions>
     <dependencies>
         <dependency path="ldk.context"/>
         <dependency path="internal/jQuery"/>
