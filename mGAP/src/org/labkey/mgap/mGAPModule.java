@@ -35,6 +35,7 @@ import org.labkey.api.ldk.buttons.ShowEditUIButton;
 import org.labkey.api.ldk.notification.NotificationService;
 import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.security.Directive;
 import org.labkey.api.sequenceanalysis.SequenceAnalysisService;
 import org.labkey.api.sequenceanalysis.pipeline.SequencePipelineService;
 import org.labkey.api.util.PageFlowUtil;
@@ -107,7 +108,8 @@ public class mGAPModule extends ExtendedSimpleModule
 
         SystemMaintenance.addTask(new mGapMaintenanceTask());
 
-        ContentSecurityPolicyFilter.registerAllowedConnectionSource(this.getClass().getName(), "https://*.fontawesome.com", "https://code.jquery.com", "https://www.gstatic.com");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://*.fontawesome.com", "https://code.jquery.com");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Style, this.getClass().getName(), "https://code.jquery.com", "https://www.gstatic.com");
 
         new PipelineStartup();
     }

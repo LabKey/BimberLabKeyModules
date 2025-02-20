@@ -29,6 +29,7 @@ import org.labkey.api.module.Module;
 import org.labkey.api.module.ModuleContext;
 import org.labkey.api.query.DefaultSchema;
 import org.labkey.api.query.QuerySchema;
+import org.labkey.api.security.Directive;
 import org.labkey.api.security.permissions.ReadPermission;
 import org.labkey.api.security.roles.RoleManager;
 import org.labkey.api.study.Study;
@@ -137,7 +138,8 @@ public class MccModule extends ExtendedSimpleModule
 
         SystemMaintenance.addTask(new MccMaintenanceTask());
 
-        ContentSecurityPolicyFilter.registerAllowedConnectionSource(this.getClass().getName(), "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Style, this.getClass().getName(), "https://cdn.datatables.net");
     }
 
     @Override
