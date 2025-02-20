@@ -108,7 +108,7 @@ public class mGAPModule extends ExtendedSimpleModule
 
         SystemMaintenance.addTask(new mGapMaintenanceTask());
 
-        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://*.fontawesome.com", "https://code.jquery.com");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://code.jquery.com");
         ContentSecurityPolicyFilter.registerAllowedSources(Directive.Style, this.getClass().getName(), "https://code.jquery.com", "https://www.gstatic.com");
         ContentSecurityPolicyFilter.registerAllowedSources(Directive.Font, this.getClass().getName(), "https://*.fontawesome.com");
 
