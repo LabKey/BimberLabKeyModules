@@ -140,6 +140,7 @@ public class MccModule extends ExtendedSimpleModule
 
         ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://cdn.datatables.net");
         ContentSecurityPolicyFilter.registerAllowedSources(Directive.Style, this.getClass().getName(), "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Image, this.getClass().getName(), "https://cdn.datatables.net");
     }
 
     @Override
