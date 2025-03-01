@@ -160,7 +160,7 @@ public class mGAPModule extends ExtendedSimpleModule
         JSONObject ret = super.getPageContextJson(context);
 
         SimpleFilter filter = new SimpleFilter();
-        filter.addClause(ContainerFilter.current(context.getContainer()).createFilterClause(mGAPSchema.getInstance().getSchema(), FieldKey.fromString("container")));
+        filter.addClause(ContainerFilter.current(context).createFilterClause(mGAPSchema.getInstance().getSchema(), FieldKey.fromString("container")));
         TableSelector ts = new TableSelector(mGAPSchema.getInstance().getSchema().getTable(mGAPSchema.TABLE_VARIANT_CATALOG_RELEASES), PageFlowUtil.set("rowid", "objectid", "version", "jbrowseId", "humanJbrowseId", "luceneIndex"), filter, new Sort("-releaseDate"));
         ts.setMaxRows(1);
         ts.forEachResults(rs -> {
