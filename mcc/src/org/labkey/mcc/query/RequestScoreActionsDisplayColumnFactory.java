@@ -76,7 +76,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccRequestAdminPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=primaryReview", requestContainer);
-                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnURL(ctx.getViewContext().getActionURL()) + "\">Enter MCC Internal Review</a>");
+                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter MCC Internal Review</a>");
                             }
                         }
                         else if (st == MccManager.RequestStatus.RabReview && ctx.get(FieldKey.fromString("pendingRabReviews"), Integer.class) == 0)
@@ -84,7 +84,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccFinalReviewPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=resourceAvailability", requestContainer);
-                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnURL(ctx.getViewContext().getActionURL()) + "\">Enter Resource Availability Assessment</a>");
+                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter Resource Availability Assessment</a>");
                             }
                         }
                         else if (st == MccManager.RequestStatus.PendingDecision)
@@ -92,7 +92,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccFinalReviewPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=finalReview", requestContainer);
-                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnURL(ctx.getViewContext().getActionURL()) + "\">Enter Final Review</a>");
+                                out.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter Final Review</a>");
                             }
                         }
                         else if (st == MccManager.RequestStatus.Approved)
