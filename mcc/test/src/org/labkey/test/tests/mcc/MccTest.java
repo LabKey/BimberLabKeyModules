@@ -40,7 +40,6 @@ import org.labkey.test.util.ApiPermissionsHelper;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.PermissionsHelper;
-import org.labkey.test.util.ext4cmp.Ext4CmpRef;
 import org.labkey.test.util.ext4cmp.Ext4ComboRef;
 import org.labkey.test.util.ext4cmp.Ext4FieldRef;
 
@@ -689,7 +688,7 @@ public class MccTest extends BaseWebDriverTest
         l = l.append(Locator.tag("form"));
         waitForElement(l);
 
-        return getAttribute(l, "lk-region-form");
+        return getAttribute(l, "data-region-form");
     }
 
     private FormElement[] getCoinvestigatorFields(int idx)
