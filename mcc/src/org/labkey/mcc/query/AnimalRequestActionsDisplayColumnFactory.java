@@ -7,8 +7,7 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
-import org.labkey.api.security.User;
-import org.labkey.api.security.UserManager;
+import org.labkey.api.writer.HtmlWriter;
 import org.labkey.mcc.MccManager;
 
 import java.io.IOException;
@@ -25,10 +24,10 @@ public class AnimalRequestActionsDisplayColumnFactory implements DisplayColumnFa
         return new AbstractMccDisplayColumn(colInfo)
         {
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
             {
                 int rowId = ctx.get(getBoundKey("rowid"), Integer.class);
-                out.write("<a class=\"labkey-text-link\" href=\"mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId + "\">Contact MCC</a>");
+                oldWriter.write("<a class=\"labkey-text-link\" href=\"mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId + "\">Contact MCC</a>");
             }
 
             @Override

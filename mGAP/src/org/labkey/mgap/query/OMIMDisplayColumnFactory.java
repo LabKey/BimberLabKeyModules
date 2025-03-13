@@ -7,6 +7,7 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.writer.HtmlWriter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -34,7 +35,7 @@ public class OMIMDisplayColumnFactory implements DisplayColumnFactory
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
             {
                 String rawValue = StringUtils.trimToNull(ctx.get(getBoundKey("omim"), String.class));
                 if (rawValue == null)
@@ -57,7 +58,7 @@ public class OMIMDisplayColumnFactory implements DisplayColumnFactory
                         text = parts[0];
                     }
 
-                    out.write(delim + "<a target=\"_blank\" href=\"https://www.omim.org/entry/" + id + "\">" + text + "</a>");
+                    oldWriter.write(delim + "<a target=\"_blank\" href=\"https://www.omim.org/entry/" + id + "\">" + text + "</a>");
                     delim = "<br>";
                 }
             }

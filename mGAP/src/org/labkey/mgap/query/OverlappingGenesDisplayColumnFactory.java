@@ -7,6 +7,7 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.writer.HtmlWriter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -34,7 +35,7 @@ public class OverlappingGenesDisplayColumnFactory implements DisplayColumnFactor
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
             {
                 String rawValue = StringUtils.trimToNull(ctx.get(getBoundKey("overlappingGenes"), String.class));
                 if (rawValue == null)
@@ -64,7 +65,7 @@ public class OverlappingGenesDisplayColumnFactory implements DisplayColumnFactor
                         url = "http://ensembl.org/Macaca_mulatta/Gene/Summary?db=core;g=" + geneName;
                     }
 
-                    out.write(delim + "<a target=\"_blank\" href=\"" + url + "\">" + geneName + "</a>");
+                    oldWriter.write(delim + "<a target=\"_blank\" href=\"" + url + "\">" + geneName + "</a>");
                     delim = "<br>";
                 }
             }

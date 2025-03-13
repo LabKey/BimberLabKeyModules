@@ -11,6 +11,7 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.writer.HtmlWriter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -52,7 +53,7 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
             {
                 String jbrowseId = StringUtils.trimToNull(ctx.get(getBoundKey("releaseId/jbrowseId"), String.class));
                 String primaryTrack = ctx.get(getBoundKey("releaseId/primaryTrack"), String.class);
@@ -67,15 +68,15 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 if (jbrowseId != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId + "&location=" + contig + ":" + start + ".." + stop + "&highlight=" + contig + ":" + position + ".." + (position + length - 1), ContainerManager.getForId(containerId));
-                    out.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
+                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
                     delim = "<br>";
                 }
 
                 if (primaryTrack != null)
                 {
-                    out.write(delim);
+                    oldWriter.write(delim);
                     DetailsURL url = DetailsURL.fromString("/jbrowse/genotypeTable.view?trackId=" + primaryTrack + "&chr=" + contig + "&start=" + position + "&stop=" + position, ContainerManager.getForId(containerId));
-                    out.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View Genotypes At Position</a>");
+                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View Genotypes At Position</a>");
                     delim = "<br>";
                 }
 
@@ -96,8 +97,8 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                                 if (!StringUtils.isEmpty(parts[1]))
                                 {
                                     String url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
-                                    out.write(delim);
-                                    out.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View in ClinVar</a>");
+                                    oldWriter.write(delim);
+                                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View in ClinVar</a>");
                                     delim = "<br>";
                                 }
                             }
@@ -109,8 +110,8 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 String contigE = contig.replaceAll("chr", "");
                 contigE = contigE.replaceAll("^0", "");
                 String url = "https://ensembl.org/Macaca_mulatta/Location/View?db=core;r=" + contigE + ":" + start +"-" + stop;
-                out.write(delim);
-                out.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View Region in Ensembl</a>");
+                oldWriter.write(delim);
+                oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View Region in Ensembl</a>");
             }
         };
     }

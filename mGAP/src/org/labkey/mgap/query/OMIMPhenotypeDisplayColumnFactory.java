@@ -7,6 +7,7 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.writer.HtmlWriter;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -49,7 +50,7 @@ public class OMIMPhenotypeDisplayColumnFactory implements DisplayColumnFactory
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
             {
                 String rawValue = StringUtils.trimToNull(ctx.get(getBoundKey("omim_phenotype"), String.class));
                 if (rawValue == null)
@@ -66,11 +67,11 @@ public class OMIMPhenotypeDisplayColumnFactory implements DisplayColumnFactory
                     String[] elements = entry.split("<>");
                     if (elements.length > 1)
                     {
-                        out.write(delim + "<a target=\"_blank\" href=\"https://www.omim.org/entry/" + elements[1] + "\">" + elements[0] + "</a>");
+                        oldWriter.write(delim + "<a target=\"_blank\" href=\"https://www.omim.org/entry/" + elements[1] + "\">" + elements[0] + "</a>");
                     }
                     else
                     {
-                        out.write(delim + "<a>" + elements[0] + "</a>");
+                        oldWriter.write(delim + "<a>" + elements[0] + "</a>");
                     }
 
                     delim = "<br>";
