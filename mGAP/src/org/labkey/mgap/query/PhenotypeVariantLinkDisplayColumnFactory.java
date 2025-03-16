@@ -8,10 +8,9 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class PhenotypeVariantLinkDisplayColumnFactory implements DisplayColumnFa
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 String containerId = ctx.get(getBoundKey("container"), String.class);
                 String omim = ctx.get(getBoundKey("omim_entry"), String.class);
@@ -53,7 +52,7 @@ public class PhenotypeVariantLinkDisplayColumnFactory implements DisplayColumnFa
                 if (releaseId != null && omim != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/mgap/variantList.view?release=" + releaseId + "&query.omim_phenotype~contains=" + omim, ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View Variants</a>");
+                    out.write(PageFlowUtil.link("View Variants").href(url.getActionURL()).addClass("labkey-text-link"));
                 }
             }
         };

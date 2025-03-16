@@ -11,10 +11,10 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Set;
 
@@ -53,7 +53,7 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 String jbrowseId = StringUtils.trimToNull(ctx.get(getBoundKey("releaseId/jbrowseId"), String.class));
                 String primaryTrack = ctx.get(getBoundKey("releaseId/primaryTrack"), String.class);
@@ -61,26 +61,26 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 String contig = StringUtils.trimToNull(ctx.get(getBoundKey("contig"), String.class));
                 String ref = ctx.get(getBoundKey("reference"), String.class);
                 Integer position = ctx.get(getBoundKey("position"), Integer.class);
-                String delim = "";
+                HtmlString delim = HtmlString.EMPTY_STRING;
                 int start = position - 200;
                 int stop = position + 200;
                 int length = ref.length();
                 if (jbrowseId != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId + "&location=" + contig + ":" + start + ".." + stop + "&highlight=" + contig + ":" + position + ".." + (position + length - 1), ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
-                    delim = "<br>";
+                    out.write(PageFlowUtil.link("View In Genome Browser").href(url.getActionURL()).addClass("labkey-text-link"));
+                    delim = HtmlString.BR;
                 }
 
                 if (primaryTrack != null)
                 {
-                    oldWriter.write(delim);
+                    out.write(delim);
                     DetailsURL url = DetailsURL.fromString("/jbrowse/genotypeTable.view?trackId=" + primaryTrack + "&chr=" + contig + "&start=" + position + "&stop=" + position, ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View Genotypes At Position</a>");
-                    delim = "<br>";
+                    out.write(PageFlowUtil.link("View Genotypes At Position").href(url.getActionURL()).addClass("labkey-text-link"));
+                    delim = HtmlString.BR;
                 }
 
-                if (ctx.get(FieldKey.fromString("identifier")) != null)
+                if (ctx.get(FieldKey.fromString("identifier"), String.class) != null)
                 {
                     String identifier = StringUtils.trimToNull(ctx.get(getBoundKey("identifier"), String.class));
                     if (identifier != null && identifier.contains(":"))
@@ -97,9 +97,9 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                                 if (!StringUtils.isEmpty(parts[1]))
                                 {
                                     String url = "https://www.ncbi.nlm.nih.gov/clinvar/variation/" + parts[1] + "/";
-                                    oldWriter.write(delim);
-                                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View in ClinVar</a>");
-                                    delim = "<br>";
+                                    out.write(delim);
+                                    out.write(PageFlowUtil.link("View in ClinVar").href(url));
+                                    delim = HtmlString.BR;
                                 }
                             }
                         }
@@ -110,8 +110,8 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 String contigE = contig.replaceAll("chr", "");
                 contigE = contigE.replaceAll("^0", "");
                 String url = "https://ensembl.org/Macaca_mulatta/Location/View?db=core;r=" + contigE + ":" + start +"-" + stop;
-                oldWriter.write(delim);
-                oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url + "\");\">View Region in Ensembl</a>");
+                out.write(delim);
+                out.write(PageFlowUtil.link("View Region in Ensembl").href(url));
             }
         };
     }

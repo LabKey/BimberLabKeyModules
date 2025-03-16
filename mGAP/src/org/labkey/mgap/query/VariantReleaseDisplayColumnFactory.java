@@ -9,13 +9,12 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.HtmlString;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.HttpView;
 import org.labkey.api.view.template.ClientDependency;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -49,12 +48,15 @@ public class VariantReleaseDisplayColumnFactory implements DisplayColumnFactory
             private boolean _clickHandlerRegistered = false;
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 Integer rowId = ctx.get(getBoundKey("rowid"), Integer.class);
                 if (rowId != null)
                 {
-                    oldWriter.write("<a class=\"labkey-text-link vrdc-row\" data-rowid=" + PageFlowUtil.jsString(rowId.toString()) + ">Download</a>");
+                    out.write(PageFlowUtil.link("Download").
+                            addClass("vrdc-row").
+                            attributes(PageFlowUtil.map("data-rowid", rowId.toString()))
+                    );
 
                     if (!_clickHandlerRegistered)
                     {
@@ -70,20 +72,20 @@ public class VariantReleaseDisplayColumnFactory implements DisplayColumnFactory
                 {
                     if (rowId != null)
                     {
-                        oldWriter.write("<br>");
+                        out.write(HtmlString.BR);
                     }
 
                     DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId, ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
+                    out.write(PageFlowUtil.link("View In Genome Browser", url.getActionURL()));
                 }
 
                 Boolean showVariantList = ctx.get(getBoundKey("hasSignificantVariants"), Boolean.class);
                 if (showVariantList)
                 {
-                    oldWriter.write("<br>");
+                    out.write(HtmlString.BR);
 
                     DetailsURL url = DetailsURL.fromString("/mgap/variantList.view?release=" + rowId, ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">Significant Variant List</a>");
+                    out.write(PageFlowUtil.link("Significant Variant List", url.getActionURL()));
                 }
             }
 

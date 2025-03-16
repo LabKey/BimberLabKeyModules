@@ -5,13 +5,12 @@ import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
+import org.labkey.api.util.PageFlowUtil;
+import org.labkey.api.writer.HtmlWriter;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
-import org.labkey.api.writer.HtmlWriter;
 import org.labkey.mcc.MccManager;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 public class AnimalRequestActionsDisplayColumnFactory implements DisplayColumnFactory
@@ -24,10 +23,10 @@ public class AnimalRequestActionsDisplayColumnFactory implements DisplayColumnFa
         return new AbstractMccDisplayColumn(colInfo)
         {
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 int rowId = ctx.get(getBoundKey("rowid"), Integer.class);
-                oldWriter.write("<a class=\"labkey-text-link\" href=\"mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId + "\">Contact MCC</a>");
+                out.write(PageFlowUtil.link("Contact MCC").href("mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId));
             }
 
             @Override

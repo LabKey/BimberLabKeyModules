@@ -11,8 +11,6 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 /**
@@ -68,14 +66,14 @@ public class VariantReleaseGenomeBrowserDisplayColumnFactory implements DisplayC
         }
 
         @Override
-        public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+        public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
         {
             String jbrowseId = ctx.get(getBoundKey("jbrowseId"), String.class);
             String containerId = ctx.get(getBoundKey("container"), String.class);
             if (jbrowseId != null)
             {
                 DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId, ContainerManager.getForId(containerId));
-                oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
+                out.write(PageFlowUtil.link("View In Genome Browser", url.getActionURL()));
             }
         }
 
