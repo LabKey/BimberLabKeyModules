@@ -9,10 +9,9 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 public class SourceDisplayColumnFactory implements DisplayColumnFactory
@@ -32,7 +31,7 @@ public class SourceDisplayColumnFactory implements DisplayColumnFactory
             }
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 String val = ctx.get(getBoundKey("source"), String.class);
                 if (val == null)
@@ -61,7 +60,14 @@ public class SourceDisplayColumnFactory implements DisplayColumnFactory
                     }
                 }
 
-                oldWriter.write(url == null ? val : "<a href=\"" + url + "\">" + val + "</a>");
+                if (url == null)
+                {
+                    out.write(val);
+                }
+                else
+                {
+                    out.write(PageFlowUtil.link(val).href(url).clearClasses());
+                }
             }
 
             private FieldKey getBoundKey(String colName)

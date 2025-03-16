@@ -11,11 +11,10 @@ import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
+import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 import org.labkey.mcc.MccManager;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 public class RequestReviewActionsDisplayColumnFactory implements DisplayColumnFactory
@@ -28,7 +27,7 @@ public class RequestReviewActionsDisplayColumnFactory implements DisplayColumnFa
         return new AbstractMccDisplayColumn(colInfo)
         {
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 int userId = ctx.get(getBoundKey("reviewerId"), Integer.class);
                 User u = UserManager.getUser(userId);
@@ -45,7 +44,7 @@ public class RequestReviewActionsDisplayColumnFactory implements DisplayColumnFa
                 String requestId = ctx.get(getBoundKey("requestId"), String.class);
                 Container requestContainer = MccManager.get().getMCCRequestContainer(ctx.getContainer());
                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=rabReview", requestContainer);
-                oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter Review</a>");
+                out.write(PageFlowUtil.link("Enter Review").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
             }
 
             @Override

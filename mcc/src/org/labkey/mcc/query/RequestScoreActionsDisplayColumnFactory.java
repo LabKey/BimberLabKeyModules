@@ -12,6 +12,7 @@ import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
+import org.labkey.api.util.HtmlString;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.HttpView;
 import org.labkey.api.view.template.ClientDependency;
@@ -20,8 +21,6 @@ import org.labkey.mcc.MccManager;
 import org.labkey.mcc.security.MccFinalReviewPermission;
 import org.labkey.mcc.security.MccRequestAdminPermission;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -37,7 +36,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
             private boolean _hasRegisteredApprovedHandler = false;
 
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 int requestRowId = ctx.get(getBoundKey("requestId", "rowid"), Integer.class);
                 if (MccManager.get().isRequestAdmin(ctx.getViewContext().getUser(), ctx.getContainer()))
@@ -50,7 +49,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                         return;
                     }
 
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId + "\">Contact Investigator</a>");
+                    out.write(PageFlowUtil.link("Contact Investigator").addClass("labkey-text-link").href("mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId));
                 }
 
                 String status = ctx.get(getBoundKey("requestId", "status"), String.class);
@@ -77,7 +76,8 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccRequestAdminPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=primaryReview", requestContainer);
-                                oldWriter.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter MCC Internal Review</a>");
+                                out.write(HtmlString.BR);
+                                out.write(PageFlowUtil.link("Enter MCC Internal Review").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.RabReview && ctx.get(FieldKey.fromString("pendingRabReviews"), Integer.class) == 0)
@@ -85,7 +85,8 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccFinalReviewPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=resourceAvailability", requestContainer);
-                                oldWriter.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter Resource Availability Assessment</a>");
+                                out.write(HtmlString.BR);
+                                out.write(PageFlowUtil.link("Enter Resource Availability Assessment").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.PendingDecision)
@@ -93,12 +94,17 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             if (requestContainer.hasPermission(ctx.getViewContext().getUser(), MccFinalReviewPermission.class))
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=finalReview", requestContainer);
-                                oldWriter.write("<br><a class=\"labkey-text-link\" href=\"" + url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL()) + "\">Enter Final Review</a>");
+                                out.write(HtmlString.BR);
+                                out.write(PageFlowUtil.link("Enter Final Review").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.Approved)
                         {
-                            oldWriter.write("<br><a class=\"labkey-text-link rsadc-approved\" data-requestrowid=" + PageFlowUtil.jsString(String.valueOf(requestRowId)) + ">Mark Fulfilled</a>");
+                            out.write(HtmlString.BR);
+                            out.write(PageFlowUtil.link("Mark Fulfilled").
+                                    addClass("labkey-text-link").
+                                    addClass("rsadc-approved").
+                                    attributes(PageFlowUtil.map("data-requestrowid", String.valueOf(requestRowId))));
 
                             if (!_hasRegisteredApprovedHandler)
                             {

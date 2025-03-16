@@ -8,9 +8,6 @@ import org.labkey.api.query.DetailsURL;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
-import java.io.IOException;
-import java.io.Writer;
-
 /**
  * Created by bimber on 5/17/2017.
  */
@@ -22,7 +19,7 @@ public class TracksPerReleaseGenomeBrowserDisplayColumnFactory extends VariantRe
         return new VariantReleaseGenomeBrowserDisplayColumnFactory.BrowserDataColumn(colInfo, PageFlowUtil.set("releaseId/jbrowseId", "releaseId/container", "trackName"))
         {
             @Override
-            public void renderGridCellContents(RenderContext ctx, Writer oldWriter, HtmlWriter out) throws IOException
+            public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 String jbrowseId = ctx.get(getBoundKey("releaseId", "jbrowseId"), String.class);
                 String containerId = ctx.get(getBoundKey("releaseId", "container"), String.class);
@@ -31,7 +28,7 @@ public class TracksPerReleaseGenomeBrowserDisplayColumnFactory extends VariantRe
                 if (jbrowseId != null && trackName != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/mgap/genomeBrowser.view?database=" + jbrowseId + "&activeTracks=" + trackName, ContainerManager.getForId(containerId));
-                    oldWriter.write("<a class=\"labkey-text-link\" href=\"" + url.getActionURL().getURIString() + "\");\">View In Genome Browser</a>");
+                    out.write(PageFlowUtil.link("View In Genome Browser").addClass("labkey-text-link").href(url.getActionURL()));
                 }
             }
         };
