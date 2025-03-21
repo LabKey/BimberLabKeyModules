@@ -75,7 +75,7 @@ public class mGapAuditTypeProvider extends AbstractAuditTypeProvider implements 
 
     public static void addAuditEntry(Container container, User user, String comment, String type, String releaseVersion)
     {
-        mGapAuditTypeProvider.AuditEvent event = new mGapAuditTypeProvider.AuditEvent(container.getId(), comment);
+        mGapAuditTypeProvider.AuditEvent event = new mGapAuditTypeProvider.AuditEvent(container, comment);
 
         event.setType(type);
         event.setReleaseVersion(releaseVersion);
@@ -93,7 +93,7 @@ public class mGapAuditTypeProvider extends AbstractAuditTypeProvider implements 
             super();
         }
 
-        public AuditEvent(String container, String comment)
+        public AuditEvent(Container container, String comment)
         {
             super(AUDIT_EVENT_TYPE, container, comment);
         }

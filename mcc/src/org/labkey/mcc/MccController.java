@@ -423,13 +423,13 @@ public class MccController extends SpringActionController
             Group g1 = GroupManager.getGroup(mccContainer, MccManager.MCC_GROUP_NAME, GroupEnumType.SITE);
             if (g1 == null)
             {
-                g1 = SecurityManager.createGroup(ContainerManager.getRoot(), MccManager.MCC_GROUP_NAME);
+                g1 = SecurityManager.createGroup(ContainerManager.getRoot(), MccManager.MCC_GROUP_NAME, getUser());
             }
 
             Group g2 = GroupManager.getGroup(mccContainer, MccManager.REQUEST_GROUP_NAME, GroupEnumType.SITE);
             if (g2 == null)
             {
-                g2 = SecurityManager.createGroup(ContainerManager.getRoot(), MccManager.REQUEST_GROUP_NAME);
+                g2 = SecurityManager.createGroup(ContainerManager.getRoot(), MccManager.REQUEST_GROUP_NAME, getUser());
             }
 
             SecurityManager.addMembers(g1, allUsers);

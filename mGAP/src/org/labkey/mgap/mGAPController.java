@@ -492,7 +492,7 @@ public class mGAPController extends SpringActionController
             Group g = GroupManager.getGroup(mGapContainer, mGAPManager.GROUP_NAME, GroupEnumType.SITE);
             if (g == null)
             {
-                g = SecurityManager.createGroup(ContainerManager.getRoot(), mGAPManager.GROUP_NAME);
+                g = SecurityManager.createGroup(ContainerManager.getRoot(), mGAPManager.GROUP_NAME, getUser());
             }
 
             SecurityManager.addMembers(g, allUsers);
