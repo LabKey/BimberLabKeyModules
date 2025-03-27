@@ -138,9 +138,9 @@ public class MccModule extends ExtendedSimpleModule
 
         SystemMaintenance.addTask(new MccMaintenanceTask());
 
-        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Connection, this.getClass().getName(), "https://cdn.datatables.net");
-        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Style, this.getClass().getName(), "https://cdn.datatables.net");
-        ContentSecurityPolicyFilter.registerAllowedSources(Directive.Image, this.getClass().getName(), "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(this.getClass().getName(), Directive.Connection, "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(this.getClass().getName(), Directive.Style, "https://cdn.datatables.net");
+        ContentSecurityPolicyFilter.registerAllowedSources(this.getClass().getName(), Directive.Image, "https://cdn.datatables.net");
     }
 
     @Override
