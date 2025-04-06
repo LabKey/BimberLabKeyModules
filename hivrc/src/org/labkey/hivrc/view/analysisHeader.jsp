@@ -18,7 +18,7 @@
     }
 %>
 <%
-    JspView<AnalysisModel> me = (JspView<AnalysisModel>) HttpView.currentView();
+    JspView<AnalysisModel> me = HttpView.currentView();
     AnalysisModel model = me.getModelBean();
     Integer workbookId = model.getWorkbookId();
     String wpId = "wp_" + me.getWebPartRowId();
