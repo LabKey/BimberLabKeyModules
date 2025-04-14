@@ -29,7 +29,7 @@ public class TracksPerReleaseGenomeBrowserDisplayColumnFactory extends VariantRe
                 if (jbrowseId != null && trackName != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/mgap/genomeBrowser.view?database=" + jbrowseId + "&activeTracks=" + trackName, ContainerManager.getForId(containerId));
-                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()).addClass("labkey-text-link"));
+                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()));
                 }
             }
         };

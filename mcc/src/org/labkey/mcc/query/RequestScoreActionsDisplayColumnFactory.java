@@ -50,7 +50,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                         return;
                     }
 
-                    out.write(LinkBuilder.labkeyLink("Contact Investigator", "mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId).addClass("labkey-text-link"));
+                    out.write(LinkBuilder.labkeyLink("Contact Investigator", "mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId));
                 }
 
                 String status = ctx.get(getBoundKey("requestId", "status"), String.class);
@@ -78,7 +78,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=primaryReview", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(LinkBuilder.labkeyLink("Enter MCC Internal Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
+                                out.write(LinkBuilder.labkeyLink("Enter MCC Internal Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.RabReview && ctx.get(FieldKey.fromString("pendingRabReviews"), Integer.class) == 0)
@@ -87,7 +87,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=resourceAvailability", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(LinkBuilder.labkeyLink("Enter Resource Availability Assessment", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
+                                out.write(LinkBuilder.labkeyLink("Enter Resource Availability Assessment", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.PendingDecision)
@@ -96,7 +96,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=finalReview", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(LinkBuilder.labkeyLink("Enter Final Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
+                                out.write(LinkBuilder.labkeyLink("Enter Final Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
                             }
                         }
                         else if (st == MccManager.RequestStatus.Approved)

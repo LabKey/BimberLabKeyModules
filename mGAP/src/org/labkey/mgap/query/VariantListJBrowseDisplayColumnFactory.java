@@ -13,7 +13,6 @@ import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.HtmlString;
 import org.labkey.api.util.LinkBuilder;
-import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
 import java.util.List;
@@ -69,7 +68,7 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 if (jbrowseId != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId + "&location=" + contig + ":" + start + ".." + stop + "&highlight=" + contig + ":" + position + ".." + (position + length - 1), ContainerManager.getForId(containerId));
-                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()).addClass("labkey-text-link"));
+                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()));
                     delim = HtmlString.BR;
                 }
 
@@ -77,7 +76,7 @@ public class VariantListJBrowseDisplayColumnFactory implements DisplayColumnFact
                 {
                     out.write(delim);
                     DetailsURL url = DetailsURL.fromString("/jbrowse/genotypeTable.view?trackId=" + primaryTrack + "&chr=" + contig + "&start=" + position + "&stop=" + position, ContainerManager.getForId(containerId));
-                    out.write(LinkBuilder.labkeyLink("View Genotypes At Position", url.getActionURL()).addClass("labkey-text-link"));
+                    out.write(LinkBuilder.labkeyLink("View Genotypes At Position", url.getActionURL()));
                     delim = HtmlString.BR;
                 }
 

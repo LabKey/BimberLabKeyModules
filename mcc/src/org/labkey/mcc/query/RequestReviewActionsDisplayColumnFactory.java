@@ -12,7 +12,6 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
 import org.labkey.api.util.LinkBuilder;
-import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 import org.labkey.mcc.MccManager;
 
@@ -45,7 +44,7 @@ public class RequestReviewActionsDisplayColumnFactory implements DisplayColumnFa
                 String requestId = ctx.get(getBoundKey("requestId"), String.class);
                 Container requestContainer = MccManager.get().getMCCRequestContainer(ctx.getContainer());
                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=rabReview", requestContainer);
-                out.write(LinkBuilder.labkeyLink("Enter Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
+                out.write(LinkBuilder.labkeyLink("Enter Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
             }
 
             @Override

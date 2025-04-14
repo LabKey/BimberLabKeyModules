@@ -9,7 +9,6 @@ import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.LinkBuilder;
-import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class PhenotypeVariantLinkDisplayColumnFactory implements DisplayColumnFa
                 if (releaseId != null && omim != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/mgap/variantList.view?release=" + releaseId + "&query.omim_phenotype~contains=" + omim, ContainerManager.getForId(containerId));
-                    out.write(LinkBuilder.labkeyLink("View Variants", url.getActionURL()).addClass("labkey-text-link"));
+                    out.write(LinkBuilder.labkeyLink("View Variants", url.getActionURL()));
                 }
             }
         };
