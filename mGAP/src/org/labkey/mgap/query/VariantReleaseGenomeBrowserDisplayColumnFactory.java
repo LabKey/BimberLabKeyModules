@@ -8,6 +8,7 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
@@ -73,7 +74,7 @@ public class VariantReleaseGenomeBrowserDisplayColumnFactory implements DisplayC
             if (jbrowseId != null)
             {
                 DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId, ContainerManager.getForId(containerId));
-                out.write(PageFlowUtil.link("View In Genome Browser", url.getActionURL()));
+                out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()));
             }
         }
 

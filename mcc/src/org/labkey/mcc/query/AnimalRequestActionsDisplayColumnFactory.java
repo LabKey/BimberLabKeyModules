@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 import org.labkey.api.data.RenderContext;
@@ -26,7 +27,7 @@ public class AnimalRequestActionsDisplayColumnFactory implements DisplayColumnFa
             public void renderGridCellContents(RenderContext ctx, HtmlWriter out)
             {
                 int rowId = ctx.get(getBoundKey("rowid"), Integer.class);
-                out.write(PageFlowUtil.link("Contact MCC").href("mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId));
+                out.write(LinkBuilder.labkeyLink("Contact MCC", "mailto:" + MccManager.get().getMccAdminEmail() + "?subject=MCC Request #" + rowId));
             }
 
             @Override

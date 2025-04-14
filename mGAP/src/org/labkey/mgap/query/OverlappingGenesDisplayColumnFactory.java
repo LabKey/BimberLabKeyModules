@@ -8,6 +8,7 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
@@ -66,7 +67,7 @@ public class OverlappingGenesDisplayColumnFactory implements DisplayColumnFactor
                     }
 
                     out.write(delim);
-                    out.write(PageFlowUtil.link(geneName).href(url).target("_blank").clearClasses());
+                    out.write(LinkBuilder.simpleLink(geneName, url).target("_blank"));
                     delim = HtmlString.BR;
                 }
             }

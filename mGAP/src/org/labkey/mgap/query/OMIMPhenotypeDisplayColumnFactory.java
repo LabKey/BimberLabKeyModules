@@ -8,6 +8,7 @@ import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
@@ -68,11 +69,11 @@ public class OMIMPhenotypeDisplayColumnFactory implements DisplayColumnFactory
                     out.write(delim);
                     if (elements.length > 1)
                     {
-                        out.write(PageFlowUtil.link(elements[0]).target("_blank").href("https://www.omim.org/entry/" + elements[1]).clearClasses());
+                        out.write(LinkBuilder.simpleLink(elements[0], "https://www.omim.org/entry/" + elements[1]).target("_blank"));
                     }
                     else
                     {
-                        out.write(PageFlowUtil.link(elements[0]).clearClasses());
+                        out.write(LinkBuilder.simpleLink(elements[0]));
                     }
 
                     delim = HtmlString.BR;

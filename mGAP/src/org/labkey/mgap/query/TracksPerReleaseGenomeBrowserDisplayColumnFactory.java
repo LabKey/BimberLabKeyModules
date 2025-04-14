@@ -5,6 +5,7 @@ import org.labkey.api.data.ContainerManager;
 import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
@@ -28,7 +29,7 @@ public class TracksPerReleaseGenomeBrowserDisplayColumnFactory extends VariantRe
                 if (jbrowseId != null && trackName != null)
                 {
                     DetailsURL url = DetailsURL.fromString("/mgap/genomeBrowser.view?database=" + jbrowseId + "&activeTracks=" + trackName, ContainerManager.getForId(containerId));
-                    out.write(PageFlowUtil.link("View In Genome Browser").addClass("labkey-text-link").href(url.getActionURL()));
+                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()).addClass("labkey-text-link"));
                 }
             }
         };

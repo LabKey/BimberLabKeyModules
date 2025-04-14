@@ -9,6 +9,7 @@ import org.labkey.api.data.DisplayColumn;
 import org.labkey.api.data.DisplayColumnFactory;
 import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.FieldKey;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.writer.HtmlWriter;
 
@@ -66,7 +67,7 @@ public class SourceDisplayColumnFactory implements DisplayColumnFactory
                 }
                 else
                 {
-                    out.write(PageFlowUtil.link(val).href(url).clearClasses());
+                    out.write(LinkBuilder.simpleLink(val, url));
                 }
             }
 

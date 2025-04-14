@@ -10,6 +10,7 @@ import org.labkey.api.data.RenderContext;
 import org.labkey.api.query.DetailsURL;
 import org.labkey.api.query.FieldKey;
 import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.HttpView;
 import org.labkey.api.view.template.ClientDependency;
@@ -53,7 +54,7 @@ public class VariantReleaseDisplayColumnFactory implements DisplayColumnFactory
                 Integer rowId = ctx.get(getBoundKey("rowid"), Integer.class);
                 if (rowId != null)
                 {
-                    out.write(PageFlowUtil.link("Download").
+                    out.write(LinkBuilder.labkeyLink("Download").
                             addClass("vrdc-row").
                             attributes(PageFlowUtil.map("data-rowid", rowId.toString()))
                     );
@@ -76,7 +77,7 @@ public class VariantReleaseDisplayColumnFactory implements DisplayColumnFactory
                     }
 
                     DetailsURL url = DetailsURL.fromString("/jbrowse/browser.view?database=" + jbrowseId, ContainerManager.getForId(containerId));
-                    out.write(PageFlowUtil.link("View In Genome Browser", url.getActionURL()));
+                    out.write(LinkBuilder.labkeyLink("View In Genome Browser", url.getActionURL()));
                 }
 
                 Boolean showVariantList = ctx.get(getBoundKey("hasSignificantVariants"), Boolean.class);
@@ -85,7 +86,7 @@ public class VariantReleaseDisplayColumnFactory implements DisplayColumnFactory
                     out.write(HtmlString.BR);
 
                     DetailsURL url = DetailsURL.fromString("/mgap/variantList.view?release=" + rowId, ContainerManager.getForId(containerId));
-                    out.write(PageFlowUtil.link("Significant Variant List", url.getActionURL()));
+                    out.write(LinkBuilder.labkeyLink("Significant Variant List", url.getActionURL()));
                 }
             }
 

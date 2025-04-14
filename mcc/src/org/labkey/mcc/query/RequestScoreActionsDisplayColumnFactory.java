@@ -13,6 +13,7 @@ import org.labkey.api.query.FieldKey;
 import org.labkey.api.security.User;
 import org.labkey.api.security.UserManager;
 import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.LinkBuilder;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.HttpView;
 import org.labkey.api.view.template.ClientDependency;
@@ -49,7 +50,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                         return;
                     }
 
-                    out.write(PageFlowUtil.link("Contact Investigator").addClass("labkey-text-link").href("mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId));
+                    out.write(LinkBuilder.labkeyLink("Contact Investigator", "mailto:" + u.getEmail() + "?subject=MCC Request #" + requestRowId).addClass("labkey-text-link"));
                 }
 
                 String status = ctx.get(getBoundKey("requestId", "status"), String.class);
@@ -77,7 +78,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=primaryReview", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(PageFlowUtil.link("Enter MCC Internal Review").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
+                                out.write(LinkBuilder.labkeyLink("Enter MCC Internal Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
                             }
                         }
                         else if (st == MccManager.RequestStatus.RabReview && ctx.get(FieldKey.fromString("pendingRabReviews"), Integer.class) == 0)
@@ -86,7 +87,7 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=resourceAvailability", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(PageFlowUtil.link("Enter Resource Availability Assessment").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
+                                out.write(LinkBuilder.labkeyLink("Enter Resource Availability Assessment", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
                             }
                         }
                         else if (st == MccManager.RequestStatus.PendingDecision)
@@ -95,16 +96,17 @@ public class RequestScoreActionsDisplayColumnFactory implements DisplayColumnFac
                             {
                                 DetailsURL url = DetailsURL.fromString("/mcc/requestReview.view?requestId=" + requestId + "&mode=finalReview", requestContainer);
                                 out.write(HtmlString.BR);
-                                out.write(PageFlowUtil.link("Enter Final Review").addClass("labkey-text-link").href(url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())));
+                                out.write(LinkBuilder.labkeyLink("Enter Final Review", url.getActionURL().addReturnUrl(ctx.getViewContext().getActionURL())).addClass("labkey-text-link"));
                             }
                         }
                         else if (st == MccManager.RequestStatus.Approved)
                         {
                             out.write(HtmlString.BR);
-                            out.write(PageFlowUtil.link("Mark Fulfilled").
+                            out.write(LinkBuilder.labkeyLink("Mark Fulfilled").
                                     addClass("labkey-text-link").
                                     addClass("rsadc-approved").
-                                    attributes(PageFlowUtil.map("data-requestrowid", String.valueOf(requestRowId))));
+                                    attributes(PageFlowUtil.map("data-requestrowid", String.valueOf(requestRowId)))
+                            );
 
                             if (!_hasRegisteredApprovedHandler)
                             {
