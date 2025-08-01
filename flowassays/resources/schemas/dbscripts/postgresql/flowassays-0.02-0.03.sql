@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+-- @SkipOnEmptySchemasBegin
 DELETE FROM flowassays.populations WHERE name = 'T-cells';
 DELETE FROM flowassays.populations WHERE name = 'T-Cells';
 INSERT INTO flowassays.populations (name) VALUES ('T-cells');
@@ -21,3 +22,4 @@ DELETE FROM flowassays.populations WHERE name = 'Lymphocytes';
 INSERT INTO flowassays.populations (name) VALUES ('Lymphocytes');
 
 INSERT INTO flowassays.assay_types (name) VALUES ('Phenotyping');
+-- @SkipOnEmptySchemasEnd

@@ -23,6 +23,8 @@ CREATE TABLE genotypeassays.assaytypes (
   CONSTRAINT pk_assaytypes PRIMARY KEY (name)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO genotypeassays.assaytypes (name, description) VALUES ('SSP', 'Sequence-specific PCR');
 INSERT INTO genotypeassays.assaytypes (name, description) VALUES ('STR', 'Microsatellite');
 INSERT INTO genotypeassays.assaytypes (name, description) VALUES ('SBT', 'Sequence-based Genotyping');
+-- @SkipOnEmptySchemasEnd

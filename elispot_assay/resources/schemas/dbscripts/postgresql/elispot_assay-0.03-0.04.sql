@@ -1,3 +1,4 @@
+-- @SkipOnEmptySchemasBegin
 TRUNCATE TABLE elispot_assay.peptide_pools;
 INSERT INTO elispot_assay.peptide_pools (pool_name, category) VALUES ('SIVmac239 Env Pool A', 'SIV');
 INSERT INTO elispot_assay.peptide_pools (pool_name, category) VALUES ('SIVmac239 Env Pool B', 'SIV');
@@ -909,3 +910,4 @@ INSERT INTO elispot_assay.peptide_pool_members (poolid, sequence) select rowid, 
 INSERT INTO elispot_assay.peptide_pool_members (poolid, sequence) select rowid,   'GKEVDSSSHMEDTGE' as sequence from elispot_assay.peptide_pools pp WHERE pp.pool_name = 'SIVmac239 Pol Pool Z';
 INSERT INTO elispot_assay.peptide_pool_members (poolid, sequence) select rowid,   'DSSSHMEDTGEAREV' as sequence from elispot_assay.peptide_pools pp WHERE pp.pool_name = 'SIVmac239 Pol Pool Z';
 INSERT INTO elispot_assay.peptide_pool_members (poolid, sequence) select rowid,   'HMEDTGEAREVA' as sequence from elispot_assay.peptide_pools pp WHERE pp.pool_name = 'SIVmac239 Pol Pool Z';
+-- @SkipOnEmptySchemasEnd

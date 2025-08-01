@@ -26,7 +26,9 @@ CREATE TABLE genotypeassays.ssp_result_types
   CONSTRAINT PK_ssp_result_types PRIMARY KEY (result)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT into genotypeassays.ssp_result_types (result, meaning, importAliases) VALUES ('POS', 'Positive', '+,1,Y');
 INSERT into genotypeassays.ssp_result_types (result, meaning, importAliases) VALUES ('NEG', 'Negative', '-,0,N');
 INSERT into genotypeassays.ssp_result_types (result, meaning, importAliases) VALUES ('IND', 'Indeterminate', null);
 INSERT into genotypeassays.ssp_result_types (result, meaning, importAliases) VALUES ('FAIL', 'Fail', 'F');
+-- @SkipOnEmptySchemasEnd

@@ -30,6 +30,7 @@ CREATE TABLE flowassays.populations
     CONSTRAINT PK_populations PRIMARY KEY (Name)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO flowassays.populations (Name) VALUES
     ('NK'),
     ('CD14 Mono'),
@@ -38,7 +39,7 @@ INSERT INTO flowassays.populations (Name) VALUES
     ('CD4'),
     ('CD14'),
     ('CD8');
-
+-- @SkipOnEmptySchemasEnd
 
 CREATE TABLE flowassays.units
 (
@@ -47,15 +48,16 @@ CREATE TABLE flowassays.units
     CONSTRAINT PK_units PRIMARY KEY (unit)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO flowassays.units VALUES ('cells/uL'), ('Tc/uL');
-
+-- @SkipOnEmptySchemasEnd
 
 UPDATE flowassays.populations SET Name = 'CD4 T-cells' WHERE Name = 'CD4';
 UPDATE flowassays.populations SET Name = 'CD8 T-cells' WHERE Name = 'CD8';
 
-
+-- @SkipOnEmptySchemasBegin
 INSERT INTO flowassays.units VALUES ('%');
-
+-- @SkipOnEmptySchemasEnd
 
 CREATE TABLE flowassays.instruments
 (
@@ -64,7 +66,9 @@ CREATE TABLE flowassays.instruments
     CONSTRAINT PK_instruments PRIMARY KEY (instrument)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO flowassays.instruments VALUES ('BD LSR II');
+-- @SkipOnEmptySchemasEnd
 
 CREATE TABLE flowassays.assay_types (
   rowid serial,
@@ -74,6 +78,7 @@ CREATE TABLE flowassays.assay_types (
   constraint pk_assay_types PRIMARY KEY (rowid)
 );
 
+-- @SkipOnEmptySchemasBegin
 DELETE FROM flowassays.populations WHERE name = 'NK';
 DELETE FROM flowassays.populations WHERE name = 'CD4';
 DELETE FROM flowassays.populations WHERE name = 'CD8';
@@ -98,3 +103,4 @@ INSERT INTO flowassays.populations(name) VALUES ('T-cells');
 
 
 INSERT INTO flowassays.assay_types(name) VALUES ('TruCount');
+-- @SkipOnEmptySchemasEnd

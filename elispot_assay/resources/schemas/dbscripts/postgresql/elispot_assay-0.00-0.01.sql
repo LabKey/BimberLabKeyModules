@@ -56,7 +56,9 @@ CREATE TABLE elispot_assay.assay_types (
   constraint PK_assay_types PRIMARY KEY (rowid)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO elispot_assay.assay_types (name, description) VALUES ('IFN-Gamma', 'Interferon Gamma');
+-- @SkipOnEmptySchemasEnd
 
 CREATE TABLE elispot_assay.instruments
 (

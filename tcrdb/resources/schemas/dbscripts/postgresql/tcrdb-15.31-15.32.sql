@@ -4,6 +4,7 @@ CREATE TABLE tcrdb.loci (
   constraint PK_loci PRIMARY KEY (locus)
 );
 
+-- @SkipOnEmptySchemasBegin
 INSERT INTO tcrdb.loci (locus) VALUES ('IGH');
 INSERT INTO tcrdb.loci (locus) VALUES ('IGL');
 INSERT INTO tcrdb.loci (locus) VALUES ('IGK');
@@ -14,3 +15,4 @@ INSERT INTO tcrdb.loci (locus) VALUES ('TRD');
 INSERT INTO tcrdb.loci (locus) VALUES ('IG');
 INSERT INTO tcrdb.loci (locus) VALUES ('TCR');
 INSERT INTO tcrdb.loci (locus) VALUES ('ALL');
+-- @SkipOnEmptySchemasEnd
