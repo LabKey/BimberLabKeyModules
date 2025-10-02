@@ -29,13 +29,7 @@ public class mGapAuditTypeProvider extends AbstractAuditTypeProvider implements 
 
     public mGapAuditTypeProvider()
     {
-        
-    }
-
-    @Override
-    protected AbstractAuditDomainKind getDomainKind()
-    {
-        return new mGapAuditTypeProvider.AuditDomainKind();
+        super(new mGapAuditTypeProvider.AuditDomainKind());
     }
 
     @Override

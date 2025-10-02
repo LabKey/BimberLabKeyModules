@@ -208,7 +208,7 @@ public class mGAPModule extends ExtendedSimpleModule
     }
 
     @Override
-    public @NotNull Set<Class> getUnitTests()
+    public @NotNull Set<Class<?>> getUnitTests()
     {
         return PageFlowUtil.set(mGapReleaseGenerator.TestCase.class);
     }

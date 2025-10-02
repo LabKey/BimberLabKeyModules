@@ -125,7 +125,7 @@ public class PrimeseqModule extends ExtendedSimpleModule
     }
 
     @Override
-    public @NotNull Set<Class> getUnitTests()
+    public @NotNull Set<Class<?>> getUnitTests()
     {
         return PageFlowUtil.set(ClusterMaintenanceTask.TestCase.class);
     }

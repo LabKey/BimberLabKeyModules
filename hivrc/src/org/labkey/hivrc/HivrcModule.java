@@ -4,10 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.labkey.api.data.Container;
 import org.labkey.api.ldk.ExtendedSimpleModule;
-import org.labkey.api.module.Module;
-import org.labkey.api.module.ModuleContext;
-import org.labkey.api.query.DefaultSchema;
-import org.labkey.api.query.QuerySchema;
 import org.labkey.api.util.HtmlString;
 import org.labkey.api.view.BaseWebPartFactory;
 import org.labkey.api.view.HtmlView;
@@ -53,7 +49,7 @@ public class HivrcModule extends ExtendedSimpleModule
                 new BaseWebPartFactory("HIVRC Analysis Header")
                 {
                     @Override
-                    public WebPartView getWebPartView(@NotNull ViewContext portalCtx, @NotNull Portal.WebPart webPart)
+                    public WebPartView<?> getWebPartView(@NotNull ViewContext portalCtx, @NotNull Portal.WebPart webPart)
                     {
                         if (!portalCtx.getContainer().isWorkbook())
                         {
