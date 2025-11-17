@@ -556,7 +556,7 @@ public class PrimeseqController extends SpringActionController
                         json.put(prop, paramJson.get(prop));
                     }
 
-                    try (PrintWriter writer = PrintWriters.getPrintWriter(sj.getParametersFile()))
+                    try (PrintWriter writer = PrintWriters.getPrintWriter(sj.getParametersFile().openOutputStream()))
                     {
                         writer.write(json.toString(1));
                     }
