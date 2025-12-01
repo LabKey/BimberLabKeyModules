@@ -10,12 +10,31 @@
                     </column>
                     <column columnName="allInfections">
                         <columnTitle>SIV Infection</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=treatments&amp;query.Id~eq=${Id}&amp;query.category~eq=SIV Infection</url>
+                        <urlTarget>_blank</urlTarget>
                     </column>
                     <column columnName="allART">
                         <columnTitle>ART</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=treatments&amp;query.Id~eq=${Id}&amp;query.category~eq=ART</url>
+                        <urlTarget>_blank</urlTarget>
                     </column>
                     <column columnName="infectionDate">
                         <columnTitle>Infection Date</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="artInitiationDate">
+                        <columnTitle>ART Initiation</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="artInitiationDPI">
+                        <columnTitle>ART Initiation (DPI)</columnTitle>
+                    </column>
+                    <column columnName="artReleaseDate">
+                        <columnTitle>ART Release</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="artReleaseWPI">
+                        <columnTitle>ART Release (WPI)</columnTitle>
                     </column>
                 </columns>
                 <titleColumn>allInfections</titleColumn>

@@ -4,17 +4,17 @@
         <column name="sex"/>
         <column name="species"/>
         <column name="calculated_status"/>
-        <column name="birth"/>
-        <column name="death"/>
-        <column name="sivART/ageAtInfection"/>
+        <column name="projects/categories"/>
         <column name="projects/allStudies"/>
-        <column name="projects/studyDescription"/>
         <column name="projects/subgroups"/>
-        <column name="immunizations/immunizations"/>
         <column name="sivART/allInfections"/>
+        <column name="sivART/artInitiationDate"/>
+        <column name="sivART/artReleaseDate"/>
         <column name="sivART/artInitiationDPI"/>
-        <column name="interventions/allInterventions"/>
-        <column name="outcomes/outcomes"/>
+        <column name="sivART/artReleaseWPI"/>
+        <column name="pvlInfo/numPVL"/>
+        <column name="pvlInfo/numPVLPostArtRelease"/>
+        <column name="pvlInfo/lastPvlPostArtReleaseWeeks"/>
     </columns>
     <sorts>
         <sort column="Id" descending="false"/>

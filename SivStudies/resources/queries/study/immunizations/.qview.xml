@@ -7,6 +7,10 @@
         <column name="route"/>
         <column name="quantity"/>
         <column name="quantity_units"/>
+        <column name="backbone"/>
+        <column name="antigens"/>
+        <column name="vectorId"/>
+        <column name="isMock"/>
         <column name="comments"/>
         <column name="dataSource"/>
     </columns>

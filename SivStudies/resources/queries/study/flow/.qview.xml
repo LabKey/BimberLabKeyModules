@@ -2,10 +2,13 @@
     <columns>
         <column name="Id"/>
         <column name="date"/>
-        <column name="sampleType"/>
         <column name="assayType"/>
+        <column name="tissue"/>
+        <column name="sampleType"/>
         <column name="population"/>
-        <column name="result"/>
+        <column name="parentPopulation"/>
+        <column name="percentOfParent"/>
+        <column name="absoluteCount"/>
         <column name="units"/>
         <column name="comments"/>
         <column name="dataSource"/>

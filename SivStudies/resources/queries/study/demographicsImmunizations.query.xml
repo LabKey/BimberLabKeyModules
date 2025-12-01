@@ -10,9 +10,13 @@
                     </column>
                     <column columnName="immunizations">
                         <columnTitle>Immunizations</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=immunizations&amp;query.Id~eq=${Id}</url>
+                        <urlTarget>_blank</urlTarget>
                     </column>
                     <column columnName="immunizationTypes">
                         <columnTitle>Immunization Types</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=immunizations&amp;query.Id~eq=${Id}</url>
+                        <urlTarget>_blank</urlTarget>
                     </column>
                 </columns>
                 <titleColumn>immunizations</titleColumn>

@@ -9,6 +9,9 @@
                         <columnTitle>Start Date</columnTitle>
                         <formatString>Date</formatString>
                     </column>
+                    <column columnName="tissue">
+                        <columnTitle>Tissue</columnTitle>
+                    </column>
                     <column columnName="sampleType">
                         <columnTitle>Sample Type</columnTitle>
                     </column>
@@ -18,8 +21,14 @@
                     <column columnName="population">
                         <columnTitle>Population</columnTitle>
                     </column>
-                    <column columnName="result">
-                        <columnTitle>Result</columnTitle>
+                    <column columnName="parentPopulation">
+                        <columnTitle>Parent Population</columnTitle>
+                    </column>
+                    <column columnName="percentOfParent">
+                        <columnTitle>% of Parent</columnTitle>
+                    </column>
+                    <column columnName="absoluteCount">
+                        <columnTitle>Absolute Count</columnTitle>
                     </column>
                     <column columnName="units">
                         <columnTitle>Units</columnTitle>

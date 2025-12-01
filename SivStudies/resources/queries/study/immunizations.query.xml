@@ -15,6 +15,12 @@
                     <column columnName="treatment">
                         <columnTitle>Treatment</columnTitle>
                     </column>
+                    <column columnName="backbone">
+                        <columnTitle>Vector Backbone</columnTitle>
+                    </column>
+                    <column columnName="antigens">
+                        <columnTitle>Antigens</columnTitle>
+                    </column>
                     <column columnName="route">
                         <columnTitle>Route</columnTitle>
                     </column>
@@ -26,6 +32,12 @@
                     </column>
                     <column columnName="reason">
                         <columnTitle>Reason</columnTitle>
+                    </column>
+                    <column columnName="vectorId">
+                        <columnTitle>Vector ID</columnTitle>
+                    </column>
+                    <column columnName="isMock">
+                        <columnTitle>Is Mock?</columnTitle>
                     </column>
                     <column columnName="comments">
                         <columnTitle>Comments</columnTitle>

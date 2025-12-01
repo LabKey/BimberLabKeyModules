@@ -1,0 +1,30 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="NOT_IN_DB">
+                <tableTitle>Interventions/Treatments Summary</tableTitle>
+                <columns>
+                    <column columnName="Id">
+                        <isKeyField>true</isKeyField>
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="allInterventions">
+                        <columnTitle>Interventions/Treatments</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=treatments&amp;query.Id~eq=${Id}&amp;query.category~eq=Intervention</url>
+                        <urlTarget>_blank</urlTarget>
+                    </column>
+                    <column columnName="firstInterventionDate">
+                        <columnTitle>Date of First Intervention</columnTitle>
+                    </column>
+                    <column columnName="firstInterventionDPI">
+                        <columnTitle>First Intervention (DPI)</columnTitle>
+                    </column>
+                    <column columnName="firstInterventionWPI">
+                        <columnTitle>First Intervention (WPI)</columnTitle>
+                    </column>
+                </columns>
+                <titleColumn>allInterventions</titleColumn>
+            </table>
+        </tables>
+    </metadata>
+</query>

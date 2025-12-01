@@ -92,17 +92,17 @@ public class SequenceJobResourceAllocator implements ClusterResourceAllocator
                 String aligner = params.get("alignment");
                 if (Arrays.asList("BWA-Mem", "BWA-Mem2", "STAR").contains(aligner))
                 {
-                    return 72;
+                    return 128;
                 }
             }
         }
         else if (job.getClass().getName().endsWith("ReferenceLibraryPipelineJob"))
         {
             // This almost always includes bwa-mem
-            return 72;
+            return 128;
         }
 
-        return 36;
+        return 72;
     }
 
     @Override

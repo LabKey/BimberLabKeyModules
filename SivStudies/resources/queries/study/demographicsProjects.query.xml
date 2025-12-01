@@ -17,12 +17,6 @@
                     <column columnName="subgroups">
                         <columnTitle>Subgroups/Treatments</columnTitle>
                     </column>
-                    <column columnName="rhCmvVaccines">
-                        <columnTitle>RhCMV Vaccines?</columnTitle>
-                    </column>
-                    <column columnName="sivArt">
-                        <columnTitle>SIV/ART Projects?</columnTitle>
-                    </column>
                 </columns>
                 <titleColumn>categories</titleColumn>
             </table>

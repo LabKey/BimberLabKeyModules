@@ -13,6 +13,7 @@ import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.ExprColumn;
+import org.labkey.api.query.FieldKey;
 import org.labkey.api.query.LookupForeignKey;
 import org.labkey.api.query.QueryDefinition;
 import org.labkey.api.query.QueryException;
@@ -27,6 +28,7 @@ import org.labkey.api.study.DatasetTable;
 import org.labkey.api.util.logging.LogHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -251,6 +253,13 @@ public class SivStudiesCustomizer extends AbstractTableCustomizer
             parentTable.addColumn(colInfo);
         }
 
+        if (parentTable.getColumn("interventions") == null)
+        {
+            BaseColumnInfo colInfo = getWrappedIdCol(parentTable.getUserSchema(), "demographicsInterventions", parentTable, "interventions");
+            colInfo.setLabel("Interventions");
+            parentTable.addColumn(colInfo);
+        }
+
         if (parentTable.getColumn("outcomes") == null)
         {
             BaseColumnInfo colInfo = getWrappedIdCol(parentTable.getUserSchema(), "demographicsOutcomes", parentTable, "outcomes");
@@ -262,6 +271,13 @@ public class SivStudiesCustomizer extends AbstractTableCustomizer
         {
             BaseColumnInfo colInfo = getWrappedIdCol(parentTable.getUserSchema(), "demographicsChallengeAndArt", parentTable, "sivART");
             colInfo.setLabel("SIV/ART Dates");
+            parentTable.addColumn(colInfo);
+        }
+
+        if (parentTable.getColumn("pvlInfo") == null)
+        {
+            BaseColumnInfo colInfo = getWrappedIdCol(parentTable.getUserSchema(), "demographicsPVL", parentTable, "pvlInfo");
+            colInfo.setLabel("PVL Info");
             parentTable.addColumn(colInfo);
         }
     }
@@ -348,17 +364,25 @@ public class SivStudiesCustomizer extends AbstractTableCustomizer
                 String name = queryName + "_sivChallenge";
                 UserSchema targetSchema = targetTable.getUserSchema().getDefaultSchema().getUserSchema(targetSchemaName);
                 QueryDefinition qd = QueryService.get().createQueryDef(u, targetSchemaContainer, targetSchema, name);
-                qd.setSql("SELECT\n" +
+                qd.setSql("SELECT t.*,\n" +
+                        "CASE\n" +
+                            "WHEN t.daysPostInfection IS NULL THEN NULL\n" +
+                            "WHEN t.daysPostInfection <= 28 THEN (CAST(t.daysPostInfection AS VARCHAR) || ' DPI')\n" +
+                            "ELSE (CAST(t.weeksPostInfection AS VARCHAR) || ' WPI')\n" +
+                        "END as timePostInfection\n" +
+                        "FROM (SELECT\n" +
                         "max(ad.date) as infectionDate,\n" +
                         // NOTE: CAST() is used to ensure whole numbers
                         "CONVERT(TIMESTAMPDIFF('SQL_TSI_DAY', CAST(max(ad.date) AS DATE), CAST(c." + dateColName + " AS DATE)), INTEGER) as daysPostInfection,\n" +
-                        "CONVERT(age_in_months(CAST(max(ad.date) AS DATE), CAST(c." + dateColName + " AS DATE)), FLOAT) as monthsPostInfection,\n" +
+                        "CONVERT((CONVERT(TIMESTAMPDIFF('SQL_TSI_DAY', CAST(max(ad.date) AS DATE), CAST(c." + dateColName + " AS DATE)), INTEGER) / 7), INTEGER) as weeksPostInfection,\n" +
+                        "ROUND(CONVERT(TIMESTAMPDIFF('SQL_TSI_DAY', CAST(max(ad.date) AS DATE), CAST(c." + dateColName + " AS DATE)), DOUBLE) / 7.0, 1) as weeksPostInfectionDecimal,\n" +
+                        "CONVERT(age_in_months(CAST(max(ad.date) AS DATE), CAST(c." + dateColName + " AS DATE)), DOUBLE) as monthsPostInfection,\n" +
                         "c." + pkCol.getFieldKey().toString() + "\n" +
                         "FROM \"" + schemaName + "\".\"" + queryName + "\" c " +
                         "JOIN studies.subjectAnchorDates ad ON (ad.subjectId = c." + idCol.getFieldKey().toSQLString() + ")\n" +
                         "WHERE ad.eventLabel = 'SIV Infection'\n" +
                         "GROUP BY c.date, c." + pkCol.getFieldKey().toString() + "\n" +
-                        "HAVING count(*) = 1"
+                        "HAVING count(*) = 1) t"
                 );
                 qd.setIsTemporary(true);
 
@@ -380,7 +404,12 @@ public class SivStudiesCustomizer extends AbstractTableCustomizer
 
                     ((BaseColumnInfo)ti.getColumn("infectionDate")).setLabel("Infection Date");
                     ((BaseColumnInfo)ti.getColumn("daysPostInfection")).setLabel("Days Post-Infection");
+                    ((BaseColumnInfo)ti.getColumn("weeksPostInfection")).setLabel("Weeks Post-Infection");
                     ((BaseColumnInfo)ti.getColumn("monthsPostInfection")).setLabel("Months Post-Infection");
+
+                    BaseColumnInfo tpi = ((BaseColumnInfo)ti.getColumn("timePostInfection"));
+                    tpi.setLabel("Time Post-Infection");
+                    tpi.setSortFieldKeys(Arrays.asList(FieldKey.fromString("daysPostInfection")));
                 }
 
                 return ti;

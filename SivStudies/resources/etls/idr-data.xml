@@ -100,8 +100,8 @@
                     <setting name="dataSourceSchema" value="bimber_data"/>
                     <setting name="dataSourceQuery" value="vacc"/>
                     <setting name="dataSourceSubjectColumn" value="Rh"/>
-                    <setting name="dataSourceColumns" value="Rh,vacc_date,name,route,dose,ag_source"/>
-                    <setting name="dataSourceColumnMapping" value="Rh=Id,vacc_date=date,name=treatment,dose=quantity,ag_source=category"/>
+                    <setting name="dataSourceColumns" value="Rh,vacc_date,name,route,dose,ag_source,backbone,vc_vector_id,orf"/>
+                    <setting name="dataSourceColumnMapping" value="Rh=Id,vacc_date=date,name=treatment,dose=quantity,ag_source=category,vc_vector_id=vectorId,orf=antigens"/>
                     <setting name="dataSourceColumnDefaults" value="dataSource=Hansen/IDR"/>
 
                     <setting name="targetSchema" value="study"/>
@@ -153,6 +153,11 @@
                     <setting name="targetSubjectColumn" value="subjectId"/>
                     <setting name="targetAdditionalFilters" value="dataSource~eq=Hansen/IDR;eventLabel~in=SIV Infection;Vaccination Start"/>
                 </settings>
+            </taskref>
+        </transform>
+        <transform id="subjects" type="TaskRefTransformStep">
+            <taskref ref="org.labkey.sivstudies.etl.PerformManualIdrStepsTask">
+
             </taskref>
         </transform>
     </transforms>

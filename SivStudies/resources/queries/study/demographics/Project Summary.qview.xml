@@ -9,8 +9,6 @@
         <column name="death"/>
         <column name="projects/allStudies"/>
         <column name="projects/categories"/>
-        <column name="projects/rhCmvVaccines"/>
-        <column name="projects/sivArt"/>
     </columns>
     <sorts>
         <sort column="Id" descending="false"/>

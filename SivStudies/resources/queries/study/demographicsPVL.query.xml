@@ -1,0 +1,65 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="demographicsPVL" tableDbType="NOT_IN_DB">
+                <tableTitle>PVL Summary</tableTitle>
+                <columns>
+                    <column columnName="Id">
+                        <isKeyField>true</isKeyField>
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="sivChallenge">
+                        <columnTitle>SIV Challenge</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+                    <column columnName="numPVL">
+                        <columnTitle># PVLs</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=viralLoads&amp;query.Id~eq=${Id}&amp;query.sampleType~eq=Plasma&amp;query.target~eq=SIV</url>
+                        <urlTarget>_blank</urlTarget>
+                    </column>
+                    <column columnName="dateOfFirstPvl">
+                        <columnTitle>First PVL</columnTitle>
+                    </column>
+                    <column columnName="dateOfLastPvl">
+                        <columnTitle>Last PVL</columnTitle>
+                    </column>
+                    <column columnName="firstPvlDPI">
+                        <columnTitle>DPI of First PVL</columnTitle>
+                    </column>
+                    <column columnName="lastPvlDPI">
+                        <columnTitle>DPI of Last PVL</columnTitle>
+                    </column>
+                    <column columnName="firstPvlWPI">
+                        <columnTitle>WPI of First PVL</columnTitle>
+                    </column>
+                    <column columnName="lastPvlWPI">
+                        <columnTitle>WPI of Last PVL</columnTitle>
+                    </column>
+                    <column columnName="artRelease">
+                        <columnTitle>ART Release</columnTitle>
+                        <formatString>Date</formatString>
+                    </column>
+
+                    <column columnName="numPVLPostArtRelease">
+                        <columnTitle># PVLs Post-ART Release</columnTitle>
+                        <url>/query/executeQuery.view?schemaName=study&amp;query.queryName=viralLoads&amp;query.Id~eq=${Id}&amp;query.sampleType~eq=Plasma&amp;query.target~eq=SIV&amp;query.date~dategte=${artRelease}</url>
+                        <urlTarget>_blank</urlTarget>
+                    </column>
+                    <column columnName="firstPvlPostArtReleaseWeeks">
+                        <columnTitle>First PVL Post-ART Release (Weeks)</columnTitle>
+                    </column>
+                    <column columnName="lastPvlPostArtReleaseWeeks">
+                        <columnTitle>Last PVL Post-ART Release (Weeks)</columnTitle>
+                    </column>
+                    <column columnName="firstPvlPostArtReleaseMonths">
+                        <columnTitle>First PVL Post-ART Release (Months)</columnTitle>
+                    </column>
+                    <column columnName="lastPvlPostArtReleaseMonths">
+                        <columnTitle>Last PVL Post-ART Release (Months)</columnTitle>
+                    </column>
+                </columns>
+                <titleColumn>numPVL</titleColumn>
+            </table>
+        </tables>
+    </metadata>
+</query>

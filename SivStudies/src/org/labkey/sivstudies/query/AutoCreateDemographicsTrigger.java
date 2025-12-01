@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AutoCreateDemographicsTrigger extends DefaultDatasetTrigger
 {
@@ -46,55 +47,33 @@ public class AutoCreateDemographicsTrigger extends DefaultDatasetTrigger
         }
     }
 
-    private static final String CACHE_KEY = "~~AutoCreateDemographicsTrigger.IdsToCreate~~";
+    private final Set<String> _idsToCheck = new CaseInsensitiveHashSet();
 
     @Override
     protected void afterUpsert(TableInfo table, Container c, User user, @Nullable Map<String, Object> newRow, @Nullable Map<String, Object> oldRow, ValidationException errors, Map<String, Object> extraContext) throws ValidationException
     {
-        if (extraContext == null)
+        String idField = getIdField(c);
+        String id = newRow.get(idField) != null  ? newRow.get(idField).toString() : null;
+        if (id != null)
         {
-            _log.error("extraContext is null in AutoCreateDemographicsTrigger.afterUpsert()");
-            return;
-        }
-
-        if (!extraContext.containsKey(AutoCreateDemographicsTrigger.CACHE_KEY))
-        {
-            extraContext.put(CACHE_KEY, new CaseInsensitiveHashSet());
-        }
-
-        if (extraContext.get(CACHE_KEY) instanceof CaseInsensitiveHashSet s)
-        {
-            String idField = getIdField(c);
-            String id = newRow.get(idField) != null  ? newRow.get(idField).toString() : null;
-            if (id != null)
-            {
-                s.add(id);
-            }
+            _idsToCheck.add(id);
         }
     }
 
     @Override
     public void complete(TableInfo table, Container c, User user, TableInfo.TriggerType event, BatchValidationException errors, Map<String, Object> extraContext)
     {
-        if (extraContext == null)
+        if (!_idsToCheck.isEmpty())
         {
-            _log.error("extraContext is null in AutoCreateDemographicsTrigger.complete()");
-            return;
-        }
-
-        if (extraContext.get(CACHE_KEY) instanceof CaseInsensitiveHashSet s)
-        {
-            s = new CaseInsensitiveHashSet(s);
-
             String idField = getIdField(c);
             TableInfo ti = QueryService.get().getUserSchema(user, getTargetContainer(c), "study").getTable("demographics");
-            List<String> existingIds = new TableSelector(ti, PageFlowUtil.set(idField), new SimpleFilter(FieldKey.fromString(idField), s, CompareType.IN), null).getArrayList(String.class);
+            List<String> existingIds = new TableSelector(ti, PageFlowUtil.set(idField), new SimpleFilter(FieldKey.fromString(idField), _idsToCheck, CompareType.IN), null).getArrayList(String.class);
 
-            s.removeAll(existingIds);
+            _idsToCheck.removeAll(existingIds);
 
-            if (!s.isEmpty())
+            if (!_idField.isEmpty())
             {
-                List<Map<String, Object>> toInsert = s.stream().map(id -> Map.of(idField, (Object)id)).toList();
+                List<Map<String, Object>> toInsert = _idsToCheck.stream().map(id -> Map.of(idField, (Object)id)).toList();
                 try
                 {
                     ti.getUpdateService().insertRows(user, c, toInsert, null, null, null);
