@@ -5,6 +5,15 @@ repositories {
    mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy {
+        // Related to: https://nvd.nist.gov/vuln/detail/CVE-2025-12183
+        dependencySubstitution {
+            substitute module('org.lz4:lz4-java') using module("at.yawk.lz4:lz4-java:${lz4Version}")
+        }
+    }
+}
+
 dependencies {
    BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:DiscvrLabKeyModules:singlecell", depProjectConfig: "apiJarFile")
    BuildUtils.addLabKeyDependency(project: project, config: "implementation", depProjectPath: ":server:modules:DiscvrLabKeyModules:SequenceAnalysis", depProjectConfig: "apiJarFile")
