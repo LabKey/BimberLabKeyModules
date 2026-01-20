@@ -73,6 +73,7 @@ import org.labkey.api.util.ConfigurationException;
 import org.labkey.api.util.ExceptionUtil;
 import org.labkey.api.util.GUID;
 import org.labkey.api.util.HtmlString;
+import org.labkey.api.util.IntegerUtils;
 import org.labkey.api.util.MailHelper;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.util.Path;
@@ -103,8 +104,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.labkey.api.exp.api.ExperimentService.asInteger;
 
 public class MccController extends SpringActionController
 {
@@ -358,7 +357,7 @@ public class MccController extends SpringActionController
                     User u;
                     if (map.get("userId") != null)
                     {
-                        Integer userId = asInteger(map.get("userId"));
+                        Integer userId = IntegerUtils.asInteger(map.get("userId"));
                         u = UserManager.getUser(userId);
                         existingUsersGivenAccess.add(u);
                     }
@@ -587,7 +586,7 @@ public class MccController extends SpringActionController
             if (requestContainer != null)
             {
                 Group requestGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.REQUEST_GROUP_NAME, GroupEnumType.SITE);
-                if (!requestContainer.getPolicy().getAssignedRoles(requestGroup).contains(RoleManager.getRole(MccRequesterRole.class)))
+                if (requestContainer.getPolicy().getAssignedRoles(requestGroup).noneMatch(role -> role.equals(RoleManager.getRole(MccRequesterRole.class))))
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(requestGroup, RoleManager.getRole(MccRequesterRole.class));
@@ -595,7 +594,7 @@ public class MccController extends SpringActionController
                 }
 
                 Group reviewGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.REQUEST_REVIEW_GROUP_NAME, GroupEnumType.SITE);
-                if (!requestContainer.getPolicy().getAssignedRoles(reviewGroup).contains(RoleManager.getRole(MccRabReviewerRole.class)))
+                if (requestContainer.getPolicy().getAssignedRoles(reviewGroup).noneMatch(role -> role.equals(RoleManager.getRole(MccRabReviewerRole.class))))
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(reviewGroup, RoleManager.getRole(MccRabReviewerRole.class));
@@ -603,7 +602,7 @@ public class MccController extends SpringActionController
                 }
 
                 Group finalGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.FINAL_REVIEW_GROUP_NAME, GroupEnumType.SITE);
-                if (!requestContainer.getPolicy().getAssignedRoles(finalGroup).contains(RoleManager.getRole(MccFinalReviewerRole.class)))
+                if (requestContainer.getPolicy().getAssignedRoles(finalGroup).noneMatch(role -> role.equals(RoleManager.getRole(MccFinalReviewerRole.class))))
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(finalGroup, RoleManager.getRole(MccFinalReviewerRole.class));
@@ -611,7 +610,7 @@ public class MccController extends SpringActionController
                 }
 
                 Group adminGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.ADMIN_GROUP_NAME, GroupEnumType.SITE);
-                if (!requestContainer.getPolicy().getAssignedRoles(adminGroup).contains(RoleManager.getRole(MccDataAdminRole.class)))
+                if (requestContainer.getPolicy().getAssignedRoles(adminGroup).noneMatch(role -> role.equals(RoleManager.getRole(MccDataAdminRole.class))))
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(requestContainer.getPolicy());
                     policy.addRoleAssignment(adminGroup, RoleManager.getRole(MccDataAdminRole.class));
@@ -623,7 +622,7 @@ public class MccController extends SpringActionController
             if (dataContainer != null)
             {
                 Group adminGroup = GroupManager.getGroup(ContainerManager.getRoot(), MccManager.ADMIN_GROUP_NAME, GroupEnumType.SITE);
-                if (!dataContainer.getPolicy().getAssignedRoles(adminGroup).contains(RoleManager.getRole(MccDataAdminRole.class)))
+                if (dataContainer.getPolicy().getAssignedRoles(adminGroup).noneMatch(role -> role.equals(RoleManager.getRole(MccDataAdminRole.class))))
                 {
                     MutableSecurityPolicy policy = new MutableSecurityPolicy(dataContainer.getPolicy());
                     policy.addRoleAssignment(adminGroup, RoleManager.getRole(MccDataAdminRole.class));
