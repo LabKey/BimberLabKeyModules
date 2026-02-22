@@ -20,6 +20,10 @@ import au.com.bytecode.opencsv.CSVReader;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -99,10 +103,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.mail.Address;
-import jakarta.mail.Message;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -960,7 +960,7 @@ public class mGAPController extends SpringActionController
     public class GenomeBrowserAction extends SimpleRedirectAction<GenomeBrowserForm>
     {
         @Override
-        public URLHelper getRedirectURL(GenomeBrowserForm form)
+        public ActionURL getRedirectURL(GenomeBrowserForm form)
         {
             Container target = mGAPManager.get().getMGapContainer();
             if (target == null)
