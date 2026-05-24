@@ -119,7 +119,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
             SimpleFilter filter = new SimpleFilter(FieldKey.fromString("locus"), "None", CompareType.NEQ_OR_NULL);
             filter.addCondition(FieldKey.fromString("disabled"), true, CompareType.NEQ_OR_NULL);
 
-            SQLFragment selectSql = QueryService.get().getSelectSQL(data, Arrays.asList(data.getColumn("analysisId"), data.getColumn("CDR3"), data.getColumn("locus"), data.getColumn("fraction"), data.getColumn("count"), data.getColumn("cDNA")), filter, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
+            SQLFragment selectSql = QueryService.get().getSelectBuilder(data).columns(Arrays.asList(data.getColumn("analysisId"), data.getColumn("CDR3"), data.getColumn("locus"), data.getColumn("fraction"), data.getColumn("count"), data.getColumn("cDNA"))).filter(filter).maxRows(Table.ALL_ROWS).buildSqlFragment();
             DetailsURL details = DetailsURL.fromString("/query/executeQuery.view?schemaName=assay." + ap.getName().replaceAll(" ", "") + "." + protocols.get(0).getName() + "&query.queryName=data&query." + urlField + "~eq=${" + urlSourceCol + "}", (ti.getUserSchema().getContainer().isWorkbook() ? ti.getUserSchema().getContainer().getParent() : ti.getUserSchema().getContainer()));
 
             SQLFragment sql = new SQLFragment("(select count(*) as expr FROM (").append(selectSql).append(") a ").append(whereClause).append(")");
@@ -173,7 +173,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
             if (addRunColumns)
             {
                 TableInfo runs = schema.getTable("runs");
-                SQLFragment runSelectSql = QueryService.get().getSelectSQL(runs, Collections.singletonList(runs.getColumn("analysisId")), null, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
+                SQLFragment runSelectSql = QueryService.get().getSelectBuilder(runs).columns(Collections.singletonList(runs.getColumn("analysisId"))).maxRows(Table.ALL_ROWS).buildSqlFragment();
                 DetailsURL runDetails = DetailsURL.fromString("/query/executeQuery.view?schemaName=assay." + ap.getName().replaceAll(" ", "") + "." + protocols.get(0).getName() + "&query.queryName=runs&query." + urlField + "~eq=${" + urlSourceCol + "}", (ti.getUserSchema().getContainer().isWorkbook() ? ti.getUserSchema().getContainer().getParent() : ti.getUserSchema().getContainer()));
 
                 SQLFragment sql5 = new SQLFragment("(select count(*) as expr FROM (").append(runSelectSql).append(") a ").append(whereClause).append(")");
@@ -206,7 +206,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
         SimpleFilter filter = new SimpleFilter(FieldKey.fromString("locus"), "None", CompareType.NEQ_OR_NULL);
         filter.addCondition(FieldKey.fromString("disabled"), true, CompareType.NEQ_OR_NULL);
 
-        SQLFragment selectSql = QueryService.get().getSelectSQL(ti, Arrays.asList(ti.getColumn("analysisId"), ti.getColumn("cloneId"), ti.getColumn("Run"), ti.getColumn("cDNA"), ti.getColumn("cdr3"), ti.getColumn("locus")), filter, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
+        SQLFragment selectSql = QueryService.get().getSelectBuilder(ti).columns(Arrays.asList(ti.getColumn("analysisId"), ti.getColumn("cloneId"), ti.getColumn("Run"), ti.getColumn("cDNA"), ti.getColumn("cdr3"), ti.getColumn("locus"))).filter(filter).maxRows(Table.ALL_ROWS).buildSqlFragment();
 
         String whereClause = " WHERE (a.cloneId = " + ExprColumn.STR_TABLE_ALIAS + ".cloneId AND a.analysisId = " + ExprColumn.STR_TABLE_ALIAS + ".analysisId AND a.Run = " + ExprColumn.STR_TABLE_ALIAS + ".Run AND a.cDNA = " + ExprColumn.STR_TABLE_ALIAS + ".cDNA) ";
         SQLFragment sql = new SQLFragment("(select ").append(ti.getSqlDialect().getGroupConcat(new SQLFragment(ti.getSqlDialect().concatenate("a.locus", "':'", "a.CDR3")), true, true, getNewlineSql(ti))).append(" FROM (").append(selectSql).append(") a ").append(whereClause).append(" )");
@@ -286,7 +286,7 @@ public class TCRdbTableCustomizer extends AbstractTableCustomizer
         if (ti.getColumn(colName) == null)
         {
             TableInfo data = schema.createDataTable(null,false);
-            SQLFragment dataSelectSql = QueryService.get().getSelectSQL(data, Arrays.asList(data.getColumn("subjectId"), data.getColumn("cdr3"), data.getColumn("fraction")), null, null, Table.ALL_ROWS, Table.NO_OFFSET, false);
+            SQLFragment dataSelectSql = QueryService.get().getSelectBuilder(data).columns(Arrays.asList(data.getColumn("subjectId"), data.getColumn("cdr3"), data.getColumn("fraction"))).maxRows(Table.ALL_ROWS).buildSqlFragment();
 
             SQLFragment sql = new SQLFragment("(select ").append(ti.getSqlDialect().getGroupConcat(new SQLFragment("a.subjectId"), true, true, getNewlineSql(ti))).append(" as expr FROM (").append(dataSelectSql).append(") a WHERE a.cdr3 = " + ExprColumn.STR_TABLE_ALIAS + ".cdr3 AND a.fraction >= 0.005)");
             ExprColumn col = new ExprColumn(ti, colName, sql, JdbcType.VARCHAR, ti.getColumn("cdr3"));
