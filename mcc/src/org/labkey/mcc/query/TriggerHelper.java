@@ -1,5 +1,7 @@
 package org.labkey.mcc.query;
 
+import jakarta.mail.Address;
+import jakarta.mail.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,15 +32,12 @@ import org.labkey.api.security.UserManager;
 import org.labkey.api.security.ValidEmail;
 import org.labkey.api.security.permissions.DeletePermission;
 import org.labkey.api.settings.AppProps;
-import org.labkey.api.study.StudyService;
 import org.labkey.api.util.MailHelper;
 import org.labkey.api.util.PageFlowUtil;
 import org.labkey.api.view.UnauthorizedException;
 import org.labkey.mcc.MccManager;
 import org.labkey.mcc.MccSchema;
 
-import jakarta.mail.Address;
-import jakarta.mail.Message;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,7 +51,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static org.labkey.api.exp.api.ExperimentService.asInteger;
+import static org.labkey.api.util.IntegerUtils.asInteger;
 
 /**
  * Created by bimber
