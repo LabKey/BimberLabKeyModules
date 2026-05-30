@@ -122,7 +122,7 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static org.labkey.api.exp.api.ExperimentService.asInteger;
+import static org.labkey.api.util.IntegerUtils.asInteger;
 
 
 public class mGAPController extends SpringActionController
