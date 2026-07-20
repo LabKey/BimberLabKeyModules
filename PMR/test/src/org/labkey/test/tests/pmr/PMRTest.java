@@ -36,7 +36,6 @@ import org.labkey.test.categories.LabModule;
 import org.labkey.test.util.Ext4Helper;
 import org.labkey.test.util.RReportHelper;
 import org.labkey.test.util.RemoteConnectionHelper;
-import org.labkey.test.util.SqlserverOnlyTest;
 import org.labkey.test.util.di.DataIntegrationHelper;
 import org.labkey.test.util.ehr.EHRClientAPIHelper;
 
@@ -50,7 +49,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Category({External.class, LabModule.class})
-public class PMRTest extends BaseWebDriverTest implements SqlserverOnlyTest
+public class PMRTest extends BaseWebDriverTest
 {
     private final DataIntegrationHelper _etlHelper = new DataIntegrationHelper(getProjectName());
 
