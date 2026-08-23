@@ -1,1 +1,0 @@
-ALTER TABLE tcrdb.stims ADD tissue varchar(4000);

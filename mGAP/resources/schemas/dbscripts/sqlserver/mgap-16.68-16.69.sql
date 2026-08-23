@@ -1,1 +1,0 @@
-ALTER TABLE mGAP.userRequests ADD country varchar(1000);

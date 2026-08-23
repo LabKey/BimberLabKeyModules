@@ -282,7 +282,7 @@ export function AnimalRequest() {
             console.error('Request being submitted without an objectId!')
         }
 
-        // NOTE: use a proper v4 UUID so this is compatible with the sqlserver ENTITYID datatype
+        // NOTE: use a proper v4 UUID so this is compatible with the ENTITYID datatype
         let coinvestigatorCommands = getCoinvestigatorCommands(data)
         let cohortCommands = getAnimalCohortCommands(data)
 

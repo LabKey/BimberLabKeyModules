@@ -1,1 +1,0 @@
-ALTER TABLE covidseq.samples ADD rqg_alt_id varchar(200);

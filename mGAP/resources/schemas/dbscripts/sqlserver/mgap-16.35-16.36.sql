@@ -1,1 +1,0 @@
-ALTER TABLE mGAP.variantCatalogReleases ADD sequenceType varchar(100);

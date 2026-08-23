@@ -17,13 +17,12 @@
 -- Create schema, tables, indexes, and constraints used for Covidseq module here
 -- All SQL VIEW definitions should be created in covidseq-create.sql and dropped in covidseq-drop.sql
 CREATE SCHEMA covidseq;
-GO
 
 CREATE TABLE covidseq.samples (
-  rowid int identity(1,1),
+  rowid serial,
   sampleName varchar(2000),
   patientId varchar(2000),
-  sampleDate datetime,
+  sampleDate timestamp,
   sampleSource varchar(2000),
   sampleType varchar(2000),
   comment varchar(4000),
@@ -33,10 +32,10 @@ CREATE TABLE covidseq.samples (
   country varchar(2000),
 
   container entityid,
-  created datetime,
+  created timestamp,
   createdby int,
-  modified datetime,
+  modified timestamp,
   modifiedby int,
 
-  constraint PK_samples PRIMARY KEY (rowid)
+  CONSTRAINT PK_samples PRIMARY KEY (rowid)
 );

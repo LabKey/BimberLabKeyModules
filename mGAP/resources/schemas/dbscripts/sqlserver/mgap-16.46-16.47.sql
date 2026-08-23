@@ -1,1 +1,0 @@
-ALTER TABLE mGAP.variantList ADD identifier VARCHAR(1000);

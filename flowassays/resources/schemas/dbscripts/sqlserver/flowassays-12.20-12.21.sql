@@ -1,1 +1,0 @@
-alter table flowassays.populations add importAliases varchar(4000);

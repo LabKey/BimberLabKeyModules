@@ -1,1 +1,0 @@
-ALTER TABLE mGAP.variantList ADD omim_phenotype VARCHAR(2000);

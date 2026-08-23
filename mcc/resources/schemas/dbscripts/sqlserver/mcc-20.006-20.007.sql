@@ -1,1 +1,0 @@
-ALTER TABLE mcc.animalRequests ADD applicationduedate VARCHAR(200);

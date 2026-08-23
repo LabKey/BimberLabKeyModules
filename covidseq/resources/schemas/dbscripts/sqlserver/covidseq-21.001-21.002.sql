@@ -1,1 +1,0 @@
-ALTER TABLE covidseq.patients ADD gender varchar(200);

@@ -1,1 +1,0 @@
-ALTER TABLE mcc.animalrequests add comments varchar(4000);

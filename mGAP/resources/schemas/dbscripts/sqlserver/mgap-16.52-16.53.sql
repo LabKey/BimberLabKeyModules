@@ -1,1 +1,0 @@
-ALTER TABLE mGAP.variantCatalogReleases ADD humanJbrowseId ENTITYID;
