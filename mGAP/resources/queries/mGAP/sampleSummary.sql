@@ -27,4 +27,5 @@ FROM (SELECT
 ) t
 
 LEFT JOIN mgap.subjectsSource ss on (t.subjectId = ss.originalId)
-LEFT JOIN mgap.animalMapping am on (t.subjectId = am.subjectname)
+-- Matched case-insensitively so an id whose alias-table spelling differs only in case still resolves; SampleSummaryCustomizer surfaces those as subjectCaseMismatch
+LEFT JOIN mgap.animalMapping am on (LOWER(t.subjectId) = LOWER(am.subjectname))
