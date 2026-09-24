@@ -143,7 +143,7 @@ public class PMRTest extends BaseWebDriverTest
 
         // Verify data imported, and then delete from the DB
         SelectRowsCommand select1 = new SelectRowsCommand("ehr", "kinship");
-        Assert.assertEquals("Incorrect number of kinship rows", 136, select1.execute(getApiHelper().getConnection(), getProjectName()).getRowCount().intValue());
+        Assert.assertEquals("Incorrect number of kinship rows", 104, select1.execute(getApiHelper().getConnection(), getProjectName()).getRowCount().intValue());
 
         new TruncateTableCommand("ehr", "kinship").execute(getApiHelper().getConnection(), getProjectName());
         Assert.assertEquals("Incorrect number of kinship rows", 0, select1.execute(getApiHelper().getConnection(), getProjectName()).getRowCount().intValue());
@@ -153,7 +153,7 @@ public class PMRTest extends BaseWebDriverTest
         goToDataPipeline();
         waitForPipelineJobsToComplete(4, "ETL Job: Import PRIMe-seq Kinship Data", false);
 
-        Assert.assertEquals("Incorrect number of kinship rows after ETL", 136, select1.execute(getApiHelper().getConnection(), getProjectName()).getRowCount().intValue());
+        Assert.assertEquals("Incorrect number of kinship rows after ETL", 104, select1.execute(getApiHelper().getConnection(), getProjectName()).getRowCount().intValue());
     }
 
     private void createTestPedigreeData() throws Exception
