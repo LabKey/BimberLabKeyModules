@@ -6,6 +6,7 @@ import htsjdk.samtools.fastq.FastqReader;
 import htsjdk.samtools.fastq.FastqWriter;
 import htsjdk.samtools.fastq.FastqWriterFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -392,7 +393,7 @@ public class MiXCRAnalysis extends AbstractPipelineStep implements AnalysisStep
 
             for (String locus : loci)
             {
-                File table = new File(outputDir, prefix + "." + StringUtils.replace(locus , ",", "_") + ".mixcr.txt");
+                File table = new File(outputDir, prefix + "." + Strings.CS.replace(locus , ",", "_") + ".mixcr.txt");
 
                 List<String> exportParams = new ArrayList<>();
                 Double minCloneFraction = getProvider().getParameterByName(MIN_CLONE_FRACTION).extractValue(getPipelineCtx().getJob(), getProvider(), getStepIdx(), Double.class, null);

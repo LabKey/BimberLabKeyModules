@@ -1,6 +1,7 @@
 package org.labkey.sivstudies.query;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,8 +95,8 @@ public class ViralLoadsTriggerFactory implements TriggerFactory
             if (val.contains("below"))
             {
                 val = StringUtils.trimToNull(val);
-                val = StringUtils.replaceIgnoreCase(val, "below lod of", "");
-                val = StringUtils.replaceIgnoreCase(val, "below", "");
+                val = Strings.CI.replace(val, "below lod of", "");
+                val = Strings.CI.replace(val, "below", "");
                 val = StringUtils.trimToNull(val);
                 if (NumberUtils.isCreatable(val))
                 {
